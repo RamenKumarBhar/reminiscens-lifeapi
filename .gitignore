@@ -1,53 +1,25 @@
-api/restfulReminiscens/logs/application.log
-api/restfulReminiscens/logs
-api/restfulReminiscens/project/project
-api/restfulReminiscens/project/target
-api/restfulReminiscens/target
-api/restfulReminiscens/conf/application.conf
-api/restfulReminiscens/tmp
-api/restfulReminiscens/dist
-api/restfulReminiscens/conf/evolutions
-api/restfulReminiscens/bin
-api/restfulReminiscens/.cache
+logs/application.log
+logs
+project/project
+project/target
+target
+conf/application.conf
+tmp
+dist
+conf/evolutions
+bin
+.cache
 *DS_Store
 *._.DS_Store
 *._*
-*.apk
 *.class
 *.DS_Store
 *.target/
 .DS_Store
 .DS_Store
-ui/marzemino/android/.DS_Store
 *.DS_Store
 
-ui/marzemino/android/First/.DS_Store
-ui/marzemino/android/First/bin
-*.ipa
-*.apk
-*.classpath
-ui/marzemino/android/First/assets/www/.buildpath
-ui/marzemino/android/First/assets/www/.project
-ui/marzemino/android/First/assets/www/.settings/.jsdtscope
-ui/marzemino/android/First/assets/www/.settings/org.eclipse.core.resources.prefs
-ui/marzemino/android/First/assets/www/.settings/org.eclipse.wst.jsdt.ui.superType.container
-ui/marzemino/android/First/assets/www/.settings/org.eclipse.wst.jsdt.ui.superType.name
-ui/marzemino/android/First/.buildpath
-ui/marzemino/android/First/.settings/org.eclipse.vjet.eclipse.core.prefs
-# built application files
-*.apk
-*.ap_
-
-# files for the dex VM
-*.dex
-
-# Java class files
-*.class
-
-# generated files
-bin/
-gen/
-
+.classpath
 # Local configuration file (sdk path, etc)
 local.properties
 
@@ -59,8 +31,8 @@ local.properties
 PID
 api/PID
 api/lifeapi.log
-api/restfulReminiscens/PID
-api/restfulReminiscens/lifeapi.log
-api/restfulReminiscens/start.sh
+PID
 lifeapi.log
-api/restfulReminiscens/project/target/streams/$global/update/$global/out
+start.sh
+lifeapi.log
+project/target/streams/$global/update/$global/out
