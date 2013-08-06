@@ -26,6 +26,8 @@ local.properties
 # Eclipse project files
 .classpath
 .project
+.settings/
+project/target/*
 
 
 PID
