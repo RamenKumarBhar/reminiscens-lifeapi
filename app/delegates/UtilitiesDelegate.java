@@ -102,7 +102,8 @@ public class UtilitiesDelegate {
 		 */
 		String uploadDir = Play.application().configuration().getString("files.home");
 		String filesBaseURL = Play.application().configuration().getString("files.baseurl");
-		String fileName = file.getFilename();
+		String fileName = "U_"+fileBean.getOwner().toString()+"_"+"D"+DateTime.now()+"_"+file.getFilename();
+		// TODO check how to make uploadDir also cross-platform
 		String fullPath = uploadDir+ FileUtilities.slash + fileName;
 		String contentType = file.getContentType();
 		File uploadFile = file.getFile();
