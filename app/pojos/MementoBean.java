@@ -51,7 +51,7 @@ public class MementoBean  implements Serializable {
 		this.lifeStory = lifeStory;
 	}
 	public Long getLifeStoryId() {
-		return lifeStory.getLifeStoryId();
+		return lifeStory == null ? null : lifeStory.getLifeStoryId();
 	}
 	public void setLifeStoryId(Long lifeStoryId) {
 		this.lifeStory = new LifeStoryBean();

@@ -67,41 +67,42 @@ public class Utilities extends Controller {
 	}
 
 //	@Security.Authenticated(Secured.class)
-	public static Result upload() {
-		Form<FileBean> filledForm = fileForm.bindFromRequest();
+//	public static Result upload() {
+//		Form<FileBean> filledForm = fileForm.bindFromRequest();
+//
+//		if (filledForm.hasErrors()) {
+//			ResponseStatusBean response = new ResponseStatusBean();
+//			response.setResponseStatus(ResponseStatus.BADREQUEST);
+//			response.setStatusMessage("play.authenticate.filledFromHasErrors:"
+//					+ filledForm.errorsAsJson());
+//			return badRequest(toJson(response));
+//		} else {
+//			play.mvc.Http.MultipartFormData body = request().body().asMultipartFormData();
+//			play.mvc.Http.MultipartFormData.FilePart file = body.getFile("file") == null ? body.getFile("files[]") : body.getFile("file") ;
+//			FileBean fileBean = filledForm.get();
+//						
+//			if (file != null) {
+//				fileBean = UtilitiesDelegate.getInstance().saveFile(file, fileBean);
+//				return ok(toJson(fileBean));
+//			} else {
+//				flash("error", "Missing file");
+//				ResponseStatusBean response = new ResponseStatusBean();
+//				response.setResponseStatus(ResponseStatus.BADREQUEST);
+//				response.setStatusMessage("File is null");
+//				return badRequest(toJson(response));
+//			}
+//		}
+//	}
 
-		if (filledForm.hasErrors()) {
-			ResponseStatusBean response = new ResponseStatusBean();
-			response.setResponseStatus(ResponseStatus.BADREQUEST);
-			response.setStatusMessage("play.authenticate.filledFromHasErrors:"
-					+ filledForm.errorsAsJson());
-			return badRequest(toJson(response));
-		} else {
-			play.mvc.Http.MultipartFormData body = request().body().asMultipartFormData();
-			play.mvc.Http.MultipartFormData.FilePart file = body.getFile("file") == null ? body.getFile("files[]") : body.getFile("file") ;
-			FileBean fileBean = filledForm.get();
-						
-			if (file != null) {
-				fileBean = UtilitiesDelegate.getInstance().saveFile(file, fileBean);
-				return ok(toJson(fileBean));
-			} else {
-				flash("error", "Missing file");
-				ResponseStatusBean response = new ResponseStatusBean();
-				response.setResponseStatus(ResponseStatus.BADREQUEST);
-				response.setStatusMessage("File is null");
-				return badRequest(toJson(response));
-			}
-		}
-	}
-
+	
+	// TODO merge file upload with posting of meme
  	@Security.Authenticated(Secured.class)
-	public static Result secureUpload() {
+	public static Result upload() {
 		Form<FileBean> filledForm = fileForm.bindFromRequest();
 
 		String userEmail = session().get("pa.u.id");
 		User user = User.getByEmail(userEmail);
 		
-		
 		if (filledForm.hasErrors()) {
 			ResponseStatusBean response = new ResponseStatusBean();
 			response.setResponseStatus(ResponseStatus.BADREQUEST);
@@ -111,11 +112,18 @@ public class Utilities extends Controller {
 		} else {
 			play.mvc.Http.MultipartFormData body = request().body().asMultipartFormData();
 			play.mvc.Http.MultipartFormData.FilePart file = body.getFile("file") == null ? body.getFile("files[]") : body.getFile("file") ;
-			FileBean fileBean = filledForm.get();
+			FileBean fileBean = filledForm.get() == null ? new FileBean() : filledForm.get() ;
 			
-			if (fileBean.getOwner() == null && user != null) {
+			if (user != null) {
 				Logger.debug("User "+user.getEmail()+" posted a file");
 				fileBean.setOwner(user.getUserId());
+			} else {
+				// TODO removed once authentication is fully tested, @security should be enough
+				flash("error", "Missing file");
+				ResponseStatusBean response = new ResponseStatusBean();
+				response.setResponseStatus(ResponseStatus.UNAUTHORIZED);
+				response.setStatusMessage("User is information is null");
+				return badRequest(toJson(response));
 			}
 						
 			if (file != null) {
