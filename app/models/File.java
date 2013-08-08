@@ -67,6 +67,14 @@ public class File extends Model {
     public static File readByHashCode(String hashcode){
         return find.where().eq("hashcode", hashcode).findUnique();
     }
+    
+
+    public static File readByHashCodeAndUserId(String hashcode, Long userId){
+        return find.where()
+        		.eq("hashcode", hashcode)
+        		.eq("owner", userId)
+        		.findUnique();
+    }
 
 	public Long getFileId() {
 		return fileId;
