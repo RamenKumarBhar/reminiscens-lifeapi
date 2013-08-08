@@ -72,6 +72,10 @@ public class Context extends Model {
         context.save();
     }
     
+    public static Context read(Long contextId) {
+    	return find.ref(contextId);
+    }
+    
     public static Context createObject(Context context){
         context.save();
         return context;

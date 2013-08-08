@@ -2,6 +2,7 @@ package models;
 
 import java.util.*;
 
+import play.Play;
 import play.db.ebean.*;
 import providers.MyUsernamePasswordAuthUser;
 import utils.PlayDozerMapper;
@@ -70,7 +71,6 @@ public class User extends Model implements Subject {
 	@Column(name = "conf_type")
 	private String confType;
 
-
 	@Temporal(TemporalType.DATE)
 	@Column
 	@org.hibernate.annotations.Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -106,12 +106,25 @@ public class User extends Model implements Subject {
 		return user;
 	}
 
-	// Lazy delete, just making an user inactive
+	/**
+	 * A lazy delete method, it updates the user to become inactive
+	 * @param id of the user
+	 */
 	public static void delete(Long id) {
 		User u = find.ref(id);
 		u.setActive(false);
 		u.update();
 	}
+	
+
+	/**
+	 * The real delete. Deletes all the content that the user created also
+	 * @param id of the user
+	 */
+	public static void deleteForce(Long uid) {
+		find.ref(uid).delete();
+	}
+	
 
 	public static User read(Long id) {
 		return find.byId(id);
@@ -208,6 +221,8 @@ public class User extends Model implements Subject {
 				if (c != null) {
 					if (c.getCityId() == null) {
 						c = models.City.getCityByName(c.getName());
+					} else {
+						c = models.City.read(c.getCityId());
 					}
 				}
 
@@ -238,8 +253,12 @@ public class User extends Model implements Subject {
 			final PicturedIdentity identity = (PicturedIdentity) authUser;
 			final String picture = identity.getPicture();
 			if (picture != null) {
-				user.profilePic = picture;
+				user.setProfilePic(picture);
+			} else {
+				user.setProfilePic(Play.application().configuration().getString("default.profilepic"));
 			}
+		} else {
+			user.setProfilePic(Play.application().configuration().getString("default.profilepic"));
 		}
 
 		// if (authUser instanceof ExtendedIdentity) {
@@ -266,13 +285,23 @@ public class User extends Model implements Subject {
 		 */
 
 		user.setUsername(models.User.generateUsername(user.getEmail()));
-
+		user.setUsernameVerified(false);
+		
 		/*
-		 * 8. Create the new user
+		 * 8. Set language of user
+		 */
+		
+		// TODO get the default language from request		
+		String userLocale = user.getLocale() == null ? Play.application().configuration().getString("default.language") : user.getLocale();		
+		user.setLocale(userLocale);
+		
+		/*
+		 * 9. Create the new user
 		 */
 		if (userId != null) {
 			user.update(userId);
 		} else {
+			user.setCreationDate(DateTime.now());
 			user.save();
 		}
 
@@ -292,12 +321,14 @@ public class User extends Model implements Subject {
 		return find.where().eq("active", true)
 				.like("username", "%" + newUsername + "%").findList().size();
 	}
+	
 
 	// TODO check play authenticate inherited code
 	public static void merge(final AuthUser oldUser, final AuthUser newUser) {
 		User.findByAuthUserIdentity(oldUser).merge(
 				User.findByAuthUserIdentity(newUser));
 	}
+	
 
 	public Set<String> getProviders() {
 		final Set<String> providerKeys = new HashSet<String>(
@@ -307,6 +338,7 @@ public class User extends Model implements Subject {
 		}
 		return providerKeys;
 	}
+	
 
 	public static void addLinkedAccount(final AuthUser oldUser,
 			final AuthUser newUser) {
@@ -315,6 +347,7 @@ public class User extends Model implements Subject {
 		u.save();
 	}
 
+	
 	/**
 	 * used by authentication, it will return only active users
 	 * 
@@ -324,25 +357,30 @@ public class User extends Model implements Subject {
 	public static User findByEmail(final String email) {
 		return getEmailUserFind(email).findUnique();
 	}
+	
 
 	private static ExpressionList<User> getEmailUserFind(final String email) {
 		return find.where().eq("active", true).eq("email", email);
 	}
+	
 
 	public LinkedAccount getAccountByProvider(final String providerKey) {
 		return LinkedAccount.findByProviderKey(this, providerKey);
 	}
+	
 
 	public static User findByUsernamePasswordIdentity(
 			final UsernamePasswordAuthUser identity) {
 		return getUsernamePasswordAuthUserFind(identity).findUnique();
 	}
+	
 
 	private static ExpressionList<User> getUsernamePasswordAuthUserFind(
 			final UsernamePasswordAuthUser identity) {
 		return getEmailUserFind(identity.getEmail()).eq(
 				"linkedAccounts.providerKey", identity.getProvider());
 	}
+	
 
 	public void resetPassword(final UsernamePasswordAuthUser authUser,
 			final boolean create) {
@@ -350,6 +388,7 @@ public class User extends Model implements Subject {
 		this.changePassword(authUser, create);
 		TokenAction.deleteByUser(this, Type.PASSWORD_RESET);
 	}
+	
 
 	public void changePassword(final UsernamePasswordAuthUser authUser,
 			final boolean create) {
@@ -366,6 +405,7 @@ public class User extends Model implements Subject {
 		a.setProviderUserId(authUser.getHashedPassword());
 		a.save();
 	}
+	
 
 	@Transactional
 	public static void verify(final User unverified) {
@@ -378,64 +418,83 @@ public class User extends Model implements Subject {
 		TokenAction.deleteByUser(unverified, Type.EMAIL_VERIFICATION);
 	}
 
+	
+	/*
+	 * Simple Getters and Setters
+	 */
+	
 	@Override
 	public String getIdentifier() {
 		return Long.toString(userId);
 	}
+	
 
 	/* GETTERS AND SETTERS */
 
 	public Long getUserId() {
 		return userId;
 	}
+	
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+	
 
 	public Person getPerson() {
 		return person;
 	}
+	
 
 	public void setPerson(Person person) {
 		this.person = person;
 	}
+	
 
 	public String getUsername() {
 		return username;
 	}
+	
 
 	public void setUsername(String nickname) {
 		this.username = nickname;
 	}
+	
 
 	public String getEmail() {
 		return email;
 	}
+	
 
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
 
 	public String getLocale() {
 		return locale;
 	}
+	
 
 	public void setLocale(String lang) {
 		this.locale = lang;
 	}
+	
 
 	public Boolean getEmailVerified() {
 		return emailVerified;
 	}
+	
 
 	public void setEmailVerified(Boolean email_verified) {
 		this.emailVerified = email_verified;
 	}
+	
 
 	public Boolean getUsernameVerified() {
 		return usernameVerified;
 	}
+	
 
 	public void setUsernameVerified(Boolean nickname_verified) {
 		this.usernameVerified = nickname_verified;
@@ -510,24 +569,25 @@ public class User extends Model implements Subject {
 		return roles;
 	}
 	
+	
 	public void addSecurityRole(SecurityRole role) {
 		roles.add(role);
 	}
+	
 
 	public void resetSecurityRole(SecurityRole role) {
 		roles = Collections.singletonList(role);
 	}
+	
 
 	@Override
 	public List<? extends Permission> getPermissions() {
 		return this.permissions;
 	}
-
-	public static void deleteForce(Long uid) {
-		find.ref(uid).delete();
-	}
+	
 
 	public void setRoles(List<SecurityRole> singletonList) {
 		this.roles = singletonList;
 	}
+	
 }

@@ -95,6 +95,30 @@ public class Relationship extends Model {
 		return participationList;
     }
     
+    public static List<Relationship> findRelationships(Long person1, Long person2) {
+    	List<Relationship> participationList = find.where()
+				.eq("personFromId", person1)
+				.eq("personToId",person2)
+				.findList();
+    	
+    	List<Relationship> participationList2 = find.where()
+				.eq("personFromId", person1)
+				.eq("personToId",person2)
+				.findList();
+    	
+    	participationList.addAll(participationList2);
+		return participationList;
+    }
+    
+	public static boolean isCuratorOf(Long user, Long person) {
+		List<Relationship> list = find.where()
+			.eq("personFromId",user)
+			.eq("personToId", person)
+			.eq("toIsCurator",Boolean.TRUE)
+			.findList();
+		return list != null && list.size()>0;
+	}
+    
 	public Long getRelationshipId() {
 		return relationshipId;
 	}

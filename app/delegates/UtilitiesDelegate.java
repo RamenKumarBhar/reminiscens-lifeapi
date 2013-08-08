@@ -102,13 +102,21 @@ public class UtilitiesDelegate {
 		 */
 		String uploadDir = Play.application().configuration().getString("files.home");
 		String filesBaseURL = Play.application().configuration().getString("files.baseurl");
+		
 		String fileName = "U_"+fileBean.getOwner().toString()+"_"+"D"+DateTime.now()+"_"+file.getFilename();
 		// TODO check how to make uploadDir also cross-platform
 		String fullPath = uploadDir+ FileUtilities.slash + fileName;
 		String contentType = file.getContentType();
 		File uploadFile = file.getFile();
-		//String filesBaseURL = "http://test.reminiscens.me/files";
 
+		String [] parts = file.getFilename().split(".");
+		String fileExtension = "";
+		
+		if (parts != null && parts.length > 0) {
+			fileExtension = parts[parts.length-1];	
+		}
+		
+		
 		Logger.root().debug("Saving File....");
 		Logger.root().debug("--> fileName=" + fileName);
 		Logger.root().debug("--> contentType=" + contentType);
@@ -133,6 +141,7 @@ public class UtilitiesDelegate {
 		fileBean.setContentType(contentType);
 		fileBean.setCreationDate(DateTime.now());
 		fileBean.setHashcode(hashcode);
+		fileBean.setExtension(fileExtension);
 		Logger.root().debug("--> creationDate=" + fileBean.getCreationDate());
 		Logger.root().debug("--> hashcode=" + fileBean.getHashcode());
 		
@@ -142,4 +151,14 @@ public class UtilitiesDelegate {
 		return fileBean;
 	}
 	
+	
+	public File getFile(String hashcode, Long userId) {
+		models.File f = models.File.readByHashCodeAndUserId(hashcode, userId);
+		
+		String uploadDir = Play.application().configuration().getString("files.home");
+		String fileName = f == null ? "" : f.getFilename();
+		String fullPath = f == null ? "" : uploadDir+ FileUtilities.slash + fileName;
+	
+		return new File(fullPath);
+	}
 }
