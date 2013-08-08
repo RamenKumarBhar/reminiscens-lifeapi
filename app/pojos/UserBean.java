@@ -2,13 +2,8 @@ package pojos;
 
 
 import java.io.Serializable;
-
-
 import play.data.validation.Constraints.Required;
-
 import com.avaje.ebean.validation.NotNull;
-
-import enums.UserType;
 import org.joda.time.DateTime;
 import utils.JodaDateTime;
 
@@ -28,7 +23,6 @@ public class UserBean implements Serializable {
     private String locale = "it_IT";
     private Boolean emailVerified = Boolean.FALSE;
     private Boolean usernameVerified = Boolean.FALSE;
-//    private UserType confType =  UserType.TEST;
 	private boolean active;
     @JodaDateTime(format="yyyy-MM-dd HH:mm:ss")
     private DateTime creationDate;    
@@ -51,20 +45,6 @@ public class UserBean implements Serializable {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-
-//	/**
-//	 * @return the personId
-//	 */
-//	public Long getPersonId() {
-//		return personId;
-//	}
-//
-//	/**
-//	 * @param personId the personId to set
-//	 */
-//	public void setPersonId(Long personId) {
-//		this.personId = personId;
-//	}
 
 	public String getCreationDateAsString() {
 		return creationDate == null ? null : creationDate.toString("yyyy-MM-dd HH:mm:ss");
@@ -121,14 +101,6 @@ public class UserBean implements Serializable {
 	public void setUsernameVerified(Boolean usernameVerified) {
 		this.usernameVerified = usernameVerified;
 	}
-
-//	public UserType getConfType() {
-//		return confType;
-//	}
-//
-//	public void setConfType(UserType confType) {
-//		this.confType = confType;
-//	}
 
 	public boolean isActive() {
 		return active;

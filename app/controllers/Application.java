@@ -22,28 +22,24 @@ public class Application extends Controller {
 	public static final String FLASH_MESSAGE_KEY = "message";
 	public static final String FLASH_ERROR_KEY = "error";
 
-	/**
-	 * Index method that renders the index view
-	 * 
-	 * @return
-	 */
 	public static Result index() {
 		return ok(views.html.index.render());
 	}
 
-	public static Result oAuthDenied(final String providerKey) {
+	public static Result doLogin() {
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-		flash(FLASH_ERROR_KEY,
-				"You need to accept the OAuth connection in order to use this website!");
-		return redirect(routes.Application.index());
+		final Form<MyLogin> filledForm = MyUsernamePasswordAuthProvider.LOGIN_FORM
+				.bindFromRequest();
+		if (filledForm.hasErrors()) {
+			// User did not fill everything properly
+			// return badRequest(login.render(filledForm));
+			return badRequest();
+		} else {
+			// Everything was filled
+			return MyUsernamePasswordAuthProvider.handleLogin(ctx());
+		}
 	}
-
-	public static User getLocalUser(final Session session) {
-		final User localUser = User.findByAuthUserIdentity(PlayAuthenticate
-				.getUser(session));
-		return localUser;
-	}
-
+	
 	public static Result doSignup() {
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		final Form<MySignup> filledForm = MyUsernamePasswordAuthProvider.SIGNUP_FORM
@@ -64,20 +60,6 @@ public class Application extends Controller {
 		}
 	}
 
-	public static Result doLogin() {
-		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-		final Form<MyLogin> filledForm = MyUsernamePasswordAuthProvider.LOGIN_FORM
-				.bindFromRequest();
-		if (filledForm.hasErrors()) {
-			// User did not fill everything properly
-			// return badRequest(login.render(filledForm));
-			return badRequest();
-		} else {
-			// Everything was filled
-			return MyUsernamePasswordAuthProvider.handleLogin(ctx());
-		}
-	}
-
 	public static Result onLoginUserNotFound() {
 		ResponseStatusBean response = new ResponseStatusBean();
 		response.setResponseStatus(ResponseStatus.NODATA);
@@ -88,4 +70,16 @@ public class Application extends Controller {
 		// .get("playauthenticate.password.login.unknown_user_or_pw"));
 	}
 
+	public static Result oAuthDenied(final String providerKey) {
+		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
+		flash(FLASH_ERROR_KEY,
+				"You need to accept the OAuth connection in order to use this website!");
+		return redirect(routes.Application.index());
+	}
+
+	public static User getLocalUser(final Session session) {
+		final User localUser = User.findByAuthUserIdentity(PlayAuthenticate
+				.getUser(session));
+		return localUser;
+	}
 }

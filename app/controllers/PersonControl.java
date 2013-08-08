@@ -3,6 +3,7 @@ package controllers;
 import java.util.List;
 
 import annotations.CustomRestrict;
+import be.objectify.deadbolt.java.actions.Dynamic;
 import be.objectify.deadbolt.java.actions.Restrict;
 
 
@@ -12,6 +13,7 @@ import pojos.MentionPersonBean;
 import pojos.PersonBean;
 import pojos.RelationshipBean;
 import pojos.ResponseStatusBean;
+import security.SecurityModelConstants;
 import static play.libs.Json.toJson;
 import enums.MyRoles;
 import delegates.PersonDelegate;
@@ -33,6 +35,7 @@ public class PersonControl extends Controller {
 		return lp != null ? ok(toJson(lp)) : notFound();
 	}
 
+	@Dynamic(value="FriendOf", meta=SecurityModelConstants.ID_FROM_PERSON)
 	public static Result getPerson(Long id) {
 		PersonBean bean = PersonDelegate.getInstance().getPerson(id);
 		return bean != null ? ok(toJson(bean)) : notFound();

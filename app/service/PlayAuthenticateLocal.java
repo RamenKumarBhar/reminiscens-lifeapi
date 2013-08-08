@@ -115,6 +115,7 @@ public class PlayAuthenticateLocal extends PlayAuthenticate {
 //							provider));
 		}
 		try {
+			// authenticate is implemented by service.PlayAuthenticateLocal.
 			final Object o = ap.authenticate(context, payload);
 			if (o instanceof String) {
 				if ("NOT_FOUND".equals(o)) {

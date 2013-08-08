@@ -77,6 +77,7 @@ GET     /city/sync/:lastCityId          controllers.Utilities.getNewCities(lastC
 GET     /city/:name                     controllers.Utilities.getCitiesByName(name: String)
 GET     /upload                         controllers.Utilities.testUpload()
 POST    /upload                         controllers.Utilities.upload()
+GET     /file/:hashcode                 controllers.Utilities.getFile(hashcode: String)
 
 # User and Authentication Management Management
 GET     /user/:uid                      controllers.UserControl.getUser(uid: Long)

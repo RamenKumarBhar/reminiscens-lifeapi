@@ -35,9 +35,12 @@ public class MyDynamicResourceHandler implements DynamicResourceHandler {
 	private static final Map<String, DynamicResourceHandler> HANDLERS = new HashMap<String, DynamicResourceHandler>();
 
 	static {
-		//HANDLERS.put("ClubOwnerOf", new ClubOwnerOfDynamicResourceHandler());
+		HANDLERS.put("FriendOf", new FriendsDynamicResourceHandler());
 		//HANDLERS.put("ClubOwnerOrTrainerOf", new OwnerOrTrainerOfDynamicResourceHandler());
 		//HANDLERS.put("isMemberOf", new MemberOfDynamicResourceHandler());
+		
+		
+		
 	}
 
 	public boolean isAllowed(String name, String meta,
