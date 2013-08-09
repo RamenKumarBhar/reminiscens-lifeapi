@@ -41,6 +41,7 @@ public class PersonControl extends Controller {
 		return bean != null ? ok(toJson(bean)) : notFound();
 	}
 
+	@CustomRestrict(value = {MyRoles.ADMIN}, config = @Restrict({}))
 	public static Result createPerson() {
 		Form<PersonBean> filledForm = personForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
@@ -55,6 +56,7 @@ public class PersonControl extends Controller {
 		}
 	}
 
+	@Dynamic(value="OnlyMe", meta=SecurityModelConstants.ID_FROM_PERSON)
 	public static Result updatePerson(Long id) {
 		Form<PersonBean> filledForm = personForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
@@ -75,7 +77,9 @@ public class PersonControl extends Controller {
 			}
 		}
 	}
-
+	
+	@Dynamic(value="OnlyMe", meta=SecurityModelConstants.ID_FROM_PERSON)
+	// TODO eliminate this method, and leave only the deletion of user
 	public static Result deletePerson(Long id) {
 		try {
 			PersonDelegate.getInstance().deletePerson(id);
@@ -90,6 +94,7 @@ public class PersonControl extends Controller {
 		}
 	}
 
+	@Security.Authenticated(Secured.class)
 	public static Result createMentionPerson() {
 		Form<MentionPersonBean> filledForm = mentionPersonForm.bindFromRequest();
 		if (filledForm.hasErrors()) {

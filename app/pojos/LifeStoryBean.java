@@ -1,7 +1,10 @@
 package pojos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+
+import models.Person;
 
 import org.joda.time.DateTime;
 
@@ -234,5 +237,14 @@ public class LifeStoryBean implements Serializable {
 
 	public void setMementoList(List<MementoBean> mementoList) {
 		this.mementoList = mementoList;
+	}
+
+	public void addParticipant(ParticipationBean part) {
+		if (this.participationList == null) {
+			this.participationList = new ArrayList<ParticipationBean>();
+			this.participationList.add(part);
+		} else {
+			this.participationList.add(part);
+		}
 	}
 }
