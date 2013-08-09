@@ -110,104 +110,46 @@ public class Participation extends Model {
 			Long lifeStoryId) {
 			LifeStory ls = LifeStory.read(lifeStoryId);
 		List<Participation> participationList = find.where()
-				.eq("lifeStory", ls).eq("isProtagonist", "1").findList();
+				.eq("lifeStory", ls).eq("isProtagonist", Boolean.TRUE).findList();
 		return participationList;
 	}
 
-	/**
-	 * @return the participationId
-	 */
 	public Long getParticipationId() {
 		return participationId;
 	}
 
-	/**
-	 * @param participationId the participationId to set
-	 */
 	public void setParticipationId(Long participationId) {
 		this.participationId = participationId;
 	}
 
-//	/**
-//	 * @return the personId
-//	 */
-//	public Long getPersonId() {
-//		return personId;
-//	}
-//
-//	/**
-//	 * @param personId the personId to set
-//	 */
-//	public void setPersonId(Long personId) {
-//		this.personId = personId;
-//	}
-//
-//	/**
-//	 * @return the lifeEventId
-//	 */
-//	public Long getLifeStoryId() {
-//		return lifeStoryId;
-//	}
-//
-//	/**
-//	 * @param lifeEventId the lifeEventId to set
-//	 */
-//	public void setLifeStoryId(Long lifeEventId) {
-//		this.lifeStoryId = lifeEventId;
-//	}
-
-	/**
-	 * @return the isProtagonist
-	 */
 	public boolean isProtagonist() {
 		return isProtagonist;
 	}
 
-	/**
-	 * @param isProtagonist the isProtagonist to set
-	 */
 	public void setProtagonist(boolean isProtagonist) {
 		this.isProtagonist = isProtagonist;
 	}
 
-	/**
-	 * @return the contributor
-	 */
 	public Long getContributorId() {
 		return contributorId;
 	}
 
-	/**
-	 * @param contributor the contributor to set
-	 */
 	public void setContributorId(Long contributor) {
 		this.contributorId = contributor;
 	}
 
-	/**
-	 * @return the person
-	 */
 	public Person getPerson() {
 		return person;
 	}
 
-	/**
-	 * @param person the person to set
-	 */
 	public void setPerson(Person person) {
 		this.person = person;
 	}
 
-	/**
-	 * @return the lifeStory
-	 */
 	public LifeStory getLifeStory() {
 		return lifeStory;
 	}
 
-	/**
-	 * @param lifeStory the lifeStory to set
-	 */
 	public void setLifeStory(LifeStory lifeStory) {
 		this.lifeStory = lifeStory;
 	}

@@ -99,11 +99,13 @@ public class Relationship extends Model {
     	List<Relationship> participationList = find.where()
 				.eq("personFromId", person1)
 				.eq("personToId",person2)
+				.eq("directed",Boolean.FALSE) // only bidirectional relationships where person1 is in from
+											  // in other words, only the relationships of which the person2 is aware of
 				.findList();
     	
     	List<Relationship> participationList2 = find.where()
-				.eq("personFromId", person1)
-				.eq("personToId",person2)
+				.eq("personFromId", person2)
+				.eq("personToId",person1)
 				.findList();
     	
     	participationList.addAll(participationList2);

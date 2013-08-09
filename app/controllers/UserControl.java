@@ -4,24 +4,30 @@ import static play.libs.Json.toJson;
 
 import java.util.List;
 
+import annotations.CustomRestrict;
+import be.objectify.deadbolt.java.actions.Dynamic;
+import be.objectify.deadbolt.java.actions.Restrict;
+
 import delegates.UserDelegate;
+import enums.MyRoles;
 import enums.ResponseStatus;
 import play.data.Form;
 import play.mvc.*;
 import pojos.UserBean;
 import pojos.ResponseStatusBean;
+import security.SecurityModelConstants;
 
 public class UserControl extends Controller {
 
 	static Form<UserBean> userForm = Form.form(UserBean.class);
 
-	@Security.Authenticated(Secured.class)
+	@CustomRestrict(value = {MyRoles.ADMIN}, config = @Restrict({}))
 	public static Result getUsers() {
 		List<UserBean> listUsers = UserDelegate.getInstance().getAll();
 		return listUsers != null ? ok(toJson(listUsers)) : notFound();
 	}
 
-	@Security.Authenticated(Secured.class)
+	@Dynamic(value="OnlyMe", meta=SecurityModelConstants.ID_FROM_USER)
 	public static Result getUser(Long uid) {
 		UserBean bean = UserDelegate.getInstance().getUser(uid);
 		return bean != null ? ok(toJson(bean)) : notFound();
@@ -58,7 +64,7 @@ public class UserControl extends Controller {
 		}
 	}
 
-	@Security.Authenticated(Secured.class)
+	@Dynamic(value="OnlyMe", meta=SecurityModelConstants.ID_FROM_USER)
 	public static Result updateUser(Long uid) {
 		Form<UserBean> filledForm = userForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
@@ -80,7 +86,7 @@ public class UserControl extends Controller {
 		}
 	}
 
-	@Security.Authenticated(Secured.class)
+	@Dynamic(value="OnlyMe", meta=SecurityModelConstants.ID_FROM_USER)
 	public static Result deleteUser(Long uid) {
 		try {
 			UserDelegate.getInstance().deleteUser(uid);
@@ -95,7 +101,7 @@ public class UserControl extends Controller {
 		}
 	}
 
-	@Security.Authenticated(Secured.class)
+	@Dynamic(value="OnlyMe", meta=SecurityModelConstants.ID_FROM_USER)
 	public static Result deleteUserForce(Long uid) {
 		try {
 			UserDelegate.getInstance().deleteUserForce(uid);
