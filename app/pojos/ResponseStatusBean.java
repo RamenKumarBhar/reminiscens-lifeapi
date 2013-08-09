@@ -16,6 +16,7 @@ public class ResponseStatusBean implements Serializable {
     private ResponseStatus responseStatus;
 	private String statusMessage;
 	private String errorTrace;
+	private Long newResourceId;
 
 	public ResponseStatusBean(ResponseStatus responseStatus,
 			String statusMessage) {
@@ -62,6 +63,14 @@ public class ResponseStatusBean implements Serializable {
 
 	public void setErrorTrace(String errorTrace) {
 		this.errorTrace = errorTrace;
+	}
+
+	public Long getNewResourceId() {
+		return newResourceId;
+	}
+
+	public void setNewResourceId(Long newResourceId) {
+		this.newResourceId = newResourceId;
 	}
 	
 	
