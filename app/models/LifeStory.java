@@ -14,7 +14,7 @@ import org.joda.time.DateTime;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="Life_Event")
+@Table(name = "Life_Event")
 public class LifeStory extends Model {
 
 	/**
@@ -23,17 +23,17 @@ public class LifeStory extends Model {
 	private static final long serialVersionUID = -4442579968783942558L;
 
 	@Id
-    @GeneratedValue
-    @Column(name="life_event_id")
-    private Long lifeStoryId;
-	
+	@GeneratedValue
+	@Column(name = "life_event_id")
+	private Long lifeStoryId;
+
 	@Required
 	@Column
 	private String headline;
 
 	@Column
 	private String text;
-	
+
 	@Column
 	private String richtext;
 
@@ -42,122 +42,179 @@ public class LifeStory extends Model {
 
 	@Column
 	private Integer visibility;
-	
-	@Column(name="contributor_id")
+
+	@Column(name = "contributor_id")
 	private Long contributorId;
 
 	@Temporal(TemporalType.DATE)
-	@Column 
-	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	@Column
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime creationDate;
-	
+
 	@Column
 	private String locale;
-	
+
 	@ManyToOne
 	@MapsId
-    @JoinColumn(name="location_id")
+	@JoinColumn(name = "location_id")
 	private Location location;
 
 	@ManyToOne
 	@MapsId
-	@JoinColumn(name="question_id")
+	@JoinColumn(name = "question_id")
 	private Question question;
-	
+
 	@ManyToOne
 	@MapsId
-    @JoinColumn(name="fuzzy_startdate", updatable=true, insertable = true)
+	@JoinColumn(name = "fuzzy_startdate", updatable = true, insertable = true)
 	private FuzzyDate startDate;
 
 	@ManyToOne
 	@MapsId
-    @JoinColumn(name="fuzzy_enddate", updatable=true, insertable = true)
+	@JoinColumn(name = "fuzzy_enddate", updatable = true, insertable = true)
 	private FuzzyDate endDate;
 
-	@OneToMany(mappedBy="lifeStory", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "lifeStory", cascade = CascadeType.ALL)
 	private List<Memento> mementoList;
 
 	@JsonIgnore
-	@OneToMany(mappedBy="lifeStory",cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "lifeStory", cascade = CascadeType.ALL)
 	private List<Participation> participationList;
 
 	@Transient
 	private boolean synced;
 
-	public static Model.Finder<Long,LifeStory> find = new Model.Finder<Long, LifeStory>(
-            Long.class,LifeStory.class
-    );
-    
-    public static List<LifeStory> all(){
-        return find.all();
-    }
-    
-    public static void create(LifeStory lifestory){
+	public static Model.Finder<Long, LifeStory> find = new Model.Finder<Long, LifeStory>(
+			Long.class, LifeStory.class);
 
-    	// 1. Data to save before creating the new life story
-    	FuzzyDate start = lifestory.getStartDate();
-    	FuzzyDate end = lifestory.getEndDate();
-    	Location place = lifestory.getLocation();
+	public static List<LifeStory> all() {
+		return find.all();
+	}
 
-    	lifestory.setStartDate(FuzzyDate.createIfNotExist(start));
-    	lifestory.setEndDate(FuzzyDate.createIfNotExist(end));
-    	lifestory.setLocation(Location.createIfNotExist(place));
+	public static void create(LifeStory lifestory) {
 
-    	// 2. Save the new life story
-    	lifestory.setSynced(true);
-    	lifestory.setCreationDate(DateTime.now());
-        lifestory.save();
-    	
-    	// 3. things to save after creating the life story
-    	List<Participation> participants = lifestory.getParticipationList();
-    	for (Participation participation : participants) {
+		// 1. Data to save before creating the new life story
+		FuzzyDate start = lifestory.getStartDate();
+		FuzzyDate end = lifestory.getEndDate();
+		Location place = lifestory.getLocation();
+
+		lifestory.setStartDate(FuzzyDate.createIfNotExist(start));
+		lifestory.setEndDate(FuzzyDate.createIfNotExist(end));
+		lifestory.setLocation(Location.createIfNotExist(place));
+
+		// 2. Save the new life story
+		lifestory.setSynced(true);
+		lifestory.setCreationDate(DateTime.now());
+		lifestory.save();
+
+		// 3. things to save after creating the life story
+		List<Participation> participants = lifestory.getParticipationList();
+		for (Participation participation : participants) {
 			Participation.create(participation);
 		}
-    	
-    	List<Memento> mementoList = lifestory.getMementoList();        
-        for (Memento memento : mementoList) {
-        	Memento.create(memento);
-		}
-    }
-    
-    public static LifeStory createObject(LifeStory lifestory){
-        lifestory.save();
-        return lifestory;
-    }
-    
-    public static void delete(Long id){
-        find.ref(id).delete();
-    }
-    
-    public static LifeStory read(Long id){
-        return find.byId(id);
-    }
 
-    public static List<LifeStory> readByPerson(Long personId){
-    	List<Participation> participationList = Participation.participationByPersonProtagonist(personId);
-    	List<LifeStory> lifeStories = new ArrayList<LifeStory> ();
-    	for (Participation participation : participationList) {
-//			LifeStory ls = LifeStory.read(participation.getLifeStoryId());
-    		LifeStory ls = participation.getLifeStory();
+		List<Memento> mementoList = lifestory.getMementoList();
+		for (Memento memento : mementoList) {
+			Memento.create(memento);
+		}
+	}
+
+	public static LifeStory createObject(LifeStory lifestory) {
+		lifestory.save();
+		return lifestory;
+	}
+
+	public static void delete(Long id) {
+		find.ref(id).delete();
+	}
+
+	public static LifeStory read(Long id) {
+		return find.byId(id);
+	}
+
+	public static List<LifeStory> readByPerson(Long personId) {
+		List<Participation> participationList = Participation
+				.participationByPersonProtagonist(personId);
+		List<LifeStory> lifeStories = new ArrayList<LifeStory>();
+		for (Participation participation : participationList) {
+			LifeStory ls = participation.getLifeStory();
 			lifeStories.add(ls);
 		}
-    	return lifeStories;
-    }
-    
-    public static List<LifeStory> readByPersonWithLimits(Long personId, Long from, Long to){
-    	List<Participation> participationList = Participation.participationByPersonProtagonist(personId);
-    	List<LifeStory> lifeStories = new ArrayList<LifeStory> ();
-    	for (int i = from.intValue(); i < participationList.size(); i++) {
-    		Participation participation = participationList.get(i);
-    		LifeStory ls = participation.getLifeStory();
+		return lifeStories;
+	}
+
+	public static List<LifeStory> readByPersonWithLimits(Long personId,
+			Long from, Long to) {
+		List<Participation> participationList = Participation
+				.participationByPersonProtagonist(personId);
+		List<LifeStory> lifeStories = new ArrayList<LifeStory>();
+		for (int i = from.intValue(); i < participationList.size(); i++) {
+			Participation participation = participationList.get(i);
+			LifeStory ls = participation.getLifeStory();
 			lifeStories.add(ls);
-    		if (i>=to.intValue()) {
+			if (i >= to.intValue()) {
 				break;
-    		} 
-    	}
-    	return lifeStories;
-    }
-    
+			}
+		}
+		return lifeStories;
+	}
+
+	public static List<LifeStory> readByPersonIncludingNonProtagonist(
+			Long personId) {
+		List<Participation> participationList = Participation
+				.participationByPerson(personId);
+		List<LifeStory> lifeStories = new ArrayList<LifeStory>();
+		for (Participation participation : participationList) {
+			LifeStory ls = participation.getLifeStory();
+			lifeStories.add(ls);
+		}
+		return lifeStories;
+	}
+
+	public void addParticipant(Participation p) {
+		List<Participation> participationList = this.participationList;
+		Long id = p.getPerson().getPersonId();
+		Boolean alreadyIn = false;
+		for (Participation participation : participationList) {
+			alreadyIn = id == participation.getPerson().getPersonId();
+			if (alreadyIn) {
+				break;
+			}
+		}
+		if (!alreadyIn) {
+			Participation.create(p);
+			this.participationList.add(p);
+		}
+
+	}
+
+	public void deleteParticipant(Long id) throws Exception {
+		List<Participation> participationList = this.participationList;
+		for (Participation participation : participationList) {
+			if (id == participation.getPerson().getPersonId()) {
+				// found!
+				if (!participation.isProtagonist()) {
+					participation.delete();
+				} else {
+					throw new Exception(
+							"Participant is a protagonist. Protagonist can only be deleted by themselves.");
+				}
+				break;
+			}
+		}
+	}
+
+	public void deleteProtagonist(Long id) {
+		List<Participation> participationList = this.participationList;
+		for (Participation participation : participationList) {
+			if (id == participation.getPerson().getPersonId()) {
+				// found!
+				participation.delete();
+				break;
+			}
+		}
+	}
+
 	public List<Memento> getMementoList() {
 		return mementoList;
 	}
@@ -166,187 +223,106 @@ public class LifeStory extends Model {
 		this.mementoList = mementoList;
 	}
 
-
-	
-	
-	/**
-	 * @return the lifeStoryId
-	 */
 	public Long getLifeStoryId() {
 		return lifeStoryId;
 	}
 
-	/**
-	 * @param lifeStoryId the lifeStoryId to set
-	 */
 	public void setLifeStoryId(Long lifeStoryId) {
 		this.lifeStoryId = lifeStoryId;
 	}
 
-	/**
-	 * @return the headline
-	 */
 	public String getHeadline() {
 		return headline;
 	}
 
-	/**
-	 * @param headline the headline to set
-	 */
 	public void setHeadline(String headline) {
 		this.headline = headline;
 	}
 
-	/**
-	 * @return the text
-	 */
 	public String getText() {
 		return text;
 	}
 
-	/**
-	 * @param text the text to set
-	 */
 	public void setText(String text) {
 		this.text = text;
 	}
 
-	/**
-	 * @return the richtext
-	 */
 	public String getRichtext() {
 		return richtext;
 	}
 
-	/**
-	 * @param richtext the richtext to set
-	 */
 	public void setRichtext(String richtext) {
 		this.richtext = richtext;
 	}
 
-	/**
-	 * @return the type
-	 */
 	public String getType() {
 		return type;
 	}
 
-	/**
-	 * @param type the type to set
-	 */
 	public void setType(String type) {
 		this.type = type;
 	}
 
-	/**
-	 * @return the visibility
-	 */
 	public Integer getVisibility() {
 		return visibility;
 	}
 
-	/**
-	 * @param visibility the visibility to set
-	 */
 	public void setVisibility(Integer visibility) {
 		this.visibility = visibility;
 	}
 
-	/**
-	 * @return the contributorId
-	 */
 	public Long getContributorId() {
 		return contributorId;
 	}
 
-	/**
-	 * @param contributorId the contributorId to set
-	 */
 	public void setContributorId(Long contributorId) {
 		this.contributorId = contributorId;
 	}
 
-	/**
-	 * @return the creation_date
-	 */
 	public DateTime getCreationDate() {
 		return creationDate;
 	}
 
-	/**
-	 * @param creation_date the creation_date to set
-	 */
 	public void setCreationDate(DateTime creation_date) {
 		this.creationDate = creation_date;
 	}
 
-	/**
-	 * @return the locale
-	 */
 	public String getLocale() {
 		return locale;
 	}
 
-	/**
-	 * @param locale the locale to set
-	 */
 	public void setLocale(String locale) {
 		this.locale = locale;
 	}
 
-	/**
-	 * @return the location
-	 */
 	public Location getLocation() {
 		return location;
 	}
 
-	/**
-	 * @param location the location to set
-	 */
 	public void setLocation(Location location) {
 		this.location = location;
 	}
 
-	/**
-	 * @return the question
-	 */
 	public Question getQuestion() {
 		return question;
 	}
 
-	/**
-	 * @param question the question to set
-	 */
 	public void setQuestion(Question question) {
 		this.question = question;
 	}
 
-	/**
-	 * @return the startDate
-	 */
 	public FuzzyDate getStartDate() {
 		return startDate;
 	}
 
-	/**
-	 * @param startDate the startDate to set
-	 */
 	public void setStartDate(FuzzyDate startDate) {
 		this.startDate = startDate;
 	}
 
-	/**
-	 * @return the endDate
-	 */
 	public FuzzyDate getEndDate() {
 		return endDate;
 	}
 
-	/**
-	 * @param endDate the endDate to set
-	 */
 	public void setEndDate(FuzzyDate endDate) {
 		this.endDate = endDate;
 	}
@@ -354,9 +330,9 @@ public class LifeStory extends Model {
 	public boolean isSynchronized() {
 		return this.synced;
 	}
-	
+
 	public void setSynced(boolean synced) {
-		this.synced=synced;
+		this.synced = synced;
 	}
 
 	public List<Participation> getParticipationList() {
