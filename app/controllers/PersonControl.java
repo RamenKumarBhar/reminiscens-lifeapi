@@ -41,7 +41,7 @@ public class PersonControl extends Controller {
 		return bean != null ? ok(toJson(bean)) : notFound();
 	}
 
-	@CustomRestrict(value = {MyRoles.ADMIN}, config = @Restrict({}))
+	@CustomRestrict(value = {MyRoles.MEMBER}, config = @Restrict({}))
 	public static Result createPerson() {
 		Form<PersonBean> filledForm = personForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
