@@ -82,4 +82,13 @@ public class Application extends Controller {
 				.getUser(session));
 		return localUser;
 	}
+
+	public static Result checkPreFlight(String path) {
+		response().setHeader("Access-Control-Allow-Origin", "*");
+		response().setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS");
+		response()
+				.setHeader("Access-Control-Allow-Headers",
+						"accept, origin, Content-type, x-json, x-prototype-version, x-requested-with, PLAY_SESSION");
+		return ok();
+	}
 }

@@ -5,6 +5,8 @@
 # Home page
 GET     /                           controllers.Application.index()
 
+OPTIONS /*path                      controllers.Application.checkPreFlight(path) 
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 #####################################################################################
@@ -14,7 +16,7 @@ GET     /person/:id                     controllers.PersonControl.getPerson(id: 
 POST    /person                         controllers.PersonControl.createPerson()
 POST    /person/mention                 controllers.PersonControl.createMentionPerson()
 PUT     /person/:id                     controllers.PersonControl.updatePerson(id: Long)
-#DELETE  /person/:id                     controllers.PersonControl.deletePerson(id: Long)
+DELETE  /person/:id                     controllers.PersonControl.deletePerson(id: Long)
 GET     /person/:id/timeline            controllers.TimelineControl.getPersonTimeline(id: Long)
 GET     /person/:id/timeline/:from/:to  controllers.TimelineControl.getPersonTimelineWithLimits(id: Long, from: Long, to: Long)
 POST    /person/:id/timeline            controllers.TimelineControl.synchronizePersonTimeline(id: Long)

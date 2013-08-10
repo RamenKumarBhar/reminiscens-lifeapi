@@ -84,7 +84,7 @@ public class Participation extends Model {
 			Long personId) {
 		Person p = Person.read(personId);
 		List<Participation> participationList = find.where()
-				.eq("person", p).eq("isProtagonist", "1").findList();
+				.eq("person", p).eq("isProtagonist", Boolean.TRUE).findList();
 		return participationList;
 	}
 	

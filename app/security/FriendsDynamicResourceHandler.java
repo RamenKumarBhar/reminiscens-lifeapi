@@ -2,7 +2,7 @@ package security;
 
 import java.util.List;
 
-import models.LifeStory;
+import play.Logger;
 import models.Participation;
 import models.Relationship;
 
@@ -11,6 +11,7 @@ import be.objectify.deadbolt.core.DeadboltAnalyzer;
 import be.objectify.deadbolt.core.models.Subject;
 import be.objectify.deadbolt.java.AbstractDynamicResourceHandler;
 import be.objectify.deadbolt.java.DeadboltHandler;
+//import play.Logger;
 
 public class FriendsDynamicResourceHandler extends
 		AbstractDynamicResourceHandler {
@@ -32,7 +33,12 @@ public class FriendsDynamicResourceHandler extends
 			Long requestedResourceId = MyDynamicResourceHandler.getIdFromPath(path, meta);
 			Long userId = new Long(subject.getIdentifier());
 			Long userPersonId = models.User.read(userId).getPersonId();
-			
+			Logger.debug("Checking relationship of...");
+			Logger.debug("--> userId = "+userId);
+			Logger.debug("--> userPersonId = "+userPersonId);
+			Logger.debug("--> requestedResourceId= "+requestedResourceId);
+			Logger.debug("--> type of resource= "+meta);
+
 			if(SecurityModelConstants.ID_FROM_PERSON.equals(meta)) {
 				// allow to myself or my list of contacts
 				allowed=checkRelationship(userPersonId,requestedResourceId);	
@@ -82,16 +88,16 @@ public class FriendsDynamicResourceHandler extends
 
 	/**
 	 * check in there is a relationship between the user and the person. if both are the same, return true
-	 * @param user
-	 * @param person
+	 * @param requestor
+	 * @param requested
 	 * @return
 	 */
-	private Boolean checkRelationship(Long user, Long person) {
-		if (user == person) {
+	private Boolean checkRelationship(Long requestor, Long requested) {
+		if (requestor == requested) {
 		// if we are talking of the same person, return true
 			return true;
 		} else {
-			List<Relationship> relationships = models.Relationship.findRelationships(user,person) ;
+			List<Relationship> relationships = models.Relationship.findRelationships(requestor,requested) ;
 			return relationships!= null && relationships.size()>0;
 		}
 	}
