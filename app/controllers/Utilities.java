@@ -78,8 +78,6 @@ public class Utilities extends Controller {
 			play.mvc.Http.MultipartFormData.FilePart file = body.getFile("file") == null ? body.getFile("files[]") : body.getFile("file") ;
 			FileBean fileBean = filledForm.get() == null ? new FileBean() : filledForm.get() ;
 			
-			
-			
 			if (user != null) {
 				Logger.debug("User "+user.getEmail()+" posted a file");
 				fileBean.setOwner(user.getUserId());
