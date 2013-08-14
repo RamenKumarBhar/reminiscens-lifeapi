@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Person;
-
 import org.joda.time.DateTime;
 
 import utils.JodaDateTime;
@@ -29,7 +27,7 @@ public class LifeStoryBean implements Serializable {
 	private LocationBean location;
 	private QuestionBean question;
 	private FuzzyDateBean startDate;
-	private boolean synced = true;
+	private boolean synced;
 	private List<ParticipationBean> participationList;
 	private List<MementoBean> mementoList;
 	
@@ -215,9 +213,9 @@ public class LifeStoryBean implements Serializable {
 		this.question = question;
 	}
 
-//	public boolean isSynced() {
-//		return synced;
-//	}
+	public boolean isSynced() {
+		return synced;
+	}
 
 	public void setSynced(boolean synced) {
 		this.synced = synced;
