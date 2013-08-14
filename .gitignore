@@ -38,3 +38,4 @@ lifeapi.log
 start.sh
 lifeapi.log
 project/target/streams/$global/update/$global/out
+conf/application.conf
