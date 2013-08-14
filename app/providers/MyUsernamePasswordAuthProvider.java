@@ -15,6 +15,7 @@ import models.TokenAction.Type;
 import models.User;
 import play.Application;
 import play.Logger;
+import play.Play;
 import play.data.Form;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MinLength;
@@ -402,8 +403,11 @@ public class MyUsernamePasswordAuthProvider
 				SETTING_KEY_VERIFICATION_LINK_SECURE);
 		// TODO find out how to return just json
 		// final String url = "";
-		final String url = routes.Signup.verify(token).absoluteURL(
-				ctx.request(), isSecure);
+//		final String url = routes.Signup.verify(token).absoluteURL(
+//				ctx.request(), isSecure);
+		String baseURL = Play.application().configuration().getString("application.baseUrl");
+		final String url = baseURL+routes.Signup.verify(token).url();
+
 
 		final Lang lang = Lang.preferred(ctx.request().acceptLanguages());
 		final String langCode = lang.code();
