@@ -93,7 +93,7 @@ public class Global extends GlobalSettings {
 				MyUsernamePasswordAuthUser auth = null;
 
 				auth = new MyUsernamePasswordAuthUser("First Member", person,
-						null, "first@example.com", "password");
+						null, "first@example.com", "password", "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png");
 
 				User user = models.User.create(auth);
 
@@ -240,7 +240,7 @@ public class Global extends GlobalSettings {
 						});
 
 	}
-
+	
 }
 
 // @SuppressWarnings("rawtypes")

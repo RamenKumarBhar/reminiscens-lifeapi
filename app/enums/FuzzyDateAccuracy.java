@@ -1,7 +1,4 @@
 package enums;
-
-import org.codehaus.jackson.annotate.JsonCreator;
-
 /**
  * describes accuracy of the date from 1 to 10
 	1, if we only have a textual description (e.g.it was around ten or 15 years ago,when i was on summer vacation)

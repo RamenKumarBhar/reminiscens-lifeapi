@@ -46,6 +46,7 @@ public class Signup extends Controller {
 	public static Result unverified() {
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 	
+		
 		// return the User
 		
 		return ok(toJson(Messages.get("playauthenticate.verify.email.cta"))); 
