@@ -1,6 +1,5 @@
 package pojos;
 
-import java.io.File;
 import java.io.Serializable;
 
 import org.joda.time.DateTime;

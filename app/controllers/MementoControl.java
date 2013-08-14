@@ -4,7 +4,12 @@ import static play.libs.Json.toJson;
 
 import java.util.List;
 
+import annotations.CustomRestrict;
+import be.objectify.deadbolt.java.actions.Dynamic;
+import be.objectify.deadbolt.java.actions.Restrict;
+
 import delegates.MementoDelegate;
+import enums.MyRoles;
 import enums.ResponseStatus;
 import play.data.Form;
 import play.mvc.*;
@@ -12,40 +17,46 @@ import pojos.MementoBean;
 import pojos.MementoParticipationBean;
 import pojos.MentionPersonBean;
 import pojos.ResponseStatusBean;
+import security.SecurityModelConstants;
 
 public class MementoControl extends Controller {
 	static Form<MementoBean> mementoForm = Form.form(MementoBean.class);
 	static Form<MentionPersonBean> mentionPersonForm = Form.form(MentionPersonBean.class);
-
+	
+	@CustomRestrict(value = {MyRoles.ADMIN}, config = @Restrict({}))
 	public static Result getAllMemento() {
 		List<MementoBean> lp = MementoDelegate.getInstance().getAll();
 		return lp != null ? ok(toJson(lp)) : notFound();
 	}
-
+	
+	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_MEMENTO)
 	public static Result getAllPersonMemento(Long personId) {
 		List<MementoBean> lp = MementoDelegate.getInstance()
 				.getAllPersonMemento(personId);
 		return lp != null ? ok(toJson(lp)) : notFound();
 	}
 
-
+	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_MEMENTO)
 	public static Result getPersonProtagonistMemento(Long personId) {
 		List<MementoBean> lp = MementoDelegate.getInstance()
 				.getPersonProtagonistMemento(personId);
 		return lp != null ? ok(toJson(lp)) : notFound();
 	}
 
+	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_MEMENTO)
 	public static Result getPersonMentionMemento(Long personId) {
 		List<MementoBean> lp = MementoDelegate.getInstance()
 				.getPersonMentiontMemento(personId);
 		return lp != null ? ok(toJson(lp)) : notFound();
 	}
 	
+	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_MEMENTO)
 	public static Result getMemento(Long id) {
 		MementoBean bean = MementoDelegate.getInstance().getMemento(id);
 		return bean != null ? ok(toJson(bean)) : notFound();
 	}
 
+	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_MEMENTO)
 	public static Result createMemento() {
 		Form<MementoBean> filledForm = mementoForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
@@ -59,8 +70,8 @@ public class MementoControl extends Controller {
 			return ok(toJson(mementoBean));
 		}
 	}
-
-	// TODO Update also participant list changes
+	
+	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_MEMENTO)
 	public static Result updateMemento(Long id) {
 		Form<MementoBean> filledForm = mementoForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
@@ -82,6 +93,7 @@ public class MementoControl extends Controller {
 		}
 	}
 
+	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_MEMENTO)
 	public static Result deleteMemento(Long id) {
 		try {
 			MementoDelegate.getInstance().deleteMemento(id);
@@ -101,6 +113,7 @@ public class MementoControl extends Controller {
 		return TODO;
 	}
 
+	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_MEMENTO)
 	public static Result addMementoParticipantByPersonId(Long id, Long pid) {
 		MementoParticipationBean response;
 		try {
@@ -117,6 +130,7 @@ public class MementoControl extends Controller {
 		return ok(toJson(response));
 	}
 
+	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_MEMENTO)
 	public static Result addMementoParticipant(Long id) {
 		Form<MentionPersonBean> filledForm = mentionPersonForm.bindFromRequest();
 		if (filledForm.hasErrors()) {

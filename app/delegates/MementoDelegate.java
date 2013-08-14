@@ -139,4 +139,18 @@ public class MementoDelegate {
 		}
 		return pojosMementos;
 	}
+
+	public MementoBean addMementoToLifeStory(Long lsid, Long mid) {
+		models.LifeStory story = models.LifeStory.read(lsid);
+		models.Memento memento = models.Memento.read(mid);
+		MementoBean mb = null;
+		
+		if (story != null && memento != null) {
+			story.getMementoList().add(memento);
+			story.update();
+			mb = PlayDozerMapper.getInstance().map(memento,MementoBean.class);
+		} 	
+		
+		return mb;
+	}
 }

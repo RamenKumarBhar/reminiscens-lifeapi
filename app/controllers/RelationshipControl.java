@@ -2,10 +2,13 @@ package controllers;
 
 import java.util.List;
 
+import be.objectify.deadbolt.java.actions.Dynamic;
+
 import play.mvc.*;
 import play.data.*;
 import pojos.RelationshipBean;
 import pojos.ResponseStatusBean;
+import security.SecurityModelConstants;
 import static play.libs.Json.toJson;
 
 import delegates.RelationshipDelegate;
@@ -16,18 +19,21 @@ public class RelationshipControl extends Controller {
 	static Form<RelationshipBean> relationshipForm = Form
 			.form(RelationshipBean.class);
 
+	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_PERSON)
 	public static Result getPersonRelationships(Long id) {
 		List<RelationshipBean> relationships = RelationshipDelegate
 				.getInstance().getPersonRelationships(id);
 		return relationships != null ? ok(toJson(relationships)) : notFound();
 	}
-
+	
+	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_PERSON)
 	public static Result getPersonCurators(Long id) {
 		List<RelationshipBean> relationships = RelationshipDelegate
 				.getInstance().getPersonCurators(id);
 		return relationships != null ? ok(toJson(relationships)) : notFound();
 	}
 
+	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_RELATIONSHIPS)
 	public static Result addRelationship() {
 		Form<RelationshipBean> filledForm = relationshipForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
@@ -42,6 +48,7 @@ public class RelationshipControl extends Controller {
 		}
 	}
 
+	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_RELATIONSHIPS)
 	public static Result updateRelationship(Long id) {
 		Form<RelationshipBean> filledForm = relationshipForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
@@ -63,6 +70,7 @@ public class RelationshipControl extends Controller {
 		}
 	}
 
+	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_RELATIONSHIPS)
 	public static Result deleteRelationship(Long id) {
 		try {
 			RelationshipDelegate.getInstance().deleteRelationship(id);
