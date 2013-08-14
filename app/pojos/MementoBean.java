@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import enums.MementoType;
-
 
 public class MementoBean  implements Serializable {
 

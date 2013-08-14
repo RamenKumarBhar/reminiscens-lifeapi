@@ -4,6 +4,8 @@ import static play.libs.Json.toJson;
 
 import java.io.UnsupportedEncodingException;
 
+import models.User;
+
 import org.apache.commons.lang.NotImplementedException;
 
 import play.Logger;
@@ -16,7 +18,7 @@ import play.mvc.Http.Session;
 import play.mvc.Result;
 import pojos.ResponseStatusBean;
 import pojos.UserBean;
-import providers.MyUsernamePasswordAuthUser;
+import providers.MyUsernamePasswordAuthProvider;
 import utils.PlayDozerMapper;
 
 import com.feth.play.module.pa.PlayAuthenticate;
@@ -32,42 +34,42 @@ public class PlayAuthenticateLocal extends PlayAuthenticate {
 	private static final String SETTING_KEY_ACCOUNT_AUTO_LINK = "accountAutoLink";
 	private static final String SETTING_KEY_ACCOUNT_AUTO_MERGE = "accountAutoMerge";
 
-	// public static Result loginAndRedirect(final Context context,
-	// final AuthUser loginUser) {
-	//
-	// // storeUser(context.session(), loginUser);
-	// String encoded = "";
-	// String signed = "";
-	// try {
-	// StringBuffer sb = new StringBuffer();
-	// sb.append("pa.u.exp:");
-	// sb.append(context.session().get("pa.u.exp"));
-	// sb.append("\u0000pa.p.id:");
-	// sb.append(context.session().get("pa.p.id"));
-	// sb.append("\u0000pa.u.id:");
-	// sb.append(context.session().get("pa.u.id"));
-	// encoded = java.net.URLEncoder.encode(sb.toString(), "UTF-8");
-	// signed = Crypto.sign(encoded);
-	// } catch (UnsupportedEncodingException e) {
-	// Logger.error(e.getMessage());
-	// e.printStackTrace();
-	// }
-	// if(Logger.isDebugEnabled()){
-	// Logger.debug("session generated: " + "PLAY_SESSION=" + signed + "-" +
-	// encoded);
-	// }
-	// return Controller.ok(toJson("PLAY_SESSION=" + signed + "-" + encoded));
-	// }
-
+	/**
+	 * Deprecated by public static Result loginAndRedirect(final Context
+	 * context, final AuthUser loginUser, Object payload)
+	 * 
+	 * Kept to allow reverse compatibility
+	 * 
+	 * @param context
+	 * @param loginUser
+	 * @return
+	 */
 	public static Result loginAndRedirect(final Context context,
 			final AuthUser loginUser) {
+
+		return loginAndRedirect(context, loginUser, null);
+	}
+
+	/**
+	 * Login and redirect signs in the user and sends him back the user
+	 * information along with the sessionKey. Payload is an object containing
+	 * information about what was the original call (signup or login) in order
+	 * to allow signup with automatic login afterwards
+	 * 
+	 * @param context
+	 * @param loginUser
+	 * @param payload
+	 * @return
+	 */
+	public static Result loginAndRedirect(final Context context,
+			final AuthUser loginUser, Object payload) {
 
 		String encoded = "";
 		String signed = "";
 
 		try {
 			StringBuffer sb = new StringBuffer();
-			
+
 			if (loginUser.expires() != AuthUser.NO_EXPIRATION) {
 				sb.append("pa.u.exp:");
 				sb.append(loginUser.expires());
@@ -83,17 +85,32 @@ public class PlayAuthenticateLocal extends PlayAuthenticate {
 			Logger.error(e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		if (Logger.isDebugEnabled()) {
 			Logger.debug("session generated: " + "PLAY_SESSION=" + signed + "-"
 					+ encoded);
 		}
-		
+
 		models.User user = models.User.getByEmail(loginUser.getId());
+
+		if (payload != null && payload.toString().equals("SIGNUP")) {
+			// send verification email
+			// added to support login after signup
+			Logger.debug("signing up a new user:");
+			Logger.debug("--> id: " + loginUser.getId());
+			Logger.debug("--> provider: " + loginUser.getProvider());
+			Logger.debug("sending verification email:");
+			Logger.debug("--> provider: " + loginUser.getProvider());
+			MyUsernamePasswordAuthProvider provider = MyUsernamePasswordAuthProvider
+					.getProvider();
+			provider.sendVerifyEmailMailingAfterSignup(user, context);
+
+		}
+
 		UserBean u = PlayDozerMapper.getInstance().map(user, UserBean.class);
 		u.setSessionKey(signed + "-" + encoded);
-//		return Controller.ok(toJson("PLAY_SESSION=" + signed + "-" + encoded));
 		return Controller.ok(toJson(u));
+		// return Controller.ok(toJson("PLAY_SESSION=" + signed + "-" + encoded));
 	}
 
 	public static Result handleAuthentication(final String provider,
@@ -107,62 +124,123 @@ public class PlayAuthenticateLocal extends PlayAuthenticate {
 			// provider));
 			ResponseStatusBean response = new ResponseStatusBean();
 			response.setResponseStatus(ResponseStatus.NOTAVAILABLE);
-			response.setStatusMessage("playauthenticate.core.exception.provider_not_found="+provider);
+			response.setStatusMessage("playauthenticate.core.exception.provider_not_found="
+					+ provider);
 			return Controller.notFound(toJson(response));
-//			return Controller.badRequest(
-//					Messages.get(
-//							"playauthenticate.core.exception.provider_not_found",
-//							provider));
+			// return Controller.badRequest(
+			// Messages.get(
+			// "playauthenticate.core.exception.provider_not_found",
+			// provider));
 		}
 		try {
-			// authenticate is implemented by service.PlayAuthenticateLocal.
+			// authenticate is implemented by
+			// com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider.java
+			// Source code for reference
+			// @Override
+			// public Object authenticate(final Context context, final Object
+			// payload)
+			// throws AuthException {
+			//
+			// if (payload == Case.SIGNUP) {
+			// final S signup = getSignup(context);
+			// final US authUser = buildSignupAuthUser(signup, context);
+			// final SignupResult r = signupUser(authUser);
+			//
+			// switch (r) {
+			// case USER_EXISTS:
+			// // The user exists already
+			// return userExists(authUser).url();
+			// case USER_EXISTS_UNVERIFIED:
+			// case USER_CREATED_UNVERIFIED:
+			// // User got created as unverified
+			// // Send validation email
+			// sendVerifyEmailMailing(context, authUser);
+			// return userUnverified(authUser).url();
+			// case USER_CREATED:
+			// // continue to login...
+			// return transformAuthUser(authUser, context);
+			// default:
+			// throw new AuthException("Something in signup went wrong");
+			// }
+			// } else if (payload == Case.LOGIN) {
+			// final L login = getLogin(context);
+			// final UL authUser = buildLoginAuthUser(login, context);
+			// final LoginResult r = loginUser(authUser);
+			// switch (r) {
+			// case USER_UNVERIFIED:
+			// // The email of the user is not verified, yet - we won't allow
+			// // him to log in
+			// return userUnverified(authUser).url();
+			// case USER_LOGGED_IN:
+			// // The user exists and the given password was correct
+			// return authUser;
+			// case WRONG_PASSWORD:
+			// // don't expose this - it might harm users privacy if anyone
+			// // knows they signed up for our service
+			// case NOT_FOUND:
+			// // forward to login page
+			// return onLoginUserNotFound(context);
+			// default:
+			// throw new AuthException("Something in login went wrong");
+			// }
+			// } else {
+			// return PlayAuthenticate.getResolver().login().url();
+			// }
+			// }
+
 			final Object o = ap.authenticate(context, payload);
 			if (o instanceof String) {
 				if ("NOT_FOUND".equals(o)) {
 					ResponseStatusBean response = new ResponseStatusBean();
 					response.setResponseStatus(ResponseStatus.UNAUTHORIZED);
-					response.setStatusMessage("playauthenticate.password.login.unknown_user_or_pw");
+					response.setStatusMessage(Messages
+							.get("playauthenticate.password.login.unknown_user_or_pw"));
 					return Controller.unauthorized(toJson(response));
-//					return Controller.unauthorized(
-//						Messages.get("playauthenticate.password.login.unknown_user_or_pw"));
+					// In case redirection is needed again
+					// return Controller.unauthorized(
+					// Messages.get("playauthenticate.password.login.unknown_user_or_pw"));
 				} else if (routes.Signup.unverified().url().equals(o)) {
-//					ResponseStatusBean response = new ResponseStatusBean();
-//					response.setResponseStatus(ResponseStatus.UNAUTHORIZED);
-//					response.setStatusMessage("playauthenticate.verify.email.cta");
-//					
-					// TODO changed the process so that the signup method returns the new user created
-					// in order not to need to retrieve it from DB
-						ResponseStatusBean response = new ResponseStatusBean();
-						response.setResponseStatus(ResponseStatus.UNAUTHORIZED);
-						response.setStatusMessage("playauthenticate.verify.email.cta");
-						return Controller.ok(toJson(response));					
-				} else
-					// TODO change this avoiding redirect
+					ResponseStatusBean response = new ResponseStatusBean();
+					response.setResponseStatus(ResponseStatus.UNAUTHORIZED);
+					response.setStatusMessage(Messages
+							.get("playauthenticate.verify.email.cta"));
+					return Controller.unauthorized(toJson(response));
+				} else if (routes.Signup.exists().url().equals(o)) {
+					ResponseStatusBean response = new ResponseStatusBean();
+					response.setResponseStatus(ResponseStatus.UNAUTHORIZED);
+					response.setStatusMessage(Messages
+							.get("playauthenticate.user.exists.message"));
+					return Controller.unauthorized(toJson(response));
+				} else {
 					// return Controller.redirect((String) o);
-					throw new NotImplementedException(
-							"not implemented when the authenticate response: "
-									+ o);
+					ResponseStatusBean response = new ResponseStatusBean();
+					response.setResponseStatus(ResponseStatus.SERVERERROR);
+					response.setStatusMessage("not implemented when the authenticate response is: "
+							+ o);
+					return Controller.internalServerError(toJson(response));
+				}
 			} else if (o instanceof AuthUser) {
 
 				final AuthUser newUser = (AuthUser) o;
 				final Session session = context.session();
 
-				// We might want to do merging here:
-				// Adapted from:
-				// http://stackoverflow.com/questions/6666267/architecture-for-merging-multiple-user-accounts-together
-				// 1. The account is linked to a local account and no session
-				// cookie is present --> Login
-				// 2. The account is linked to a local account and a session
-				// cookie is present --> Merge
-				// 3. The account is not linked to a local account and no
-				// session cookie is present --> Signup
-				// 4. The account is not linked to a local account and a session
-				// cookie is present --> Linking Additional account
-
-				// get the user with which we are logged in - is null if we
-				// are
+				/* 
+				 * We might want to do merging here:
+				 *
+				 * Adapted from:
+				 * http://stackoverflow.com/questions/6666267/architecture-for-merging-multiple-user-accounts-together
+				 * 1. The account is linked to a local account and no session
+				 * 	  cookie is present --> Login
+				 * 2. The account is linked to a local account and a session
+				 *    cookie is present --> Merge
+				 * 3. The account is not linked to a local account and no
+				 *    session cookie is present --> Signup
+				 * 4. The account is not linked to a local account and a session
+				 *    cookie is present --> Linking Additional account
+				 */
+				
+				// Get the user with which we are logged in - is null if we are
 				// not logged in (does NOT check expiration)
-
 				AuthUser oldUser = getUser(session);
 
 				// checks if the user is logged in (also checks the expiration!)
@@ -170,16 +248,13 @@ public class PlayAuthenticateLocal extends PlayAuthenticate {
 
 				Object oldIdentity = null;
 
-				// check if local user still exists - it might have been
-				// deactivated/deleted,
+				// check if local user still exists - it might have been deactivated/deleted,
 				// so this is a signup, not a link
-				
 				if (isLoggedIn) {
 					oldIdentity = getUserService().getLocalIdentity(oldUser);
 					isLoggedIn &= oldIdentity != null;
 					if (!isLoggedIn) {
-						// if isLoggedIn is false here, then the local user has
-						// been deleted/deactivated
+						// if isLoggedIn is false here, then the local user has been deleted/deactivated
 						// so kill the session
 						logout(session);
 						oldUser = null;
@@ -236,6 +311,7 @@ public class PlayAuthenticateLocal extends PlayAuthenticate {
 				} else if (!isLinked && !isLoggedIn) {
 					// 3. -> Signup
 					loginUser = signupUser(newUser);
+					
 				} else {
 					// !isLinked && isLoggedIn:
 
@@ -261,7 +337,7 @@ public class PlayAuthenticateLocal extends PlayAuthenticate {
 
 				}
 
-				return loginAndRedirect(context, loginUser);
+				return loginAndRedirect(context, loginUser, payload);
 			} else {
 				ResponseStatusBean response = new ResponseStatusBean();
 				response.setResponseStatus(ResponseStatus.SERVERERROR);
@@ -280,13 +356,13 @@ public class PlayAuthenticateLocal extends PlayAuthenticate {
 					response.setResponseStatus(ResponseStatus.SERVERERROR);
 					response.setStatusMessage(message);
 					return Controller.internalServerError(toJson(response));
-					//return Controller.internalServerError(message);
+					// return Controller.internalServerError(message);
 				} else {
 					ResponseStatusBean response = new ResponseStatusBean();
 					response.setResponseStatus(ResponseStatus.SERVERERROR);
 					response.setStatusMessage("Internal server error");
 					return Controller.internalServerError(toJson(response));
-					//return Controller.internalServerError();
+					// return Controller.internalServerError();
 				}
 			}
 		}
@@ -299,6 +375,7 @@ public class PlayAuthenticateLocal extends PlayAuthenticate {
 			throw new AuthException(
 					Messages.get("playauthenticate.core.exception.singupuser_failed"));
 		}
+
 		loginUser = u;
 		return loginUser;
 	}

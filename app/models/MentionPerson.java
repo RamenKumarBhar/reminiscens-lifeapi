@@ -86,7 +86,7 @@ public class MentionPerson extends Model{
     
     public static MentionPerson searchByFullname(String fullname) {    	
     	ExpressionList<MentionPerson> el = find.where().eq("fullname", fullname);
-    	MentionPerson result = el.findUnique();	
+    	MentionPerson result = el.findList().get(0);	
     	return result;
     }
 

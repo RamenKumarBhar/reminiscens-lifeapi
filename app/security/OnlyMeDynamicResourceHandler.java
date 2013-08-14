@@ -40,7 +40,10 @@ public class OnlyMeDynamicResourceHandler extends
 			} else if (SecurityModelConstants.ID_FROM_MEMENTO.equals(meta)) {
 				LifeStory story = getMementoStory(requestedResourceId);
 				allowed = story!=null && story.getContributorId() == userId && checkThatStoryIsMine(userPersonId, story);
-			} 
+			}  else if (SecurityModelConstants.ID_FROM_RELATIONSHIPS.equals(meta)) {
+				// TODO implement relationships security checks
+				allowed = true;
+			}
 		}
 		return allowed;
 	}

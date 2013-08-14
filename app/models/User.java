@@ -89,6 +89,9 @@ public class User extends Model implements Subject {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "User_User_Permission", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "user_id", updatable = true, insertable = true) }, inverseJoinColumns = { @JoinColumn(name = "permission_id", referencedColumnName = "permission_id", updatable = true, insertable = true) })
 	private List<UserPermission> permissions;
+	
+	@OneToMany(mappedBy = "targetUser", cascade = CascadeType.ALL)
+	private List<TokenAction> tokenActions;
 
 	public static Model.Finder<Long, User> find = new Model.Finder<Long, User>(
 			Long.class, User.class);

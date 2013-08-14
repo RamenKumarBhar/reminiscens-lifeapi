@@ -4,16 +4,15 @@ import static play.libs.Json.toJson;
 
 import java.util.List;
 
-import models.LifeStory;
-import models.Participation;
 import models.User;
 import be.objectify.deadbolt.java.actions.Dynamic;
 import delegates.LifeStoryDelegate;
-import delegates.UtilitiesDelegate;
+import delegates.MementoDelegate;
 import enums.ResponseStatus;
 import play.mvc.*;
 import play.data.*;
 import pojos.LifeStoryBean;
+import pojos.MementoBean;
 import pojos.ParticipationBean;
 import pojos.PersonBean;
 import pojos.ResponseStatusBean;
@@ -23,8 +22,10 @@ import utils.PlayDozerMapper;
 public class LifeStoryControl extends Controller {
 
 	static Form<LifeStoryBean> lifeStoryForm = Form.form(LifeStoryBean.class);
+	static Form<MementoBean> mementoForm = Form.form(MementoBean.class);
 
 	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_PERSON)
+	@Security.Authenticated(Secured.class)
 	public static Result getPersonLifeStoryAll(Long id) {
 		List<LifeStoryBean> bean = LifeStoryDelegate.getInstance()
 				.getAllByPersonId(id);
@@ -214,15 +215,34 @@ public class LifeStoryControl extends Controller {
 			return badRequest(toJson(res));
 		}
 	}
-
+	
+	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_STORY)
 	public static Result addMementoToLifeStory(Long lsid, Long mid) {
-		/** @TODO */
-		return TODO;
+		MementoBean mementoBean = MementoDelegate.getInstance().addMementoToLifeStory(lsid, mid);
+		
+		if (mementoBean == null) {
+			ResponseStatusBean res = new ResponseStatusBean(
+					ResponseStatus.NODATA, "Entity does not exist");
+			return badRequest(toJson(res));
+		} else {
+		return ok(toJson(mementoBean));
+		}
 	}
 
+	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_STORY)
 	public static Result addNewMementoToLifeStory(Long lsid) {
-		/** @TODO */
-		return TODO;
+		Form<MementoBean> filledForm = mementoForm.bindFromRequest();
+		if (filledForm.hasErrors()) {
+			ResponseStatusBean res = new ResponseStatusBean(
+					ResponseStatus.BADREQUEST,
+					"Body of request misses some information or it is malformed");
+			return badRequest(toJson(res));
+		} else {
+			MementoBean mementoBean = filledForm.get();
+			mementoBean.setLifeStoryId(lsid);
+			MementoDelegate.getInstance().create(mementoBean);
+			return ok(toJson(mementoBean));
+		}
 	}
 
 }

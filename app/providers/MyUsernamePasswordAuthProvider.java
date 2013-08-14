@@ -36,7 +36,11 @@ import controllers.routes;
 
 public class MyUsernamePasswordAuthProvider
 		extends
-		UsernamePasswordAuthProvider<String, MyLoginUsernamePasswordAuthUser, MyUsernamePasswordAuthUser, MyUsernamePasswordAuthProvider.MyLogin, MyUsernamePasswordAuthProvider.MySignup> {
+		UsernamePasswordAuthProvider<String, 
+										MyLoginUsernamePasswordAuthUser, 
+										MyUsernamePasswordAuthUser,
+										MyUsernamePasswordAuthProvider.MyLogin, 
+										MyUsernamePasswordAuthProvider.MySignup> {
 
 	private static final String SETTING_KEY_VERIFICATION_LINK_SECURE = SETTING_KEY_MAIL
 			+ "." + "verificationLink.secure";
@@ -102,18 +106,20 @@ public class MyUsernamePasswordAuthProvider
 		public String repeatPassword;
 
 		public String name;
-		
+
 		@Required
 		public PersonBean person;
-		
+
 		public Long userId;
-		
+
+		public String profilePic;
+
 		public String validate() {
 			if (password == null || !password.equals(repeatPassword)) {
-//				ResponseStatusBean response = ResponseStatusBean();
-//				response.setResponseStatus(ResponseStatus.BADREQUEST);
-//				response.setStatusMessage("playauthenticate.password.signup.error.passwords_not_same");
-//				return 				
+				// ResponseStatusBean response = ResponseStatusBean();
+				// response.setResponseStatus(ResponseStatus.BADREQUEST);
+				// response.setStatusMessage("playauthenticate.password.signup.error.passwords_not_same");
+				// return
 				return Messages
 						.get("playauthenticate.password.signup.error.passwords_not_same");
 			}
@@ -157,11 +163,11 @@ public class MyUsernamePasswordAuthProvider
 		// if you return
 		// return SignupResult.USER_CREATED;
 		// then the user gets logged in directly
-		//return SignupResult.USER_CREATED_UNVERIFIED;
-		
+		// return SignupResult.USER_CREATED_UNVERIFIED;
+
 		// TODO Send verification mail even if we log in the user directly
 		// TODO verify that the email is correct and valid
-		
+
 		return SignupResult.USER_CREATED;
 	}
 
@@ -257,7 +263,6 @@ public class MyUsernamePasswordAuthProvider
 
 		final Lang lang = Lang.preferred(ctx.request().acceptLanguages());
 		final String langCode = lang.code();
-				
 
 		final String html = getEmailTemplate(
 				"views.html.account.signup.email.verify_email", langCode, url,
@@ -300,8 +305,8 @@ public class MyUsernamePasswordAuthProvider
 	protected Body getPasswordResetMailingBody(final String token,
 			final User user, final Context ctx) {
 
-//		final boolean isSecure = getConfiguration().getBoolean(
-//				SETTING_KEY_PASSWORD_RESET_LINK_SECURE);
+		// final boolean isSecure = getConfiguration().getBoolean(
+		// SETTING_KEY_PASSWORD_RESET_LINK_SECURE);
 		// TODO find out how to return just json
 		final String url = "";
 		// final String url = routes.Signup.resetPassword(token).absoluteURL(
@@ -342,13 +347,23 @@ public class MyUsernamePasswordAuthProvider
 			final String name, final String email) {
 		Class<?> cls = null;
 		String ret = null;
+		String locale = "";
+		
+		if (langCode.equals("it_IT") || langCode.equals("it-IT")) {
+			locale = "it";
+		} else if (langCode.equals("es_ES") || langCode.equals("es-ES")) {
+			locale = "es";
+		} else {
+			locale = langCode;
+		}
+		
 		try {
-			cls = Class.forName(template + "_" + langCode);
+			cls = Class.forName(template + "_" + locale);
 		} catch (ClassNotFoundException e) {
 			Logger.warn("Template: '"
 					+ template
 					+ "_"
-					+ langCode
+					+ locale
 					+ "' was not found! Trying to use English fallback template instead.");
 		}
 		if (cls == null) {
@@ -392,19 +407,22 @@ public class MyUsernamePasswordAuthProvider
 
 		final Lang lang = Lang.preferred(ctx.request().acceptLanguages());
 		final String langCode = lang.code();
-		
+
 		String locale = langCode;
-		
-		if (user.getLocale()!=null) {
+
+		if (user.getLocale() != null) {
 			locale = user.getLocale();
 		}
-		
-		String fullName = user.getPerson().getFirstname()+" "+user.getPerson().getLastname();
+
+		String name = user.getPerson().getFirstname() + " "
+				+ user.getPerson().getLastname();
 		String email = user.getEmail();
 		final String html = getEmailTemplate(
-				"views.html.account.email.verify_email", locale, url, token,fullName, email);
+				"views.html.account.email.verify_email", locale, url, token,
+				name, email);
 		final String text = getEmailTemplate(
-				"views.txt.account.email.verify_email", locale, url, token,fullName, email);
+				"views.txt.account.email.verify_email", locale, url, token,
+				name, email);
 
 		return new Body(text, html);
 	}
@@ -420,7 +438,7 @@ public class MyUsernamePasswordAuthProvider
 	}
 
 	private String getEmailName(final User user) {
-		return getEmailName(user.getPerson().getFirstname(), user.getEmail());
+		return getEmailName(user.getEmail(), user.getPerson().getFirstname());
 	}
 
 	public static Result handleLogin(final Context ctx) {
