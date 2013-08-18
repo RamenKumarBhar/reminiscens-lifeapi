@@ -166,7 +166,6 @@ public class MyUsernamePasswordAuthProvider
 		// then the user gets logged in directly
 		// return SignupResult.USER_CREATED_UNVERIFIED;
 
-		// TODO Send verification mail even if we log in the user directly
 		// TODO verify that the email is correct and valid
 
 		return SignupResult.USER_CREATED;
@@ -420,6 +419,14 @@ public class MyUsernamePasswordAuthProvider
 		if (user.getLocale() != null) {
 			locale = user.getLocale();
 		}
+		
+		if (locale.equals("it_IT")||locale.equals("it-IT")||locale.equals("it")) {
+			locale="it";
+		} else if (locale.equals("es_ES")||locale.equals("es-ES")||locale.equals("es")) {
+			locale="es";
+		} else if (locale.equals("en_EN")||locale.equals("en-EN")||locale.equals("en")) {
+			locale="en";
+		} 
 
 		String name = user.getPerson().getFirstname() + " "
 				+ user.getPerson().getLastname();
