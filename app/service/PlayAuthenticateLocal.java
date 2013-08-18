@@ -4,10 +4,6 @@ import static play.libs.Json.toJson;
 
 import java.io.UnsupportedEncodingException;
 
-import models.User;
-
-import org.apache.commons.lang.NotImplementedException;
-
 import play.Logger;
 import play.api.libs.Crypto;
 import play.i18n.Messages;

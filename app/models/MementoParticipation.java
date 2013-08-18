@@ -54,6 +54,22 @@ public class MementoParticipation extends Model {
 		find.where().eq("mentionPerson", mp)
 				.eq("memento", m).findUnique().delete();
 	}
+	
+	public static void deleteByPersonId(Long personId, Long mementoId) {
+		List<models.MentionPerson> mp = models.MentionPerson.readByPersonId(personId);
+		models.Memento m = models.Memento.read(mementoId);
+		
+		
+		for (MentionPerson mentionPerson : mp) {
+			MementoParticipation p = find.where().eq("mentionPerson", mentionPerson)
+					.eq("memento", m).findUnique();
+			Long mentionPersonId = mentionPerson.getMentionPersonId();
+		
+			if (p!=null) {
+				p.deleteManyToManyAssociations("Memento.participants");
+			}
+		}
+	}
 
 	public static MementoParticipation read(Long mentionPersonId, Long mementoId) {
 		models.MentionPerson mp = models.MentionPerson.read(mentionPersonId);

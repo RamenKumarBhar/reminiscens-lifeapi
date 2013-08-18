@@ -121,6 +121,25 @@ public class Relationship extends Model {
 		return list != null && list.size()>0;
 	}
     
+
+	public static List<Relationship> findRelationshipsByPersonByType(Long id,
+			String type) {
+		List<Relationship> participationList = find.where()
+				.eq("personFromId", id)
+				.eq("network", type)
+				.eq("directed",Boolean.FALSE) // only bidirectional relationships where person1 is in from
+											  // in other words, only the relationships of which the person2 is aware of
+				.findList();
+    	
+    	List<Relationship> participationList2 = find.where()
+				.eq("personFromId", id)
+				.eq("network", type)
+				.findList();
+    	
+    	participationList.addAll(participationList2);
+		return participationList;
+	}
+	
 	public Long getRelationshipId() {
 		return relationshipId;
 	}

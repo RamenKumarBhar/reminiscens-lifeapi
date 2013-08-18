@@ -25,6 +25,12 @@ public class TimelineControl extends Controller {
 		TimelineBean bean = TimelineDelegate.getInstance().getTimelineWithLimits(id, from, to);
 		return bean != null ? ok(toJson(bean)) : notFound();
 	}
+	
+	@Dynamic(value="FriendOf", meta=SecurityModelConstants.ID_FROM_PERSON)
+	public static Result getPersonTimelineByDecade(Long id, Long decade) {
+		TimelineBean bean = TimelineDelegate.getInstance().getTimelineByDecade(id, decade);
+		return bean != null ? ok(toJson(bean)) : notFound();
+	}
 
 	@Dynamic(value="OnlyMe", meta=SecurityModelConstants.ID_FROM_PERSON)
 	public static Result synchronizePersonTimeline(Long id) {

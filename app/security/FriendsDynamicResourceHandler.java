@@ -20,10 +20,10 @@ public class FriendsDynamicResourceHandler extends
 	public boolean isAllowed(String name, String meta,
 			DeadboltHandler deadboltHandler, Http.Context context) {
 		Subject subject = deadboltHandler.getSubject(context);
-
 		
 		boolean allowed = false;
 		if (DeadboltAnalyzer.hasRole(subject, "ADMIN")) {
+			Logger.debug("Requested by an ADMIN...");
 			allowed = true;
 		} else {
 			// a call to view profile is probably a get request, so
@@ -31,6 +31,7 @@ public class FriendsDynamicResourceHandler extends
 			
 			String path = context.request().path();
 			Long requestedResourceId = MyDynamicResourceHandler.getIdFromPath(path, meta);
+			
 			Long userId = new Long(subject.getIdentifier());
 			Long userPersonId = models.User.read(userId).getPersonId();
 			Logger.debug("Checking relationship of...");

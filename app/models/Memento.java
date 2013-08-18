@@ -102,6 +102,18 @@ public class Memento extends Model {
 	// TODO Improve efficiency of this process by improving mapping so that 
 	// MentionPerson.mentionPersonId generates automatically
 	public static void create(Memento memento) {
+		// 1. Data to save before creating the new life story
+		FuzzyDate start = memento.getStartDate();
+		FuzzyDate end = memento.getEndDate();
+		Location place = memento.getLocation();
+		
+		if (start != null)
+			memento.setStartDate(FuzzyDate.createIfNotExist(start));
+		if (end != null)
+			memento.setEndDate(FuzzyDate.createIfNotExist(end));	
+		if (place != null)
+			memento.setLocation(Location.createIfNotExist(place));
+		
 		List<MentionPerson> participantList = memento.getParticipants();
 		List<MentionPerson> newParticipantList = new ArrayList<MentionPerson>();
 
@@ -171,7 +183,25 @@ public class Memento extends Model {
 		}
 		return mementoList;
 	}
+	
+	public static void removeParticipant(Long mementoId, Long mPersonId) {
+		Memento m = models.Memento.read(mementoId);
+		MentionPerson mp = MentionPerson.find.where().eq("person.PersonId", mPersonId).eq("memento", m).findUnique();
+		
+		if (mp == null) {
+			mp = MentionPerson.find.where().eq("mentionPersonId", mPersonId).eq("memento", m).findUnique();			
+		}
+		m.getParticipants().remove(mp);
+		m.deleteManyToManyAssociations("participants");
+	}
 
+	public static void removeParticipantByPersonId(Long mementoId, Long personId) {
+		Memento m = models.Memento.read(mementoId);
+		m.getParticipants().remove(MentionPerson.find.where().eq("person.personId", personId).eq("memento", m));
+		m.deleteManyToManyAssociations("participants");
+	}
+
+	
 	public Long getMementoId() {
 		return mementoId;
 	}

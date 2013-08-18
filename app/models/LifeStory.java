@@ -97,11 +97,25 @@ public class LifeStory extends Model {
 		FuzzyDate start = lifestory.getStartDate();
 		FuzzyDate end = lifestory.getEndDate();
 		Location place = lifestory.getLocation();
-
+		String storyLang = lifestory.getLocale();
+		
+		if (start!=null)
+			start.setLocale(storyLang);
+		
+		if (end!=null) 
+			end.setLocale(storyLang);
+		
+		if (place!=null)
+			place.setLocale(storyLang);
+		
+		// we need at least a "start"
 		lifestory.setStartDate(FuzzyDate.createIfNotExist(start));
-		lifestory.setEndDate(FuzzyDate.createIfNotExist(end));
+		if (end != null) {
+			lifestory.setEndDate(FuzzyDate.createIfNotExist(end));	
+		}
+		
 		lifestory.setLocation(Location.createIfNotExist(place));
-
+		
 		// 2. Save the new life story
 		lifestory.setSynced(true);
 		lifestory.setCreationDate(DateTime.now());
@@ -145,6 +159,7 @@ public class LifeStory extends Model {
 
 	public static List<LifeStory> readByPersonWithLimits(Long personId,
 			Long from, Long to) {
+		// TODO change to a specialized query
 		List<Participation> participationList = Participation
 				.participationByPersonProtagonist(personId);
 		List<LifeStory> lifeStories = new ArrayList<LifeStory>();
@@ -154,6 +169,40 @@ public class LifeStory extends Model {
 			lifeStories.add(ls);
 			if (i >= to.intValue()) {
 				break;
+			}
+		}
+		return lifeStories;
+	}
+	
+
+	public static List<LifeStory> readByPersonByDecade(Long personId,
+			Long decade) {
+		// TODO change to a specialized query
+		List<Participation> participationList = Participation
+			.participationByPersonProtagonist(personId);
+//		find.where()
+//			.eq("participationList.person.personId", personId)
+//			.or(		
+//		
+//		
+		List<LifeStory> lifeStories = new ArrayList<LifeStory>();
+		for (int i = 0 ; i < participationList.size(); i++) {
+			Participation participation = participationList.get(i);
+			LifeStory ls = participation.getLifeStory();
+			FuzzyDate d = ls.getStartDate();
+			
+			Long fuzzydecade = d.getDecade();
+			Long year = d.getYear();
+			DateTime exact = d.getExactDate();
+			
+			if (exact != null) {
+				year = new Long(exact.getYear());
+			} else if (fuzzydecade != null) {
+				year = fuzzydecade;
+			}
+			
+			if (year >= decade && year < (decade+10)) {
+				lifeStories.add(ls);
 			}
 		}
 		return lifeStories;

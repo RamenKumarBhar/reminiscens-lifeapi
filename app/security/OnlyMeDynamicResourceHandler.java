@@ -1,10 +1,9 @@
 package security;
 
-import java.util.List;
-
 import models.LifeStory;
 import models.Participation;
 
+import play.Logger;
 import play.mvc.Http;
 import be.objectify.deadbolt.core.DeadboltAnalyzer;
 import be.objectify.deadbolt.core.models.Subject;
@@ -19,18 +18,25 @@ public class OnlyMeDynamicResourceHandler extends
 			DeadboltHandler deadboltHandler, Http.Context context) {
 		Subject subject = deadboltHandler.getSubject(context);
 
-		
 		boolean allowed = false;
 		if (DeadboltAnalyzer.hasRole(subject, "ADMIN")) {
+			Logger.debug("Requested by an ADMIN...");
 			allowed = true;
 		} else {
-				// a call to view profile is probably a get request, so
+			// a call to view profile is probably a get request, so
 			// the query string is used to provide info
 			
 			String path = context.request().path();
 			Long requestedResourceId = MyDynamicResourceHandler.getIdFromPath(path, meta);
 			Long userId = new Long(subject.getIdentifier());
 			Long userPersonId = models.User.read(userId).getPersonId();
+			Logger.debug("Checking relationship of...");
+			Logger.debug("--> userId = "+userId);
+			Logger.debug("--> userPersonId = "+userPersonId);
+			Logger.debug("--> requestedResourceId = "+requestedResourceId);
+			Logger.debug("--> type of resource= "+meta);
+			Logger.debug("Checking for path "+meta+requestedResourceId);
+
 			
 			if(SecurityModelConstants.ID_FROM_PERSON.equals(meta)) {
 				allowed = userPersonId == requestedResourceId;	
@@ -40,9 +46,11 @@ public class OnlyMeDynamicResourceHandler extends
 			} else if (SecurityModelConstants.ID_FROM_MEMENTO.equals(meta)) {
 				LifeStory story = getMementoStory(requestedResourceId);
 				allowed = story!=null && story.getContributorId() == userId && checkThatStoryIsMine(userPersonId, story);
-			}  else if (SecurityModelConstants.ID_FROM_RELATIONSHIPS.equals(meta)) {
+			} else if (SecurityModelConstants.ID_FROM_RELATIONSHIPS.equals(meta)) {
 				// TODO implement relationships security checks
 				allowed = true;
+			} else if (SecurityModelConstants.ID_FROM_USER.equals(meta)) {
+				allowed = userId.longValue() == requestedResourceId.longValue();
 			}
 		}
 		return allowed;

@@ -178,7 +178,7 @@ public class Global extends GlobalSettings {
 			@Override
 			public Call onException(final AuthException e) {
 				if (e instanceof AccessDeniedException) {
-					return routes.Application
+					return routes.UserControl
 							.oAuthDenied(((AccessDeniedException) e)
 									.getProviderKey());
 				}

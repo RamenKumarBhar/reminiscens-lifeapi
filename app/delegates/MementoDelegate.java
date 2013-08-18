@@ -60,10 +60,10 @@ public class MementoDelegate {
 		PlayDozerMapper.getInstance().map(memento, mementoBean);
 	}
 
-	public void update(MementoBean bean, Long id) {
+	public void update(MementoBean bean) {
 		models.Memento memento = PlayDozerMapper.getInstance().map(bean,
 				models.Memento.class);
-		memento.update(id);
+		memento.update(bean.getMementoId());
 		memento = models.Memento.read(memento.getMementoId());
 		PlayDozerMapper.getInstance().map(memento, bean);
 	}
@@ -152,5 +152,10 @@ public class MementoDelegate {
 		} 	
 		
 		return mb;
+	}
+
+	public void deleteMementoParticipantByPersonId(Long id,
+			Long pid) {
+		models.Memento.removeParticipant(id,pid);
 	}
 }
