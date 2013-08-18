@@ -83,6 +83,8 @@ public class FuzzyDate extends Model {
 		if (fuzzyDate != null) {
 			Long id = fuzzyDate.getFuzzyDateId();
 			DateTime exactDate = fuzzyDate.getExactDate();
+			
+			// 1. if a record for this date exists, reuse
 			FuzzyDate existing = null;
 			if (id != null) {
 				existing = read(id);
@@ -95,6 +97,76 @@ public class FuzzyDate extends Model {
 					return existing;
 				}
 			}
+
+			// 2. make sure all important fields are compiled
+			// fuzzy date parts
+			Long decade = fuzzyDate.getDecade();
+			Long year = fuzzyDate.getYear();
+			String month = fuzzyDate.getMonth();
+			String day = fuzzyDate.getDay();
+			String hour = fuzzyDate.getHour();
+			String minute = fuzzyDate.getMinute();
+			String second = fuzzyDate.getSecond();
+			String textual = fuzzyDate.getTextual_date();
+			
+//			0, if we only have a textual description (e.g.it was around ten or 15 years ago,when i was on summer vacation)
+//			1-7, number of date parts we have (decade, year, month, day, hour, minute, second)
+//			8, we have additional info
+//			9, only textual
+			Long acc = new Long(0); 
+			
+			// if the exact date is present, fill all the blanks
+			if (exactDate != null) {
+				year = new Long(exactDate.getYear());
+				month = exactDate.getMonthOfYear() + "";
+				day = exactDate.getDayOfMonth() + "";
+				hour = exactDate.getHourOfDay() + "";
+				minute = exactDate.getMinuteOfHour() + "";
+				second = exactDate.getSecondOfMinute() + "";
+				decade = year - year%10;
+				
+				fuzzyDate.setDecade(decade);
+				fuzzyDate.setYear(year);
+				fuzzyDate.setMonth(month);
+				fuzzyDate.setDay(day);
+				fuzzyDate.setHour(hour);
+				fuzzyDate.setMinute(minute);
+				fuzzyDate.setSecond(second);
+				fuzzyDate.setAccuracy(new Long(7));
+			} else {
+				
+				if (year!=null && year > 0) {
+					decade = year - year%10; // make sure decade correspond to year	
+					acc++;
+				}
+				// sync year and decade
+				if (decade != null && decade > 0)
+					acc++; 
+
+				if (month!=null && !month.isEmpty())
+					acc++;
+				
+				if (day!=null && !day.isEmpty())
+					acc++;
+
+				if (hour!=null && !hour.isEmpty())
+					acc++;
+
+				if (minute!=null && !minute.isEmpty())
+					acc++;
+
+				if (second!=null && !second.isEmpty())
+					acc++;
+			}
+			
+			if (textual!=null && textual.isEmpty()) {
+				if (acc>0) {
+					acc++;
+				} else {
+					acc = new Long(9);
+				}
+			}
+			
 			fuzzyDate.save();
 			return fuzzyDate;
 		} else {

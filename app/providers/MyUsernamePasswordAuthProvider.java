@@ -49,7 +49,7 @@ public class MyUsernamePasswordAuthProvider
 			+ "." + "passwordResetLink.secure";
 	private static final String SETTING_KEY_LINK_LOGIN_AFTER_PASSWORD_RESET = "loginAfterPasswordReset";
 
-	private static final String EMAIL_TEMPLATE_FALLBACK_LANGUAGE = "en";
+	private static final String EMAIL_TEMPLATE_FALLBACK_LANGUAGE = "it";
 
 	@Override
 	protected List<String> neededSettingKeys() {
@@ -179,26 +179,29 @@ public class MyUsernamePasswordAuthProvider
 		if (u == null) {
 			return LoginResult.NOT_FOUND;
 		} else {
-			if (!u.isEmailValidated()) {
-				return LoginResult.USER_UNVERIFIED;
-			} else {
-				for (final LinkedAccount acc : u.getLinkedAccounts()) {
-					if (getKey().equals(acc.getProviderKey())) {
-						if (authUser.checkPassword(acc.getProviderUserId(),
-								authUser.getPassword())) {
-							// Password was correct
-							return LoginResult.USER_LOGGED_IN;
-						} else {
-							// if you don't return here,
-							// you would allow the user to have
-							// multiple passwords defined
-							// usually we don't want this
-							return LoginResult.WRONG_PASSWORD;
-						}
+			// TODO every certain time, resend verification email
+			// if (!u.isEmailValidated()) {
+			// return LoginResult.USER_UNVERIFIED;
+			// }
+			//
+			// {
+			for (final LinkedAccount acc : u.getLinkedAccounts()) {
+				if (getKey().equals(acc.getProviderKey())) {
+					if (authUser.checkPassword(acc.getProviderUserId(),
+							authUser.getPassword())) {
+						// Password was correct
+						return LoginResult.USER_LOGGED_IN;
+					} else {
+						// if you don't return here,
+						// you would allow the user to have
+						// multiple passwords defined
+						// usually we don't want this
+						return LoginResult.WRONG_PASSWORD;
 					}
 				}
-				return LoginResult.WRONG_PASSWORD;
 			}
+			return LoginResult.WRONG_PASSWORD;
+			// }
 		}
 	}
 

@@ -34,4 +34,14 @@ public class TimelineDelegate {
         models.Timeline.synchronize(timeline);
     }
 
+	public TimelineBean getTimelineByDecade(Long id, Long decade) {
+		   models.Timeline timeline = models.Timeline.readByPersonByDecade(id, decade);
+	        if (timeline != null) {
+	        	TimelineBean timelineBean = PlayDozerMapper.getInstance().map(timeline, TimelineBean.class);
+	        	return timelineBean;
+	        } else {
+	        	return null; 
+	        }
+	}
+
 }

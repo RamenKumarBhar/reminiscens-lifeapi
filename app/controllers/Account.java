@@ -1,6 +1,5 @@
 package controllers;
 
-
 import play.data.format.Formats.NonEmpty;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
@@ -61,14 +60,14 @@ public class Account extends Controller {
 
 //	private static final Form<Accept> ACCEPT_FORM = form(Accept.class);
 //	private static final Form<Account.PasswordChange> PASSWORD_CHANGE_FORM = form(Account.PasswordChange.class);
-
+//
 //	@SubjectPresent
 //	public static Result link() {
 //		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 //		return ok(link.render());
 //	}
-
-//	@Restrict(@Group(Application.USER_ROLE))
+//
+//	@Restrict(@Group(MyRoles.MEMBER))
 //	public static Result verifyEmail() {
 //		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 //		final User user = Application.getLocalUser(session());
@@ -89,7 +88,7 @@ public class Account extends Controller {
 //		}
 //		return redirect(routes.Application.profile());
 //	}
-
+//
 //	@Restrict(@Group(Application.USER_ROLE))
 //	public static Result changePassword() {
 //		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
@@ -101,7 +100,7 @@ public class Account extends Controller {
 //			return ok(password_change.render(PASSWORD_CHANGE_FORM));
 //		}
 //	}
-
+//
 //	@Restrict(@Group(Application.USER_ROLE))
 //	public static Result doChangePassword() {
 //		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
@@ -120,7 +119,7 @@ public class Account extends Controller {
 //			return redirect(routes.Application.profile());
 //		}
 //	}
-
+//
 //	@SubjectPresent
 //	public static Result askLink() {
 //		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
@@ -131,7 +130,7 @@ public class Account extends Controller {
 //		}
 //		return ok(ask_link.render(ACCEPT_FORM, u));
 //	}
-
+//
 //	@SubjectPresent
 //	public static Result doLink() {
 //		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
@@ -155,7 +154,7 @@ public class Account extends Controller {
 //			return PlayAuthenticate.link(ctx(), link);
 //		}
 //	}
-
+//
 //	@SubjectPresent
 //	public static Result askMerge() {
 //		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
@@ -173,7 +172,7 @@ public class Account extends Controller {
 //		// User.findByAuthUserIdentity(newUser)
 //		return ok(ask_merge.render(ACCEPT_FORM, aUser, bUser));
 //	}
-
+//
 //	@SubjectPresent
 //	public static Result doMerge() {
 //		com.feth.play.module.pa.controllers.Authenticate.noCache(response());

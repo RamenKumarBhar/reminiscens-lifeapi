@@ -26,63 +26,6 @@ public class Application extends Controller {
 		return ok(views.html.index.render());
 	}
 
-	public static Result doLogin() {
-		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-		final Form<MyLogin> filledForm = MyUsernamePasswordAuthProvider.LOGIN_FORM
-				.bindFromRequest();
-		if (filledForm.hasErrors()) {
-			// User did not fill everything properly
-			// return badRequest(login.render(filledForm));
-			return badRequest();
-		} else {
-			// Everything was filled
-			return MyUsernamePasswordAuthProvider.handleLogin(ctx());
-		}
-	}
-	
-	public static Result doSignup() {
-		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-		final Form<MySignup> filledForm = MyUsernamePasswordAuthProvider.SIGNUP_FORM
-				.bindFromRequest();
-		if (filledForm.hasErrors()) {
-			// User did not fill everything properly
-			// return badRequest(signup.render(filledForm));
-			ResponseStatusBean response = new ResponseStatusBean();
-			response.setResponseStatus(ResponseStatus.BADREQUEST);
-			response.setStatusMessage("play.authenticate.filledFromHasErrors:"
-					+ filledForm.errorsAsJson());
-			return badRequest(toJson(response));
-		} else {
-			// Everything was filled correctly
-			// Do something with your part of the form before handling the user
-			// signup
-			return MyUsernamePasswordAuthProvider.handleSignup(ctx());
-		}
-	}
-
-	public static Result onLoginUserNotFound() {
-		ResponseStatusBean response = new ResponseStatusBean();
-		response.setResponseStatus(ResponseStatus.NODATA);
-		response.setStatusMessage(Messages
-				.get("playauthenticate.password.login.unknown_user_or_pw"));
-		return notFound(toJson(response));
-		// return notFound(Messages
-		// .get("playauthenticate.password.login.unknown_user_or_pw"));
-	}
-
-	public static Result oAuthDenied(final String providerKey) {
-		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-		flash(FLASH_ERROR_KEY,
-				"You need to accept the OAuth connection in order to use this website!");
-		return redirect(routes.Application.index());
-	}
-
-	public static User getLocalUser(final Session session) {
-		final User localUser = User.findByAuthUserIdentity(PlayAuthenticate
-				.getUser(session));
-		return localUser;
-	}
-
 	public static Result checkPreFlight(String path) {
 		response().setHeader("Access-Control-Allow-Origin", "*");
 		response().setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS");

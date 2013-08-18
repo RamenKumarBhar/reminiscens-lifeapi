@@ -9,6 +9,7 @@ import utils.PlayDozerMapper;
 
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 //import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import models.TokenAction.Type;
@@ -44,7 +45,7 @@ public class User extends Model implements Subject {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@MapsId
-	@JoinColumn(name = "person_id")
+	@JoinColumn(name = "person_id", updatable=true, insertable=true )
 	private Person person;
 
 	@Column(length = 60, name = "nickname")
@@ -79,6 +80,7 @@ public class User extends Model implements Subject {
 	@Column
 	private boolean active;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<LinkedAccount> linkedAccounts;
 
@@ -89,7 +91,8 @@ public class User extends Model implements Subject {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "User_User_Permission", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "user_id", updatable = true, insertable = true) }, inverseJoinColumns = { @JoinColumn(name = "permission_id", referencedColumnName = "permission_id", updatable = true, insertable = true) })
 	private List<UserPermission> permissions;
-	
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "targetUser", cascade = CascadeType.ALL)
 	private List<TokenAction> tokenActions;
 

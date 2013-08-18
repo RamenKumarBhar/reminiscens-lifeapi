@@ -5,24 +5,23 @@ import static play.libs.Json.toJson;
 import java.util.List;
 
 import models.User;
-import be.objectify.deadbolt.java.actions.Dynamic;
-import delegates.LifeStoryDelegate;
-import delegates.MementoDelegate;
-import enums.ResponseStatus;
-import play.mvc.*;
-import play.data.*;
+import play.data.Form;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Security;
 import pojos.LifeStoryBean;
-import pojos.MementoBean;
 import pojos.ParticipationBean;
 import pojos.PersonBean;
 import pojos.ResponseStatusBean;
 import security.SecurityModelConstants;
 import utils.PlayDozerMapper;
+import be.objectify.deadbolt.java.actions.Dynamic;
+import delegates.LifeStoryDelegate;
+import enums.ResponseStatus;
 
 public class LifeStoryControl extends Controller {
 
 	static Form<LifeStoryBean> lifeStoryForm = Form.form(LifeStoryBean.class);
-	static Form<MementoBean> mementoForm = Form.form(MementoBean.class);
 
 	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_PERSON)
 	@Security.Authenticated(Secured.class)
@@ -150,6 +149,21 @@ public class LifeStoryControl extends Controller {
 	}
 
 	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_STORY)
+	public static Result addParticipant(Long lsid, Long id, String type) {
+
+		if (type.equals("protagonist")) {
+			return addProtagonistToLifeStory(lsid, id);
+		} else if (type.equals("regular")) {
+			return addParticipantToLifeStory(lsid, id);
+		} else {
+			ResponseStatusBean res = new ResponseStatusBean(
+					ResponseStatus.BADREQUEST,
+					"Type of participation ("+type+") is not valid");
+			return badRequest(toJson(res));
+		}
+	}
+	
+	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_STORY)
 	public static Result addParticipantToLifeStory(Long lsid, Long id) {
 		try {
 			String userEmail = session().get("pa.u.id");
@@ -173,10 +187,12 @@ public class LifeStoryControl extends Controller {
 		try {
 			String userEmail = session().get("pa.u.id");
 			User user = User.getByEmail(userEmail);
-			LifeStoryDelegate.getInstance().addParticipant(lsid, id,
+			Long newResourceId = LifeStoryDelegate.getInstance().addParticipant(lsid, id,
 					user.getUserId(), true);
 			ResponseStatusBean res = new ResponseStatusBean(ResponseStatus.OK,
 					"New participant added with success");
+			res.setNewResourceId(newResourceId);
+			
 			return ok(toJson(res));
 		} catch (Exception e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -186,12 +202,15 @@ public class LifeStoryControl extends Controller {
 		}
 	}
 
-	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_STORY)
+	// TODO create a dynamic to support deletion of participant from both owner of 
+	// the story and the person referenced
+	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_STORY)
 	public static Result deletePersonFromLifeStory(Long lsid, Long id) {
 		try {
 			LifeStoryDelegate.getInstance().deleteParticipant(lsid, id);
 			ResponseStatusBean res = new ResponseStatusBean(ResponseStatus.OK,
 					"Entity deleted with success");
+			
 			return ok(toJson(res));
 		} catch (Exception e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -215,34 +234,4 @@ public class LifeStoryControl extends Controller {
 			return badRequest(toJson(res));
 		}
 	}
-	
-	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_STORY)
-	public static Result addMementoToLifeStory(Long lsid, Long mid) {
-		MementoBean mementoBean = MementoDelegate.getInstance().addMementoToLifeStory(lsid, mid);
-		
-		if (mementoBean == null) {
-			ResponseStatusBean res = new ResponseStatusBean(
-					ResponseStatus.NODATA, "Entity does not exist");
-			return badRequest(toJson(res));
-		} else {
-		return ok(toJson(mementoBean));
-		}
-	}
-
-	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_STORY)
-	public static Result addNewMementoToLifeStory(Long lsid) {
-		Form<MementoBean> filledForm = mementoForm.bindFromRequest();
-		if (filledForm.hasErrors()) {
-			ResponseStatusBean res = new ResponseStatusBean(
-					ResponseStatus.BADREQUEST,
-					"Body of request misses some information or it is malformed");
-			return badRequest(toJson(res));
-		} else {
-			MementoBean mementoBean = filledForm.get();
-			mementoBean.setLifeStoryId(lsid);
-			MementoDelegate.getInstance().create(mementoBean);
-			return ok(toJson(mementoBean));
-		}
-	}
-
 }

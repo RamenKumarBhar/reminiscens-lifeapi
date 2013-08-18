@@ -2,53 +2,64 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+#####################################################################################
 # Home page
-GET     /                           controllers.Application.index()
+GET     /                                       controllers.Application.index()
 
-OPTIONS /*path                      controllers.Application.checkPreFlight(path) 
-
+#####################################################################################
+# CORS support
+OPTIONS /*path                                  controllers.Application.checkPreFlight(path)
+ 
+#####################################################################################
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /assets/*file                           controllers.Assets.at(path="/public", file)
+
+#####################################################################################
+# Very basic User and Authentication Management based on play-authenticate
+POST    /user/login                                  controllers.UserControl.doLogin()
+POST    /user/signup                                 controllers.UserControl.doSignup()
+GET     /user/logout                                 controllers.UserControl.doLogout()
+GET     /user/profile                                controllers.UserControl.profile()
+PUT     /user/:uid                                   controllers.UserControl.updateUser(uid: Long) 
+DELETE  /user/:uid                                   controllers.UserControl.deleteUser(uid: Long)
+DELETE  /user/:uid/force                             controllers.UserControl.deleteUserForce(uid: Long)
+GET     /user                                        controllers.UserControl.getUsers()
+GET     /user/:uid                                   controllers.UserControl.getUser(uid: Long)
+POST    /user/email                                  controllers.UserControl.getUserByEmail() 
+
+
 #####################################################################################
 # People, Life Stories and Timeline
-GET     /person                         controllers.PersonControl.getPersonAll() 
-GET     /person/:id                     controllers.PersonControl.getPerson(id: Long) 
-POST    /person                         controllers.PersonControl.createPerson() 
-POST    /person/mention                 controllers.PersonControl.createMentionPerson() 
-PUT     /person/:id                     controllers.PersonControl.updatePerson(id: Long) 
-DELETE  /person/:id                     controllers.PersonControl.deletePerson(id: Long) 
-GET     /person/:id/timeline            controllers.TimelineControl.getPersonTimeline(id: Long) 
-GET     /person/:id/timeline/:from/:to  controllers.TimelineControl.getPersonTimelineWithLimits(id: Long, from: Long, to: Long) 
-POST    /person/:id/timeline            controllers.TimelineControl.synchronizePersonTimeline(id: Long) 
-
-GET     /person/:id/lifestory           controllers.LifeStoryControl.getPersonLifeStoryAll(id: Long) 
-GET     /person/:id/lifestory/protagonist controllers.LifeStoryControl.getProtagonistLifeStoryAll(id: Long) 
-GET     /lifestory/:lsid                controllers.LifeStoryControl.getLifeStory(lsid: Long) 
-POST    /lifestory                      controllers.LifeStoryControl.createLifeStory() 
-PUT     /lifestory/:lsid                controllers.LifeStoryControl.updateLifeStory(lsid: Long) 
-DELETE  /lifestory/:lsid                controllers.LifeStoryControl.deleteLifeStory(lsid: Long) 
-POST    /lifestory/:lsid/person/:id     controllers.LifeStoryControl.addParticipantToLifeStory(lsid: Long, id: Long) 
-POST    /lifestory/:lsid/protag/:id     controllers.LifeStoryControl.addProtagonistToLifeStory(lsid: Long, id: Long) 
-DELETE  /lifestory/:lsid/person/:id     controllers.LifeStoryControl.deletePersonFromLifeStory(lsid: Long, id: Long) 
-DELETE  /lifestory/:lsid/person/:id/protag     controllers.LifeStoryControl.deleteProtagonistFromLifeStory(lsid: Long, id: Long) 
-#POST    /lifestory/:lsid/memento/:mid   controllers.LifeStoryControl.addMementoToLifeStory(lsid: Long, mid: Long) 
-POST    /lifestory/:lsid/memento        controllers.LifeStoryControl.addNewMementoToLifeStory(lsid: Long) 
-
-GET     /person/:id/memento             controllers.MementoControl.getAllPersonMemento(id: Long) 
-GET     /person/:id/memento/protagonist controllers.MementoControl.getPersonProtagonistMemento(id: Long)
-GET     /person/:id/memento/mention     controllers.MementoControl.getPersonMentionMemento(id: Long)
-GET     /memento/:id                    controllers.MementoControl.getMemento(id: Long)
-POST    /memento                        controllers.MementoControl.createMemento()
-PUT     /memento/:id                    controllers.MementoControl.updateMemento(id: Long)
-DELETE  /memento/:id                    controllers.MementoControl.deleteMemento(id: Long)
-POST    /memento/:id/person             controllers.MementoControl.addMementoParticipant(id: Long)
-POST    /memento/:id/person/:pid        controllers.MementoControl.addMementoParticipantByPersonId(id: Long, pid: Long)
-
-GET     /person/:id/relationships       controllers.RelationshipControl.getPersonRelationships(id: Long) 
-GET     /person/:id/curators            controllers.RelationshipControl.getPersonCurators(id: Long) 
-PUT     /relationship/:id               controllers.RelationshipControl.updateRelationship(id: Long) 
-POST    /relationship                   controllers.RelationshipControl.addRelationship() 
-DELETE  /relationship/:id               controllers.RelationshipControl.deleteRelationship(id: Long) 
+GET     /person                                 controllers.PersonControl.getPersonAll() 
+GET     /person/:id                             controllers.PersonControl.getPerson(id: Long) 
+POST    /person                                 controllers.PersonControl.createPerson() 
+PUT     /person/:id                             controllers.PersonControl.updatePerson(id: Long) 
+DELETE  /person/:id                             controllers.PersonControl.deletePerson(id: Long) 
+GET     /person/:id/timeline                    controllers.TimelineControl.getPersonTimeline(id: Long) 
+GET     /person/:id/timeline/:from/:to          controllers.TimelineControl.getPersonTimelineWithLimits(id: Long, from: Long, to: Long) 
+POST    /person/:id/timeline                    controllers.TimelineControl.synchronizePersonTimeline(id: Long) 
+GET     /person/:id/timeline/:decade            controllers.TimelineControl.getPersonTimelineByDecade(id: Long, decade: Long) 
+GET     /person/:id/relationships               controllers.RelationshipControl.getPersonRelationships(id: Long) 
+GET     /person/:id/relationships/:network      controllers.RelationshipControl.getPersonRelationshipsByNetwork(id: Long, network: String) 
+PUT     /person/:id/relationship/:rid           controllers.RelationshipControl.updateRelationship(id: Long, rid: Long) 
+POST    /person/:id/relationship                controllers.RelationshipControl.addRelationship(id: Long) 
+DELETE  /person/:id/relationship/:rid           controllers.RelationshipControl.deleteRelationship(id: Long, rid: Long) 
+GET     /person/:id/memento                     controllers.MementoControl.getAllPersonMemento(id: Long) 
+GET     /person/:id/memento/:type               controllers.MementoControl.getPersonMementoByParticipationType(id: Long, type: String)
+GET     /lifestory/:lsid                        controllers.LifeStoryControl.getLifeStory(lsid: Long) 
+POST    /lifestory                              controllers.LifeStoryControl.createLifeStory() 
+PUT     /lifestory/:lsid                        controllers.LifeStoryControl.updateLifeStory(lsid: Long) 
+DELETE  /lifestory/:lsid                        controllers.LifeStoryControl.deleteLifeStory(lsid: Long) 
+POST    /lifestory/:lsid/person/:id/:type       controllers.LifeStoryControl.addParticipant(lsid: Long, id: Long, type: String) 
+DELETE  /lifestory/:lsid/person/:id             controllers.LifeStoryControl.deletePersonFromLifeStory(lsid: Long, id: Long) 
+DELETE  /lifestory/:lsid/person/:id/protagonist controllers.LifeStoryControl.deleteProtagonistFromLifeStory(lsid: Long, id: Long) 
+POST    /lifestory/:lsid/memento                controllers.MementoControl.addNewMementoToLifeStory(lsid: Long) 
+GET     /lifestory/:lsid/memento/:id            controllers.MementoControl.getMemento(lsid: Long, id: Long)
+PUT     /lifestory/:lsid/memento/:id            controllers.MementoControl.updateMemento(lsid: Long, id: Long)
+DELETE  /lifestory/:lsid/memento/:id            controllers.MementoControl.deleteMemento(lsid: Long, id: Long)
+POST    /lifestory/:lsid/memento/:id/mention     controllers.MementoControl.addMementoParticipant(lsid: Long, id: Long)
+POST    /lifestory/:lsid/memento/:id/mention/:pid controllers.MementoControl.addMementoParticipantByPersonId(lsid: Long, id: Long, pid: Long)
+DELETE  /lifestory/:lsid/memento/:id/mention/:pid controllers.MementoControl.deleteMementoParticipantByPersonId(lsid: Long, id: Long, pid: Long)
 
 # Contextual Reminiscence
 GET     /context/:cid                   controllers.ContextControl.getContext(cid: Long)
@@ -86,35 +97,14 @@ GET     /file/:hashcode                 controllers.Utilities.getFile(hashcode: 
 #GET    /location                       controllers.Utilities.getDistinctLocations() 
 #GET    /location/:name                 controllers.Utilities.getDistinctLocationsByName(name: String) 
 
-# User and Authentication Management Management
-GET     /user/:uid                      controllers.UserControl.getUser(uid: Long)
-POST    /user/email                     controllers.UserControl.getUserByEmail() 
-PUT     /user/:uid                      controllers.UserControl.updateUser(uid: Long) 
-DELETE  /user/:uid                      controllers.UserControl.deleteUser(uid: Long)
-DELETE  /user/:uid/force                controllers.UserControl.deleteUserForce(uid: Long)
-
-## UM based on play-authenticate
-POST    /signup                         controllers.Application.doSignup()
-POST    /login                          controllers.Application.doLogin()
-GET     /login/denied                   controllers.Application.onLoginUserNotFound()
-
 # Play Authenticate endpoints to validate/integrate, used to verify the email
 GET     /accounts/verify/:token         controllers.Signup.verify(token: String)
 GET     /accounts/unverified            controllers.Signup.unverified()
 GET     /accounts/exists                controllers.Signup.exists()
 
 # Play Authenticate endpoints to validate/integrate
+GET     /login/denied                   controllers.UserControl.onLoginUserNotFound()
 GET     /authenticated                  controllers.Restricted.index()
 GET     /login/:id                      controllers.Restricted.id(id: String)
-GET     /logout                         com.feth.play.module.pa.controllers.Authenticate.logout()
 GET     /authenticate/:provider         controllers.AuthenticateLocal.authenticate(provider: String)
-GET     /authenticate/:provider/denied  controllers.Application.oAuthDenied(provider: String)
-
-# Old Endpoints
-# User management deprecated actions
-#GET     /user                           controllers.UserControlControl.getUsers()
-#POST    /user                           controllers.UserControl.createUser()
-#POST    /signup                         controllers.UserControl.signup()
-#POST    /login                          controllers.UserControl.login()
-#PUT     /login                          controllers.UserControl.updateLogin(sid: Long)
-#DELETE  /login                          controllers.UserControl.logout(sid: Long)
+GET     /authenticate/:provider/denied  controllers.UserControl.oAuthDenied(provider: String)

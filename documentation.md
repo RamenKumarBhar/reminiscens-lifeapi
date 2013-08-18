@@ -1,7 +1,6 @@
-HOST: http://test.reminiscens.me/lifeapi/
+FORMAT: X-1A
 
---- Reminiscens Life API version 1.0 ---
----
+# Reminiscens Life API version 1.0 #
 Reminiscens Life API is a RESTful API that provides HTTP access to resources that support the Reminiscens' tablet application 
 for stimulating elderly and their families in sharing memories and motivate conversation by exploring contextual content for these 
 memories, based on their place and period of time. The goal is to stimulate a healthy practice of positive reminiscence that will benefit 
@@ -14,10 +13,9 @@ the result of participatory research action and design with local elders, with t
 social interactions between older adults and their younger relatives. Not only we have worked on designing an 
 application, but we have worked to build an interesting knowledge base of content that will stimulate people to 
 reminisce. It is work in progress, towards the finalization of a Ph.D. in Information and Communication Technologies 
----
 
---
-Resource Beans
+
+# Resource Beans
  
 <h3><b><a id="session">Session Resource:</a></b></h3>
 <p><pre><code>
@@ -267,15 +265,14 @@ Timeline Curators, who can access and edit thes stories in his/her timeline</p>
 
 <p><b>Observation:</b>for every date information in the response, there will be both the Unix Timestamp (e.g., "date" : 1357016400000) 
 representaion and the string representation (e.g., "dateAsString" : "2013-01-01 00:00:00"</p> 
---
 
---
-User management endpoints
+# Group User management
 <p> The user management section of this API groups the endpoints related to signing up, in and out of the application. 
 These are the entry points to Reminiscens' services</p>
 <p> <b><a href="user">Users</a></b> endpoints are also included, giving access to operations on user data, including also his
 <a href="#person">Person</a> profile information. </p>
---
+
+## Login 
 
 <p><b>Signing in and creating a session.</b> </p>
 
@@ -294,7 +291,7 @@ support password that are not send in clear text
 <p> Once the sessionKey is obtained, it will have to be added as a header for all the other requests </p> 
 <script src="https://gist.github.com/cdparra/6185587.js"></script>
 
-POST /user/login
+POST /login
 > Content-Type: application/json
 {  
     "email": "reminiscensapp+4@gmail.com",
@@ -374,19 +371,17 @@ POST /user/login
         + <b>Mandatory.</b> firstname  
         + <b>Mandatory.</b> lastname
         + <b>Mandatory.</b> birthdate (in "yyyy-MM-dd HH:mm:ss" format)
-        + <b>Mandatory.</b> birthplace as a <a href="#city">City</a> resource identified byt its cityId or name.
-    + <b>Optional.</b> profilePic with an URL to the profile picture of the person 
+        + <b>Mandatory.</b> birthplaceId of the <a href="#city">City</a> resource in which the person was born.
         
+<p><b>Observation: </b> A list of cities that we currently support, with their respective IDs, can be downloaded from 
+<a href="http://test.reminiscens.me/lifeapi/city"> here</a></p>
+
 <p>Response: </p> 
 
- + The newly created <a href="#user">User</a> resource with a generated nickname and 
- corresponding <a href="#person">Person</a> and <a href ="#session"> Session </a> key
- 
- <p><b>Observation: </b> A list of cities that we currently support, with their respective 
- IDs, can be downloaded from <a href="http://test.reminiscens.me/lifeapi/city"> here</a>. 
- Moreover, an email with a link to verify the account will be send to the provided email </p>
+ + The newly created <a href="#user">User</a> resource with a generated nickname and corresponding <a href="#person">Person</a> 
+and <a href ="#session"> Session </a> key
 
-POST /user/signup
+POST /signup
 > Content-Type: application/json
 {  
     "email":"resminiscensapp+99@gmail.com",
@@ -453,101 +448,16 @@ POST /user/signup
     "status_message":"playauthenticate.core.exception.general"
 }
 
-<p><b><a href="#user">User</a> logout endpoint </b></p>
-<p>Request:</p>
- 
- + The <a href="#session">Session</a> key 
-
-GET /user/logout
-> Content-Type: application/json
-> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com 
-< 200
-< Content-Type: application/html
-<html lang="it"><head>
-    <title>Reminiscens RESTful API</title>
-   
-    <!-- Le meta -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Reminiscens is tablet application to stimulate good old positive memories with context">
-    <meta name="author" content="Reminiscens Team">
-    
-    <!-- Le scripts -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-
-    <!-- Le styles -->
-    <link href="/assets/stylesheets/main.min.css" rel="stylesheet">
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
- <link type="text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css"><script type="text/javascript" charset="utf-8" src="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/page_context.js"></script></head>
-
- <body screen_capture_injected="true">       
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="/">Play! Authenticate</a>
-          
-          <div class="btn-group pull-right">
-          
-
-
-
-            <a href="/user/login" class="btn btn-primary btn-mini disabled">Log in</a>
-          
-
-
-          </div>
-
-          
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li class=""><a href="/">Home</a></li>
-                
-
-
-
-                    <li class=""><a href="/user/signup">Sign up</a></li>
-                
-
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-    
-    <div class="container">        
-        
-        
-        
-            
-    
-    <iframe src="http://docs.reminiscens.apiary.io/" seamless="" width="1200px" height="900" sandbox="allow-scripts"></iframe>
-
-
-    </div>
-    <hr>
-  
-
-</body></html>
-
 <p><b>Update user endpoint</b></p>
 <p>Request: </p>
  
  + The <a href="#user">User</a> with the udpated fields
+ + The <a href="#person">person</a> with the udpated fields
 
 <p>Response:</p> 
 
  + The <a href="#user">User</a> resource with its updated information
+ + The <a href="#user">Person</a> resource with its updated information
 
 PUT /user/{id}
 > Content-Type: application/json
@@ -558,11 +468,13 @@ PUT /user/{id}
   "email":"reminiscensapp+99@gmail.com",
   "password":"testing-password",
   "repeatPassword":"testing-password",
-  "profilePic": http://www.onlinerepmanagement.com/wp-content/uploads/2011/12/Profile-Picture.png",
-  "locale": "it_IT",
-  "emailVerified": true,
-  "usernameVerified": true,
-  "active": true
+  "locale":"it_IT",
+  "person": {
+      "firstname"  : "Pinco",
+    "lastname"   : "Pallino",
+    "birthdate"  : "1984-06-21 18:00:00",
+    "birthplaceId" : 9091
+  }
 }
 < 200
 < Content-Type: application/json
@@ -570,8 +482,8 @@ PUT /user/{id}
     "userId": 999,
     "email": "reminiscensapp+99@gmail.com",
     "username": "testing.user99",
-   "profilePic": http://www.onlinerepmanagement.com/wp-content/uploads/2011/12/Profile-Picture.png",  
-   "locale": "it_IT",
+    "profilePic": null,
+    "locale": "it_IT",
     "emailVerified": true,
     "usernameVerified": true,
     "active": true,
@@ -663,107 +575,6 @@ DELETE /user/{id}/force
     "errorTrace": null
 }
 
-<p><b>Get user information endpoint</b></p>
-<p>Request: </p>
- 
- + The <a href="#user">Session</a> key header (only the user itself can access this)
- 
-GET /user/{id}
-> Accept: text/json
-{"url":"/user/999"}
-< 200
-< Content-Type: application/json
-{
-    "userId": 3,
-    "email": "cdparra2@gmail.com",
-    "username": "cdparra.test",
-    "profilePic": "http://www.onlinerepmanagement.com/wp-content/uploads/2011/12/Profile-Picture.png",
-    "locale": "en_EN",
-    "emailVerified": true,
-    "usernameVerified": true,
-    "active": true,
-    "creationDate": 1373379759000,
-    "sessionKey": null,
-    "person": {
-        "personId": 2,
-        "firstname": "Daniel",
-        "lastname": "Sam",
-        "birthdate": 456616800000,
-        "deathdate": null,
-        "gender": "male",
-        "birthplace": {
-            "cityId": 9093,
-            "name": "Asunción",
-            "country": {
-                "countryId": 172,
-                "short_name": "Paraguay",
-                "spanish_name": "Paraguay",
-                "italian_name": null
-            },
-            "lat": -25.282197,
-            "lon": -57.6351
-        },
-        "famous": null,
-        "birthdateAsString": "1984-06-21 00:00:00",
-        "deathdateAsString": null,
-        "famousId": null
-    },
-    "creationDateAsString": "2013-07-09 16:22:39"
-}
-
-<p><b>Get user by email information endpoint</b></p>
-<p>Request: </p>
- 
- + The <a href="#user">Session</a> key header (only the user itself can access this)
- 
-POST /user
-> Accept: text/json
-> Content-Type: application/json
-{
-   "email":"cdparra2@gmail.com"
-}
-< 200
-< Content-Type: application/json
-{
-    "userId": 3,
-    "email": "cdparra2@gmail.com",
-    "username": "cdparra.test",
-    "profilePic": "http://www.onlinerepmanagement.com/wp-content/uploads/2011/12/Profile-Picture.png",
-    "locale": "en_EN",
-    "emailVerified": true,
-    "usernameVerified": true,
-    "active": true,
-    "creationDate": 1373379759000,
-    "sessionKey": null,
-    "person": {
-        "personId": 2,
-        "firstname": "Daniel",
-        "lastname": "Sam",
-        "birthdate": 456616800000,
-        "deathdate": null,
-        "gender": "male",
-        "birthplace": {
-            "cityId": 9093,
-            "name": "Asunción",
-            "country": {
-                "countryId": 172,
-                "short_name": "Paraguay",
-                "spanish_name": "Paraguay",
-                "italian_name": null
-            },
-            "lat": -25.282197,
-            "lon": -57.6351
-        },
-        "famous": null,
-        "birthdateAsString": "1984-06-21 00:00:00",
-        "deathdateAsString": null,
-        "famousId": null
-    },
-    "creationDateAsString": "2013-07-09 16:22:39"
-}
-
-
-
 --
 People, Life Stories and Timelines  (TO UPDATE)
 
@@ -790,7 +601,7 @@ person (that represents the user or a friend of the user). </p>
  
 <p>Authorization:</p> 
  
- + User must be in the list of relationships of the requested person
+ + User must be ADMIN
 
 GET /person/{id}
 > Accept: application/json
@@ -835,7 +646,7 @@ GET /person/{id}
  
 <p>Authorization:</p> 
  
- + User must be logged in
+ + User must be MEMBER
 
 POST /person
 > Accept: application/json
@@ -915,14 +726,15 @@ PUT /person/{id}
     "deathdateAsString": null
 }
 
-<p> Delete a person record 
+<p> Update a person record 
 <p>Request: </p>
  
  +  <b> Mandatory. </b> <a href="#session">Session</a> header
- 
+ +  <b> Mandatory. </b> <a href="#person">Person</a> in the body
+
 <p>Response:</p> 
 
- + <a href="#response_status">Response</a> with the result of the operation  
+ + <a href="#person">Person</a> just updated  
  
 <p>Authorization:</p> 
  
@@ -1614,141 +1426,7 @@ GET /person/{id}/timeline
     "curators": null
 }
 
-
-<p> Get the timeline of life stories of a person, including only stories started in DECADE: </p>
-<p>Request: </p>
- 
- +  <b> Mandatory. </b> <a href="#session">Session</a>
-
-<p>Response: </p> 
-
-+ A <a href="#timeline">Timeline</a> resource 
- 
-GET /person/{id}/timeline/{decade}
-> Accept: application/json
-> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{"url":"/person/4/timeline/1980"}
-< 200 
-< Content-Type: application/json
-{
-    "aboutPerson": {
-        "personId": 4,
-        "firstname": "Bruno",
-        "lastname": "Kessler",
-        "birthdate": -1447635600000,
-        "deathdate": 669337200000,
-        "gender": "male",
-        "birthplace": {
-            "cityId": 4015,
-            "name": "Trento",
-            "country": {
-                "countryId": 109,
-                "short_name": "Italy",
-                "spanish_name": "Italia",
-                "italian_name": null
-            },
-            "lat": 46.069692,
-            "lon": 11.121089
-        },
-        "famous": {
-            "famousId": 4,
-            "source": null,
-            "sourceUrl": null,
-            "resourceUrl": "https://dl.dropboxusercontent.com/u/2797542/timeline/bkessler/bruno_kessler_imagelarge.jpeg",
-            "locale": "it_IT",
-            "tags": null,
-            "indexed": false,
-            "lastUpdate": 1371765599000,
-            "fullname": null,
-            "firstname": "Bruno",
-            "lastname": "Kessler",
-            "famousFor": "Presidente del Consiglio di Trento",
-            "birthDate": null,
-            "deathDate": null,
-            "birhplace": null,
-            "deathplace": null,
-            "country": {
-                "countryId": 109,
-                "short_name": "Italy",
-                "spanish_name": "Italia",
-                "italian_name": null
-            },
-            "status": "CONFIRMED",
-            "creatorType": "SYSTEM",
-            "creationDate": 1357081199000,
-            "creationDateAsString": "2013-01-01 23:59:59",
-            "lastUpdateAsString": "2013-06-20 23:59:59"
-        },
-        "famousId": 4,
-        "birthdateAsString": "1924-02-17 00:00:00",
-        "deathdateAsString": "1991-03-19 00:00:00"
-    },
-    "storyList": [
-        {
-            "lifeStoryId": 8,
-            "headline": "Senate",
-            "text": "Elected to the Senate in 1983",
-            "richtext": null,
-            "creationDate": 1348696800000,
-            "locale": "it_IT",
-            "location": {
-                "locationId": 1528,
-                "location_textual": "Roma",
-                "name": null,
-                "country": null,
-                "region": null,
-                "cityName": "Roma",
-                "coordinates_trust": 0,
-                "lat": null,
-                "lon": null,
-                "locale": null,
-                "city": {
-                    "cityId": 5906,
-                    "name": "Roma",
-                    "country": {
-                        "countryId": 109,
-                        "short_name": "Italy",
-                        "spanish_name": "Italia",
-                        "italian_name": null
-                    },
-                    "lat": 41.892916,
-                    "lon": 12.48252
-                },
-                "accuracy": 1
-            },
-            "question": null,
-            "startDate": {
-                "fuzzyDateId": 10466,
-                "textual_date": null,
-                "exactDate": 421624800000,
-                "decade": null,
-                "year": null,
-                "month": null,
-                "day": null,
-                "accuracy": 11,
-                "locale": null,
-                "exactDateAsString": "1983-05-13 00:00:00"
-            },
-            "synced": false,
-            "participationList": [
-                {
-                    "participationId": 7,
-                    "contributorId": 1,
-                    "lifeStoryId": 8,
-                    "protagonist": true,
-                    "personId": 4
-                }
-            ],
-            "mementoList": [],
-            "contributorId": 2,
-            "creationDateAsString": "2012-09-27 00:00:00"
-        }
-    ],
-    "curators": null
-}
-
-
-<p> Get the timeline of life stories of a person, including only stories from START to END (by order of insertion): </p>
+<p> Get the timeline of life stories of a person, including only stories from START to END (by order of insersion): </p>
 <p>Request: </p>
  
  +  <b> Mandatory. </b> <a href="#session">Session</a>
@@ -2188,9 +1866,6 @@ POST /person/{id}/timeline
     ],
     "curators": null
 }
-
-
-
 
 <p> Create a new story: </p>
 

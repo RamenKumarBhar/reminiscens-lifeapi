@@ -102,6 +102,67 @@ public class Location extends Model {
 					return existing;
 				}
 			} 
+			
+			String textual = location.getLocation_textual();
+			String name = location.getName();
+			String country = location.getCountry();
+			String region = location.getRegion();
+			String cityName = location.getCityName();
+			City city = location.getCity();
+			Double lat = location.getLat();
+			Double lon = location.getLon();
+
+			Long acc = new Long(0); 
+//			TODO review the whole accuracy model
+//			1, flickr world-level, if we only have textual description (e.g. it was nearby my hometown) or a name of a place
+			if ((textual !=null && !textual.isEmpty()) || (name !=null && !name.isEmpty()))
+				acc = new Long(1);
+			
+//			2, if we have only continent or environment (e.g. it was in a beach, it was in africa)
+//			3, flickr country-level, if we have country or city or neighbourhood
+			if (country !=null && !country.isEmpty())
+				acc = new Long(3);
+			
+//			4, if it is 3 + environment 
+//			5, if we have country + city or neighbourhood
+//			6, flickr region-level, if we have country + region
+			if (region !=null && !region.isEmpty())
+				acc = new Long(6);
+
+//			7, if we have 6 + environment
+//			11, flickr city-level, if we have country + city 
+			if (cityName != null && !cityName.isEmpty()) {
+				if (city==null) {
+					City c = City.getCityByName(cityName);
+					location.setCity(c);
+					location.setCountry(c.getCountry().getShort_name());
+					location.setRegion(c.getRegion());
+					if (lat == null && lon == null) {
+						location.setLat(location.getCity().getLat());
+						location.setLon(location.getCity().getLon());
+						location.setCoordinates_trust(new Integer(0));
+						acc = new Long(11);
+					}
+				}
+			}
+			
+//			12, if we have country + city + neighbourhood
+//			16, flickr street-level, if we have 11 or 12 + street
+//			17, if we have 7 + environment
+//			19,  if we have Lat + Lon but coordinates_trust = false
+//			20, the best, if we have both Lat + Longitude and coordinates_trust = true
+			if (lat != null && lon!=null) {
+				Integer coordTrustInt = location.getCoordinates_trust();
+				Boolean coordTrust = coordTrustInt != null && coordTrustInt == 1;
+				if (coordTrust) {
+					acc = new Long(20);
+				} else {
+					acc = new Long(19);
+				}
+			}
+			// TODO add geocoding to every new location added			
+			
+			location.setAccuracy(acc);
 			location.save();
 			return location;
 		} else {
@@ -368,14 +429,14 @@ public class Location extends Model {
 	/**
 	 * @return the locate
 	 */
-	public String getLocate() {
+	public String getLocale() {
 		return locale;
 	}
 
 	/**
 	 * @param locate the locate to set
 	 */
-	public void setLocate(String locate) {
+	public void setLocale(String locate) {
 		this.locale = locate;
 	}
 

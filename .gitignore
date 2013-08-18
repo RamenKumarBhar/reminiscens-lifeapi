@@ -2,6 +2,7 @@ logs/application.log
 logs
 project/project
 project/target
+project/target/*
 target
 conf/application.conf
 tmp

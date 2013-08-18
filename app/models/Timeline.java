@@ -38,6 +38,16 @@ public class Timeline extends Model {
 		t.setStoryList(LifeStory.readByPersonWithLimits(personId, from, to));
 		return t;
 	}
+	
+
+	public static Timeline readByPersonByDecade(Long personId, Long decade) {
+		Person p = Person.read(personId);
+		Timeline t = new Timeline();
+		t.setAboutPerson(p);
+		t.setStoryList(LifeStory.readByPersonByDecade(personId, decade));
+		return t;
+	}	
+	
 	public static Timeline synchronize(Timeline t) {
 		// 1. Create/Update stories in the timeline, sent from the client
 		List<LifeStory> storyList = t.getStoryList();
@@ -79,5 +89,5 @@ public class Timeline extends Model {
 
 	public void setCurators(List<User> curators) {
 		this.curators = curators;
-	}	
+	}
 }

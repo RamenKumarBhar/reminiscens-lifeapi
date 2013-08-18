@@ -9,7 +9,6 @@ import be.objectify.deadbolt.java.actions.Restrict;
 
 import play.mvc.*;
 import play.data.*;
-import pojos.MentionPersonBean;
 import pojos.PersonBean;
 import pojos.RelationshipBean;
 import pojos.ResponseStatusBean;
@@ -23,7 +22,6 @@ public class PersonControl extends Controller {
 
 	static Form<PersonBean> personForm = Form.form(PersonBean.class);
 	static Form<RelationshipBean> relationshipForm = Form.form(RelationshipBean.class);
-	static Form<MentionPersonBean> mentionPersonForm = Form.form(MentionPersonBean.class);
 
 	/** 
 	 * Get a complete list of people mentioned in reminiscens
@@ -41,7 +39,7 @@ public class PersonControl extends Controller {
 		return bean != null ? ok(toJson(bean)) : notFound();
 	}
 
-	@CustomRestrict(value = {MyRoles.MEMBER}, config = @Restrict({}))
+ 	@Security.Authenticated(Secured.class)
 	public static Result createPerson() {
 		Form<PersonBean> filledForm = personForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
@@ -91,21 +89,6 @@ public class PersonControl extends Controller {
 					ResponseStatus.NODATA, "Entity does not exist",
 					e.getMessage());
 			return badRequest(toJson(res));
-		}
-	}
-
-	@Security.Authenticated(Secured.class)
-	public static Result createMentionPerson() {
-		Form<MentionPersonBean> filledForm = mentionPersonForm.bindFromRequest();
-		if (filledForm.hasErrors()) {
-			ResponseStatusBean res = new ResponseStatusBean(
-					ResponseStatus.BADREQUEST,
-					"Body of request misses some information or it is malformed");
-			return badRequest(toJson(res));
-		} else {
-			MentionPersonBean mentionPersonBean = filledForm.get();
-			PersonDelegate.getInstance().createPersonMention(mentionPersonBean);
-			return ok(toJson(mentionPersonBean ));
 		}
 	}
 }

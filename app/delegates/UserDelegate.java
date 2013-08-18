@@ -3,6 +3,8 @@ package delegates;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.User;
+
 import pojos.UserBean;
 import utils.PlayDozerMapper;
 
@@ -42,19 +44,25 @@ public class UserDelegate {
         }
     }
 
-
+    // TODO manage change of password
     public void create(UserBean userBean){
-        models.User user = PlayDozerMapper.getInstance().map(userBean, models.User.class);
+    	models.User user = PlayDozerMapper.getInstance().map(userBean, models.User.class);
         models.User.create(user);
         user = models.User.read(user.getUserId());
         PlayDozerMapper.getInstance().map(user,userBean);
     }
 
     public void update(UserBean bean, Long id) {
-        models.User person = PlayDozerMapper.getInstance().map(bean, models.User.class);
-        person.update(id);
-        person = models.User.read(person.getUserId());
-        PlayDozerMapper.getInstance().map(person,bean);
+      //  models.User user = models.User.read(id);
+    	// TODO manage mapping of null and empty strings in configuration of Dozer
+    	if (!bean.isActive()) {
+    		bean.setActive(true);
+    	}
+    	bean.setUserId(id);
+    	models.User user = PlayDozerMapper.getInstance().map(bean, models.User.class);
+        user.update();
+        user = models.User.read(user.getUserId());
+        PlayDozerMapper.getInstance().map(user,bean);
     }
 
     public void deleteUser(Long id) {
