@@ -1,11 +1,6 @@
 package security;
 
-import models.User;
-import play.mvc.Http;
-import pojos.LifeStoryBean;
 import be.objectify.deadbolt.java.AbstractDynamicResourceHandler;
-import be.objectify.deadbolt.java.DeadboltHandler;
-import delegates.LifeStoryDelegate;
 
 public class AdminDynamicResourceHandler extends
 		AbstractDynamicResourceHandler {

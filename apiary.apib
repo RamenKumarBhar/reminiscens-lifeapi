@@ -4218,68 +4218,252 @@ POST /upload
 > PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
 {}
 < 200
-< Content-Type: application/json
+< Content-Type: application/octet-stream
 {}
 
 Get the file identified by hashcode
 GET	/file/{hashcode}
-> Content-type: multipart/form-data
-> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{}
+{"url":"/file/93c6d1e3-adba-3799-8b58-bf1f2ac4c448"}
 < 200
-< Content-Type: application/json
+< Content-Type: application/octet-stream
+{}
+
+Get the file identified by hashcode and of size "thumbnail", "small", "medium" or "large"  
+GET	/file/{hashcode}/{size}
+{"url":"/file/93c6d1e3-adba-3799-8b58-bf1f2ac4c448/small"}
+< 200
+< Content-Type: application/octet-stream
 {}
 
 Get all the cities in our system
 GET	/city
-> Content-type: multipart/form-data
-> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{}
+> Content-type: application/json
 < 200
 < Content-Type: application/json
-{}
+[
+    {
+        "cityId": 9092,
+        "name": "Luque",
+        "country": {
+            "countryId": 172,
+            "short_name": "Paraguay",
+            "spanish_name": "Paraguay",
+            "italian_name": null
+        },
+        "lat": -25.27,
+        "lon": -57.487222
+    },
+    {
+        "cityId": 9093,
+        "name": "Asunción",
+        "country": {
+            "countryId": 172,
+            "short_name": "Paraguay",
+            "spanish_name": "Paraguay",
+            "italian_name": null
+        },
+        "lat": -25.282197,
+        "lon": -57.6351
+    }
+]
+
 
 Get cities of a country by name
 GET	/country/{country}/city
-> Content-type: multipart/form-data
-> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{}
+> Content-type: application/json
+{"url":"/country/Paraguay/city"}
 < 200
 < Content-Type: application/json
-{}
+[
+    {
+        "cityId": 9092,
+        "name": "Luque",
+        "country": {
+            "countryId": 172,
+            "short_name": "Paraguay",
+            "spanish_name": "Paraguay",
+            "italian_name": null
+        },
+        "lat": -25.27,
+        "lon": -57.487222
+    },
+    {
+        "cityId": 9093,
+        "name": "Asunción",
+        "country": {
+            "countryId": 172,
+            "short_name": "Paraguay",
+            "spanish_name": "Paraguay",
+            "italian_name": null
+        },
+        "lat": -25.282197,
+        "lon": -57.6351
+    }
+]
 
 Get cities of a country and a region
 GET	/country/{country}/{region}/city
-> Content-type: multipart/form-data
-> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{}
+> Content-type: application/json
+{"url":"http://localhost/lifeapi/country/Italy/Toscana/city"}
 < 200
 < Content-Type: application/json
-{}
+[
+    {
+        "cityId": 5311,
+        "name": "Aulla",
+        "country": {
+            "countryId": 109,
+            "short_name": "Italy",
+            "spanish_name": "Italia",
+            "italian_name": null
+        },
+        "lat": 44.216671,
+        "lon": 9.967497
+    },
+    {
+        "cityId": 5312,
+        "name": "Bagnone",
+        "country": {
+            "countryId": 109,
+            "short_name": "Italy",
+            "spanish_name": "Italia",
+            "italian_name": null
+        },
+        "lat": 44.317193,
+        "lon": 10.013593
+    },
+    {
+        "cityId": 5313,
+        "name": "Carrara",
+        "country": {
+            "countryId": 109,
+            "short_name": "Italy",
+            "spanish_name": "Italia",
+            "italian_name": null
+        },
+        "lat": 44.079325,
+        "lon": 10.097677
+    },
+    {
+        "cityId": 5314,
+        "name": "\"Casola in Lunigiana\"",
+        "country": {
+            "countryId": 109,
+            "short_name": "Italy",
+            "spanish_name": "Italia",
+            "italian_name": null
+        },
+        "lat": 44.182257,
+        "lon": 10.159121
+    }
+]
 
 Get a city by Id
 GET	/city/id/{cityId}
-> Content-type: multipart/form-data
-> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{}
+> Content-type: application/json
+{"url":"/city/id/5314"}
 < 200
 < Content-Type: application/json
-{}
+{
+    "cityId": 5314,
+    "name": "\"Casola in Lunigiana\"",
+    "country": {
+        "countryId": 109,
+        "short_name": "Italy",
+        "spanish_name": "Italia",
+        "italian_name": null
+    },
+    "lat": 44.182257,
+    "lon": 10.159121
+}
 
 Get the list of cities added after cityId
 GET	/city/sync/{lastCityId}
-> Content-type: multipart/form-data
-> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{}
+> Content-type: application/json
+{"url":"/city/sync/9064"}
 < 200
 < Content-Type: application/json
-{}
+[
+    {
+        "cityId": 9064,
+        "name": "\"Monte San Pietrangeli\"",
+        "country": {
+            "countryId": 109,
+            "short_name": "Italy",
+            "spanish_name": "Italia",
+            "italian_name": null
+        },
+        "lat": null,
+        "lon": null
+    },
+    {
+        "cityId": 9065,
+        "name": "\"Monte Urano\"",
+        "country": {
+            "countryId": 109,
+            "short_name": "Italy",
+            "spanish_name": "Italia",
+            "italian_name": null
+        },
+        "lat": null,
+        "lon": null
+    },
+    {
+        "cityId": 9066,
+        "name": "\"Monte Vidon Combatte\"",
+        "country": {
+            "countryId": 109,
+            "short_name": "Italy",
+            "spanish_name": "Italia",
+            "italian_name": null
+        },
+        "lat": null,
+        "lon": null
+    }
+]
 
 Get a city by name
 GET	/city/{name}
-> Content-type: multipart/form-data
-> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{}
+> Content-type: application/json
+{"url":"/city/Trento"}
 < 200
 < Content-Type: application/json
-{}
+[
+    {
+        "cityId": 4009,
+        "name": "\"Tione di Trento\"",
+        "country": {
+            "countryId": 109,
+            "short_name": "Italy",
+            "spanish_name": "Italia",
+            "italian_name": null
+        },
+        "lat": 46.031342,
+        "lon": 10.722728
+    },
+    {
+        "cityId": 4015,
+        "name": "Trento",
+        "country": {
+            "countryId": 109,
+            "short_name": "Italy",
+            "spanish_name": "Italia",
+            "italian_name": null
+        },
+        "lat": 46.069692,
+        "lon": 11.121089
+    },
+    {
+        "cityId": 6154,
+        "name": "Trentola-Ducenta",
+        "country": {
+            "countryId": 109,
+            "short_name": "Italy",
+            "spanish_name": "Italia",
+            "italian_name": null
+        },
+        "lat": 40.975511,
+        "lon": 14.16113
+    }
+]
+

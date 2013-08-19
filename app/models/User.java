@@ -1,11 +1,9 @@
 package models;
 
-import java.text.ParseException;
 import java.util.*;
 
 import play.Play;
 import play.db.ebean.*;
-import play.i18n.Messages;
 import providers.MyUsernamePasswordAuthUser;
 import utils.PlayDozerMapper;
 
@@ -269,18 +267,6 @@ public class User extends Model implements Subject {
 			user.setProfilePic(Play.application().configuration().getString("default.profilepic"));
 		}
 
-		// if (authUser instanceof ExtendedIdentity) {
-		// final ExtendedIdentity identity = (ExtendedIdentity) authUser;
-		// if (identity.getFirstName() != null) {
-		// person.setFirstname(identity.getFirstName());
-		// }
-		// person.setLastname(identity.getLastName());
-		// if (identity.getGender() != null
-		// && !"".trim().equals(identity.getGender()))
-		// person.setGender(identity.getGender().substring(0, 1));
-		//
-		// }
-
 		/*
 		 * 6. always the email is going to be validated by google
 		 */
@@ -298,7 +284,6 @@ public class User extends Model implements Subject {
 		/*
 		 * 8. Set language of user
 		 */
-		
 		// TODO get the default language from request		
 		String userLocale = user.getLocale() == null ? Play.application().configuration().getString("default.language") : user.getLocale();		
 		user.setLocale(userLocale);
@@ -317,8 +302,6 @@ public class User extends Model implements Subject {
 			models.LifeStory.createBirthStory(user);
 		}
 		
-		
-
 		return user;
 	}
 

@@ -83,11 +83,8 @@ public class City extends Model {
     }
     
     public static List<City> findByName(String name){
-    	@SuppressWarnings("unchecked")
-		List<City> result = (List<City>) find.where()
-    			.ilike("name", "%"+name+"%")
-    			.findPagingList(25)
-    			.getPage(1);
+    	List<City> result = (List<City>) find.where()
+    			.ilike("name", "%"+name+"%").findList();
     	return result;
     }
     

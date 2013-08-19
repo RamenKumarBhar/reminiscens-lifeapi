@@ -6,7 +6,6 @@ import java.util.List;
 import play.mvc.Http;
 import play.mvc.Result;
 import annotations.CustomRestrict;
-import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.RestrictAction;
 import enums.MyRoles;
 
@@ -19,6 +18,7 @@ public class CustomRestrictAction extends RestrictAction {
 		RestrictAction restrictAction = new RestrictAction(
 				((CustomRestrict) configuration).config(), this.delegate) {
 
+			@SuppressWarnings("unused")
 			public String[] getRoleNames() {
 				List<String> roleNames = new ArrayList<String>();
 				for (MyRoles role : outerConfig.value()) {

@@ -440,6 +440,7 @@ public class LifeStory extends Model {
 		} catch (ParseException e) {
 			// TODO change to stop user from being created if no birthdate is provided
 		}
+		FuzzyDate.createOrUpdateIfNotExist(fuzzyBirth);
 		birth.setStartDate(fuzzyBirth);
 		
 		City birthPlace = user.getPerson().getBirthplace();
