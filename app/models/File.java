@@ -27,6 +27,8 @@ public class File extends Model {
 	@Column
 	private String URI;
 	@Column
+	private String thumbnailURI;
+	@Column
 	private String contentType;
 	@Column
 	private String extension; 
@@ -138,5 +140,13 @@ public class File extends Model {
 
 	public void setCreationDate(DateTime creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	public String getThumbnailURI() {
+		return thumbnailURI;
+	}
+
+	public void setThumbnailURI(String thumbnailURI) {
+		this.thumbnailURI = thumbnailURI;
 	}	
 }

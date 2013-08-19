@@ -1,5 +1,9 @@
 # Override default Play's validation messages
 
+# --- reminiscens
+reminiscens.birth.headline = Nascita
+reminiscens.birth.text = La storia della mia nascita
+
 # --- Constraints
 constraint.required=Required
 constraint.min=Minimum value: {0}

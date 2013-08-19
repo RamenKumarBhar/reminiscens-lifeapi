@@ -1,9 +1,20 @@
 package delegates;
 
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import javax.imageio.ImageIO;
+
 import org.joda.time.DateTime;
 
 import akka.event.slf4j.Logger;
@@ -96,7 +107,7 @@ public class UtilitiesDelegate {
 		return cityBean;
 	}	
 
-	public FileBean saveFile(FilePart file, FileBean fileBean) {
+	public FileBean saveFile(FilePart file, FileBean fileBean) throws IOException {
 		/*
 		 * 1. Prepare file metadata before saving the file in the final destination
 		 */
@@ -128,7 +139,15 @@ public class UtilitiesDelegate {
 		File localFile = new File(fullPath);
 		uploadFile.renameTo(localFile);		
 		Logger.root().debug("--> localFile=" + localFile);
-
+		File thumbnailFile = null;
+		
+		if (contentType.contains("image"))
+			thumbnailFile = scalePicture(localFile);
+		
+		String thumbnailURI = "";
+		if (thumbnailFile != null) {
+			thumbnailURI = filesBaseURL + "/" + thumbnailFile.getName();
+		}
 		/*
 		 * 3. Generate Hashcode to use as new name
 		 */
@@ -138,6 +157,7 @@ public class UtilitiesDelegate {
 		 */
 		fileBean.setFilename(fileName);
 		fileBean.setURI(filesBaseURL + "/" + fileName);
+		fileBean.setThumbnailURI(thumbnailURI);
 		fileBean.setContentType(contentType);
 		fileBean.setCreationDate(DateTime.now());
 		fileBean.setHashcode(hashcode);
@@ -152,6 +172,15 @@ public class UtilitiesDelegate {
 	}
 	
 	
+	private File scalePicture(File localFile) throws IOException {
+		BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+		img.createGraphics().drawImage(ImageIO.read(localFile), null, null);
+		BufferedImage scaled = scale(img,0.5);
+		File thumbFile = new File(localFile.getAbsolutePath()+"_thumb");
+		ImageIO.write(scaled, "jpg", thumbFile);
+		return thumbFile;
+	}
+
 	public File getFile(String hashcode, Long userId) {
 		models.File f = models.File.readByHashCodeAndUserId(hashcode, userId);
 		
@@ -161,4 +190,25 @@ public class UtilitiesDelegate {
 	
 		return new File(fullPath);
 	}
+	
+	private BufferedImage scale(BufferedImage source,double ratio) {
+		  int w = (int) (source.getWidth() * ratio);
+		  int h = (int) (source.getHeight() * ratio);
+		  BufferedImage bi = getCompatibleImage(w, h);
+		  Graphics2D g2d = bi.createGraphics();
+		  double xScale = (double) w / source.getWidth();
+		  double yScale = (double) h / source.getHeight();
+		  AffineTransform at = AffineTransform.getScaleInstance(xScale,yScale);
+		  g2d.drawRenderedImage(source, at);
+		  g2d.dispose();
+		  return bi;
+		}
+
+	private BufferedImage getCompatibleImage(int w, int h) {
+		  GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		  GraphicsDevice gd = ge.getDefaultScreenDevice();
+		  GraphicsConfiguration gc = gd.getDefaultConfiguration();
+		  BufferedImage image = gc.createCompatibleImage(w, h);
+		  return image;
+		}
 }
