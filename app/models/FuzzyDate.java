@@ -85,7 +85,7 @@ public class FuzzyDate extends Model {
 	@JsonIgnore
 	@OneToMany(mappedBy = "endDate", cascade = CascadeType.ALL)
 	private List<LifeStory> mementosEnd;
-	
+
 	public static Model.Finder<Long, FuzzyDate> find = new Model.Finder<Long, FuzzyDate>(
 			Long.class, FuzzyDate.class);
 
@@ -96,28 +96,31 @@ public class FuzzyDate extends Model {
 	public static void create(FuzzyDate fuzzyDate) {
 		fuzzyDate.save();
 	}
-	
+
 	public static FuzzyDate createOrUpdateIfNotExist(FuzzyDate fuzzyDate) {
 		if (fuzzyDate != null) {
 			Long id = fuzzyDate.getFuzzyDateId();
 			DateTime exactDate = fuzzyDate.getExactDate();
-			
+
 			// 1. if a record for this date exists, reuse
 			FuzzyDate existing = null;
 			if (id != null) {
 				existing = read(id);
-				// if the existing date with the provided id is equal, there is nothing to create or update
-				if (existing.isEqualTo(fuzzyDate)){
+				// if the existing date with the provided id is equal, there is
+				// nothing to create or update
+				if (existing.isEqualTo(fuzzyDate)) {
 					return existing;
 				}
 			} else if (exactDate != null) {
 				existing = readByExactDate(exactDate);
-				// if the existing date with the provided id is equal, there is nothing to create or update
-				if (existing.isEqualTo(fuzzyDate)){
+				// if the existing date with the provided id is equal, there is
+				// nothing to create or update
+				if (existing.isEqualTo(fuzzyDate)) {
 					return existing;
 				}
 			}
-			
+			// to ensure we create a new one, we don't update existing fuzzy
+			// dates
 			fuzzyDate.setFuzzyDateId(null);
 
 			// 2. make sure all important fields are compiled
@@ -130,13 +133,15 @@ public class FuzzyDate extends Model {
 			String minute = fuzzyDate.getMinute();
 			String second = fuzzyDate.getSecond();
 			String textual = fuzzyDate.getTextual_date();
-			
-//			0, if we only have a textual description (e.g.it was around ten or 15 years ago,when i was on summer vacation)
-//			1-7, number of date parts we have (decade, year, month, day, hour, minute, second)
-//			8, we have additional info
-//			9, only textual
-			Long acc = new Long(0); 
-			
+
+			// 0, if we only have a textual description (e.g.it was around ten
+			// or 15 years ago,when i was on summer vacation)
+			// 1-7, number of date parts we have (decade, year, month, day,
+			// hour, minute, second)
+			// 8, we have additional info
+			// 9, only textual
+			Long acc = new Long(0);
+
 			// if the exact date is present, fill all the blanks
 			if (exactDate != null) {
 				year = new Long(exactDate.getYear());
@@ -145,8 +150,8 @@ public class FuzzyDate extends Model {
 				hour = exactDate.getHourOfDay() + "";
 				minute = exactDate.getMinuteOfHour() + "";
 				second = exactDate.getSecondOfMinute() + "";
-				decade = year - year%10;
-				
+				decade = year - year % 10;
+
 				fuzzyDate.setDecade(decade);
 				fuzzyDate.setYear(year);
 				fuzzyDate.setMonth(month);
@@ -156,39 +161,39 @@ public class FuzzyDate extends Model {
 				fuzzyDate.setSecond(second);
 				fuzzyDate.setAccuracy(new Long(7));
 			} else {
-				
-				if (year!=null && year > 0) {
-					decade = year - year%10; // make sure decade correspond to year	
+				if (year != null && year > 0) {
+					decade = year - year % 10; // make sure decade correspond to
+												// year
 					acc++;
 				}
 				// sync year and decade
 				if (decade != null && decade > 0)
-					acc++; 
-
-				if (month!=null && !month.isEmpty())
-					acc++;
-				
-				if (day!=null && !day.isEmpty())
 					acc++;
 
-				if (hour!=null && !hour.isEmpty())
+				if (month != null && !month.isEmpty())
 					acc++;
 
-				if (minute!=null && !minute.isEmpty())
+				if (day != null && !day.isEmpty())
 					acc++;
 
-				if (second!=null && !second.isEmpty())
+				if (hour != null && !hour.isEmpty())
+					acc++;
+
+				if (minute != null && !minute.isEmpty())
+					acc++;
+
+				if (second != null && !second.isEmpty())
 					acc++;
 			}
-			
-			if (textual!=null && textual.isEmpty()) {
-				if (acc>0) {
+
+			if (textual != null && textual.isEmpty()) {
+				if (acc > 0) {
 					acc++;
 				} else {
 					acc = new Long(9);
 				}
 			}
-			
+
 			fuzzyDate.save();
 			return fuzzyDate;
 		} else {
@@ -206,15 +211,12 @@ public class FuzzyDate extends Model {
 		String minute = fd.getMinute();
 		String second = fd.getSecond();
 		String textual = fd.getTextual_date();
-		
+
 		boolean result = (this.exactDate == exact);
 		if (!result) {
-			result = (this.decade == decade) 
-					&& (this.year == year)
-					&& (this.month == month)
-					&& (this.day == day)
-					&& (this.hour == hour)
-					&& (this.minute == minute)
+			result = (this.decade == decade) && (this.year == year)
+					&& (this.month == month) && (this.day == day)
+					&& (this.hour == hour) && (this.minute == minute)
 					&& (this.second == second)
 					&& (this.textual_date == textual);
 		}
@@ -235,9 +237,10 @@ public class FuzzyDate extends Model {
 	}
 
 	public static FuzzyDate readByExactDate(DateTime exactDate) {
-		List<FuzzyDate> fList = find.where().eq("exactDate", exactDate).findList();
-		
-		return fList!=null && !fList.isEmpty() ? fList.get(0) : null;
+		List<FuzzyDate> fList = find.where().eq("exactDate", exactDate)
+				.findList();
+
+		return fList != null && !fList.isEmpty() ? fList.get(0) : null;
 	}
 
 	/**

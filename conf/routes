@@ -86,15 +86,15 @@ GET     /memento/:decade/:place         controllers.PublicMementoControl.getMeme
 
 #####################################################################################
 # Utilities (cities, countries, other stuff)
+POST    /upload                         controllers.Utilities.upload() 
+GET     /file/:hashcode                 controllers.Utilities.getFileNoLogin(hashcode: String) 
+GET     /file/:hashcode/:size           controllers.Utilities.getFileBySizeNoLogin(hashcode: String, size: String) 
 GET     /city                           controllers.Utilities.getCities() 
 GET     /country/:country/city          controllers.Utilities.getCitiesByCountryName(country: String) 
 GET     /country/:country/:region/city  controllers.Utilities.getCitiesByCountryNameAndRegion(country: String, region: String) 
 GET     /city/id/:cityId                controllers.Utilities.getCityById(cityId: Long) 
 GET     /city/sync/:lastCityId          controllers.Utilities.getNewCities(lastCityId: Long) 
 GET     /city/:name                     controllers.Utilities.getCitiesByName(name: String) 
-GET     /upload                         controllers.Utilities.testUpload() 
-POST    /upload                         controllers.Utilities.upload() 
-GET     /file/:hashcode                 controllers.Utilities.getFile(hashcode: String) 
 
 #TODOLIST OF UTILITIES
 #GET    /location                       controllers.Utilities.getDistinctLocations() 

@@ -3,8 +3,6 @@ package delegates;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.User;
-
 import pojos.UserBean;
 import utils.PlayDozerMapper;
 

@@ -19,13 +19,12 @@ import pojos.CityBean;
 import pojos.FileBean;
 import utils.FileUtilities;
 import utils.PlayDozerMapper;
-import static org.imgscalr.Scalr.*;
 
 public class UtilitiesDelegate {
 
-	public final String uploadDir = Play.application().configuration()
+	public String uploadDir = Play.application().configuration()
 			.getString("files.home");
-	public final String filesBaseURL = Play.application().configuration()
+	public String filesBaseURL = Play.application().configuration()
 			.getString("files.baseurl");
 
 	public static UtilitiesDelegate getInstance() {
@@ -140,26 +139,36 @@ public class UtilitiesDelegate {
 		File localFile = new File(fullPath);
 		uploadFile.renameTo(localFile);
 		Logger.root().debug("--> localFile=" + localFile);
-		
+		if (play.mvc.Controller.request().host().contains("localhost")) {
+			filesBaseURL = "http://localhost/files";
+		}
 		
 		/*
 		 * 3. Save scaled down versions
 		 */
 		File thumbnailFile = null;
+		File smallFile = null;
 		File mediumFile = null;
 		File largeFile = null;
 
 		if (contentType.contains("image")) {
-			thumbnailFile = scalePictureAndSave(localFile, fileExtension, "THUMBNAIL");
+			thumbnailFile = scalePictureAndSave(localFile, fileExtension,
+					"THUMBNAIL");
+			smallFile = scalePictureAndSave(localFile, fileExtension, "SMALL");
 			mediumFile = scalePictureAndSave(localFile, fileExtension, "MEDIUM");
 			largeFile = scalePictureAndSave(localFile, fileExtension, "LARGE");
 		}
 
 		String thumbnailURI = "";
+		String smallURI = "";
 		String mediumURI = "";
 		String largeURI = "";
 		if (thumbnailFile != null) {
 			thumbnailURI = filesBaseURL + "/" + thumbnailFile.getName();
+		}
+
+		if (smallFile != null) {
+			smallURI = filesBaseURL + "/" + smallFile.getName();
 		}
 
 		if (mediumFile != null) {
@@ -169,19 +178,20 @@ public class UtilitiesDelegate {
 		if (largeFile != null) {
 			largeURI = filesBaseURL + "/" + largeFile.getName();
 		}
-		
+
 		/*
-		 * 3. Generate Hashcode to use as new name
+		 * 4. Generate Hashcode to use as new name
 		 */
 		String hashcode = UUID.nameUUIDFromBytes(fullPath.getBytes())
 				.toString();
 		/*
-		 * 4. Save File metadata in Database
+		 * 5. Save File metadata in Database
 		 */
 		fileBean.setFilename(fileName);
 		fileBean.setURI(filesBaseURL + "/" + fileName);
 		fileBean.setThumbnailURI(thumbnailURI);
 		fileBean.setMediumURI(mediumURI);
+		fileBean.setSmallURI(smallURI);
 		fileBean.setLargeURI(largeURI);
 		fileBean.setContentType(contentType);
 		fileBean.setCreationDate(DateTime.now());
@@ -197,8 +207,8 @@ public class UtilitiesDelegate {
 		return fileBean;
 	}
 
-	private File scalePictureAndSave(File sourceImageFile, String fileExtension, String size)
-			throws IOException {
+	private File scalePictureAndSave(File sourceImageFile,
+			String fileExtension, String size) throws IOException {
 
 		// 1. Read image
 		BufferedImage img = ImageIO.read(sourceImageFile);
@@ -206,7 +216,7 @@ public class UtilitiesDelegate {
 		// 2. Create scaled image
 		BufferedImage scaled = null;
 		if (size.equals("THUMBNAIL")) {
-			// thumbnail=150px 
+			// thumbnail=150px
 			scaled = FileUtilities.createThumbnail(img);
 		} else if (size.equals("SMALL")) {
 			// small=250px
@@ -218,29 +228,71 @@ public class UtilitiesDelegate {
 			// large=1024px
 			scaled = FileUtilities.createLarge(img);
 		}
-		
+
 		scaled.flush();
-		
+
 		// 3. prepare the path and filename for the scaled image
-		String fileName = size+"_" + sourceImageFile.getName();
+		String fileName = size + "_" + sourceImageFile.getName();
 		String fullPath = uploadDir + FileUtilities.slash + fileName;
 		File thumbFile = new File(fullPath);
-		
+
 		// 4. save scaled image
 		ImageIO.write(scaled, fileExtension, thumbFile);
 		return thumbFile;
 	}
 
-	public File getFile(String hashcode, Long userId) {
+	public java.io.File getFile(String hashcode, Long userId, String type) {
+
 		models.File f = models.File.readByHashCodeAndUserId(hashcode, userId);
 
-		String uploadDir = Play.application().configuration()
-				.getString("files.home");
-		String fileName = f == null ? "" : f.getFilename();
-		String fullPath = f == null ? "" : uploadDir + FileUtilities.slash
-				+ fileName;
+		if (f != null) {
 
-		return new File(fullPath);
+			if (!f.getContentType().contains("image"))
+				type = "";
+
+			String uploadDir = Play.application().configuration()
+					.getString("files.home");
+			String fileName = f == null ? "" : f.getFilename();
+			String typePrefix = type != null && !type.isEmpty() ? type
+					.toUpperCase() + "_" : "";
+			String fullPath = f == null ? "" : uploadDir + FileUtilities.slash
+					+ typePrefix + fileName;
+
+			return new java.io.File(fullPath);
+		} else {
+			return null;
+		}
+	}
+
+	public java.io.File getFile(String hashcode, Long userId) {
+		return getFile(hashcode, userId, "");
+	}
+	
+	public java.io.File getFileNoLogin(String hashcode, String type) {
+
+		models.File f = models.File.readByHashCode(hashcode);
+
+		if (f != null) {
+
+			if (!f.getContentType().contains("image"))
+				type = "";
+
+			String uploadDir = Play.application().configuration()
+					.getString("files.home");
+			String fileName = f == null ? "" : f.getFilename();
+			String typePrefix = type != null && !type.isEmpty() ? type
+					.toUpperCase() + "_" : "";
+			String fullPath = f == null ? "" : uploadDir + FileUtilities.slash
+					+ typePrefix + fileName;
+
+			return new java.io.File(fullPath);
+		} else {
+			return null;
+		}
+	}
+
+	public java.io.File getFileNoLogin(String hashcode) {
+		return getFileNoLogin(hashcode, "");
 	}
 
 }
