@@ -4212,22 +4212,74 @@ Utilities
 <p> In this section we group API endpoints for general utilities used to support the other services </p>
 --
 
-
-
---
-Work-In-Progress
-
-<p> API endpoints currently still in development process. Some might be included in final version while other might not. </p>
-
-GET	/question/{byear}/{fyear}/
-GET	/question/{chapter}
-GET	/city
-GET	/country/{country}/city
-GET	/country/{country}/{region}/city
-GET	/city/id/{cityId}
-GET	/city/sync/{lastCityId}
-GET	/city/{name}
-GET	/upload
+Upload a file
 POST /upload
+> Content-type: multipart/form-data
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{}
+< 200
+< Content-Type: application/json
+{}
+
+Get the file identified by hashcode
 GET	/file/{hashcode}
---
+> Content-type: multipart/form-data
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{}
+< 200
+< Content-Type: application/json
+{}
+
+Get all the cities in our system
+GET	/city
+> Content-type: multipart/form-data
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{}
+< 200
+< Content-Type: application/json
+{}
+
+Get cities of a country by name
+GET	/country/{country}/city
+> Content-type: multipart/form-data
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{}
+< 200
+< Content-Type: application/json
+{}
+
+Get cities of a country and a region
+GET	/country/{country}/{region}/city
+> Content-type: multipart/form-data
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{}
+< 200
+< Content-Type: application/json
+{}
+
+Get a city by Id
+GET	/city/id/{cityId}
+> Content-type: multipart/form-data
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{}
+< 200
+< Content-Type: application/json
+{}
+
+Get the list of cities added after cityId
+GET	/city/sync/{lastCityId}
+> Content-type: multipart/form-data
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{}
+< 200
+< Content-Type: application/json
+{}
+
+Get a city by name
+GET	/city/{name}
+> Content-type: multipart/form-data
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{}
+< 200
+< Content-Type: application/json
+{}

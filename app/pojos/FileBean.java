@@ -16,12 +16,14 @@ public class FileBean  implements Serializable {
 	private Long fileId;
 	private String filename;
 	private String URI;
+	private String thumbnailURI;
 	private String contentType;
 	private String extension; 
 	private String hashcode; 
 	private Long owner;
 	@JodaDateTime(format = "yyyy-MM-dd HH:mm:ss")
 	private DateTime creationDate;
+
 	
 	public String getFilename() {
 		return filename;
@@ -73,5 +75,11 @@ public class FileBean  implements Serializable {
 	}
 	public void setFileId(Long fileId) {
 		this.fileId = fileId;
+	}
+	public String getThumbnailURI() {
+		return thumbnailURI;
+	}
+	public void setThumbnailURI(String thumbnailURI) {
+		this.thumbnailURI = thumbnailURI;
 	}
 }

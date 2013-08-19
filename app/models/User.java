@@ -1,9 +1,11 @@
 package models;
 
+import java.text.ParseException;
 import java.util.*;
 
 import play.Play;
 import play.db.ebean.*;
+import play.i18n.Messages;
 import providers.MyUsernamePasswordAuthUser;
 import utils.PlayDozerMapper;
 
@@ -176,7 +178,7 @@ public class User extends Model implements Subject {
 		Ebean.save(Arrays.asList(new User[] { otherUser, this }));
 	}
 
-	public static User create(final AuthUser authUser) {
+	public static User create(final AuthUser authUser) throws ParseException {
 		/*
 		 * 0. Zero step, create a new User instance
 		 */
@@ -309,7 +311,13 @@ public class User extends Model implements Subject {
 		} else {
 			user.setCreationDate(DateTime.now());
 			user.save();
+			user.refresh();
+			
+			// create Birth life story
+			models.LifeStory.createBirthStory(user);
 		}
+		
+		
 
 		return user;
 	}

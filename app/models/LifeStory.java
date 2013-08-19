@@ -1,5 +1,6 @@
 package models;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import play.db.ebean.Model;
+import play.i18n.Messages;
+import pojos.ParticipationBean;
 
 @Entity
 @Table(name = "Life_Event")
@@ -421,5 +424,35 @@ public class LifeStory extends Model {
 
 	public boolean isSynced() {
 		return synced;
+	}
+
+	public static void createBirthStory(User user) throws ParseException {
+		LifeStory birth = new LifeStory();
+		birth.setHeadline(Messages.get("reminiscens.birth.headline"));
+		birth.setText(Messages.get("reminiscens.birth.text"));
+		birth.setContributorId(user.getUserId());
+		birth.setCreationDate(DateTime.now());
+		birth.setLocale(user.getLocale());
+
+		DateTime birthdate = user.getPerson().getBirthdate();
+		FuzzyDate fuzzyBirth = new FuzzyDate();
+		fuzzyBirth.setExactDate(birthdate);
+		birth.setStartDate(fuzzyBirth);
+		
+		City birthPlace = user.getPerson().getBirthplace();
+		Location loc = new Location();
+		loc.setCity(birthPlace);
+		birth.setLocation(loc);
+		
+		Participation part = new Participation();
+		part.setContributorId(user.getUserId());
+		part.setProtagonist(true);
+		part.setPerson(user.getPerson());
+		part.setLifeStory(birth);
+		birth.addParticipant(part);
+		
+		
+		birth.save();
+		birth.refresh();
 	}
 }
