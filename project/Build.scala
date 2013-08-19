@@ -19,7 +19,8 @@ object ApplicationBuild extends Build {
     javaEbean,
     "org.jadira.usertype" % "usertype.jodatime" % "1.8",
     "org.hibernate" % "hibernate-annotations" % "3.5.6-Final",
-    "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final"
+    "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final", 
+    "org.imgscalr" % "imgscalr-lib" % "4.2"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
@@ -30,6 +31,8 @@ object ApplicationBuild extends Build {
     resolvers += Resolver.url("play-easymail (snapshot)", url("http://joscha.github.com/play-easymail/repo/snapshots/"))(Resolver.ivyStylePatterns),
 
     resolvers += Resolver.url("play-authenticate (release)", url("http://joscha.github.com/play-authenticate/repo/releases/"))(Resolver.ivyStylePatterns),
-    resolvers += Resolver.url("play-authenticate (snapshot)", url("http://joscha.github.com/play-authenticate/repo/snapshots/"))(Resolver.ivyStylePatterns)
+    resolvers += Resolver.url("play-authenticate (snapshot)", url("http://joscha.github.com/play-authenticate/repo/snapshots/"))(Resolver.ivyStylePatterns),
+
+    resolvers += Resolver.url("imgscalr (release)", url("https://github.com/thebuzzmedia/imgscalr/releases/"))(Resolver.ivyStylePatterns)
     )
 }
