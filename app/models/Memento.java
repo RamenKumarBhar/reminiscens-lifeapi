@@ -80,7 +80,10 @@ public class Memento extends Model {
 	@MapsId
 	@JoinColumn(name = "question_id")
 	private Question question;
-
+	
+	@Column(name="file_hashcode")
+	private String fileHashcode;
+	
 	// @OneToMany(mappedBy="memento")
 	// private List<MementoParticipation> participantList;
 
@@ -344,6 +347,14 @@ public class Memento extends Model {
 
 	public void setParticipants(List<MentionPerson> participants) {
 		this.participants = participants;
+	}
+
+	public String getFileHashcode() {
+		return fileHashcode;
+	}
+
+	public void setFileHashcode(String fileHashcode) {
+		this.fileHashcode = fileHashcode;
 	}
 
 }

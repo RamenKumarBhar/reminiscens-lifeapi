@@ -29,6 +29,7 @@ public class MementoBean  implements Serializable {
 	private LocationBean location;
 	private FuzzyDateBean startDate;
 	private List<MentionPersonBean> participants;
+	private String fileHashcode;
 
 //	Fields in Database not exposed through API
 //	private String source;
@@ -150,6 +151,12 @@ public class MementoBean  implements Serializable {
 	}
 	public void setParticipants(List<MentionPersonBean> participants) {
 		this.participants = participants;
+	}
+	public String getFileHashcode() {
+		return fileHashcode;
+	}
+	public void setFileHashcode(String fileHashcode) {
+		this.fileHashcode = fileHashcode;
 	}
 
 }
