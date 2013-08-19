@@ -31,6 +31,7 @@ public class PersonBean implements Serializable {
 	private DateTime deathdate;
 	
 	private String gender;
+	private String contactEmail;
 	private CityBean birthplace;
 	private FamousPersonBean famous;
 	
@@ -129,5 +130,13 @@ public class PersonBean implements Serializable {
 			birthplace = new CityBean();
 		}
 		this.birthplace.setName(birthplaceName);
+	}
+
+	public String getContactEmail() {
+		return contactEmail;
+	}
+
+	public void setContactEmail(String contactEmail) {
+		this.contactEmail = contactEmail;
 	}
 }

@@ -3,6 +3,7 @@ package delegates;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.FuzzyDate;
 import models.LifeStory;
 import models.Participation;
 import models.Person;
@@ -75,8 +76,8 @@ public class LifeStoryDelegate {
 	public LifeStoryBean update(LifeStoryBean bean, Long id) {
 		models.LifeStory lifeStory = PlayDozerMapper.getInstance().map(bean,
 				models.LifeStory.class);
-		lifeStory.update(id);
-		lifeStory = models.LifeStory.read(lifeStory.getLifeStoryId());
+		lifeStory.setLifeStoryId(id);
+		models.LifeStory.update(lifeStory);		
 		LifeStoryBean updatedStory = new LifeStoryBean();
 		PlayDozerMapper.getInstance().map(lifeStory, updatedStory);
 		return updatedStory;

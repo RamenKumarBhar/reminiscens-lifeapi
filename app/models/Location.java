@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import play.db.ebean.Model;
 
 @Entity
@@ -79,6 +81,16 @@ public class Location extends Model {
 	@MapsId
     @JoinColumn(name="city_id")
 	private City city;
+	
+	// foreign keys
+	@JsonIgnore
+	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+	private List<LifeStory> lifeStoriesLocation;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+	private List<Memento> mementosLocation;
+
 
 	public static Model.Finder<Long,Location> find = new Model.Finder<Long, Location>(
             Long.class,Location.class
@@ -92,18 +104,22 @@ public class Location extends Model {
         person.save();
     }
     
-    public static Location createIfNotExist(Location location) {
+    public static Location createOrUpdateIfNotExist(Location location) {
 		if (location != null) {
     		Long id = location.getLocationId();
 			Location existing = null;
 			if (id != null) {
 				existing = read(id);
-				if (existing != null) {
+				if (existing.isEqualTo(location)) {
 					return existing;
+				} else {
+					location.copyNotNullsFrom(existing);
 				}
 			} 
 			
+			location.setLocationId(null);
 			String textual = location.getLocation_textual();
+			
 			String name = location.getName();
 			String country = location.getCountry();
 			String region = location.getRegion();
@@ -170,7 +186,54 @@ public class Location extends Model {
 		}
 	}
     
-    public static Location createObject(Location person){
+    private void copyNotNullsFrom(Location existing) {
+    	String textual = existing.getLocation_textual();
+		String name = existing.getName();
+		String country = existing.getCountry();
+		String region = existing.getRegion();
+		String cityName = existing.getCityName();
+		City city = existing.getCity();
+		Double lat = existing.getLat();
+		Double lon = existing.getLon();
+		if (this.location_textual == null) 
+			this.location_textual = textual;
+		if (this.name == null) 
+			this.name = name;
+		if (this.country== null) 
+			this.country = country;
+		if (this.region == null)
+			this.region = region;
+		if (this.cityName == null)
+			this.cityName = cityName;
+		if (this.city == null)
+			this.city = city; 
+		if (this.lat == null)
+			this.lat = lat; 
+		if (this.lon == null)
+			this.lon = lon;		
+	}
+
+	private boolean isEqualTo(Location location) {
+		String textual = location.getLocation_textual();
+		String name = location.getName();
+		String country = location.getCountry();
+		String region = location.getRegion();
+		String cityName = location.getCityName();
+		City city = location.getCity();
+		Double lat = location.getLat();
+		Double lon = location.getLon();
+
+		return this.location_textual == textual 
+				&& this.name == name 
+				&& this.country == country
+				&& this.region == region
+				&& this.cityName == cityName
+				&& this.city == city
+				&& this.lat == lat
+				&& this.lon == lon;
+	}
+
+	public static Location createObject(Location person){
         person.save();
         return person;
     }

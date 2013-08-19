@@ -401,8 +401,8 @@ public class MyUsernamePasswordAuthProvider
 	protected Body getVerifyEmailMailingBodyAfterSignup(final String token,
 			final User user, final Context ctx) {
 
-		final boolean isSecure = getConfiguration().getBoolean(
-				SETTING_KEY_VERIFICATION_LINK_SECURE);
+//		final boolean isSecure = getConfiguration().getBoolean(
+//				SETTING_KEY_VERIFICATION_LINK_SECURE);
 		// TODO find out how to return just json
 		// final String url = "";
 //		final String url = routes.Signup.verify(token).absoluteURL(

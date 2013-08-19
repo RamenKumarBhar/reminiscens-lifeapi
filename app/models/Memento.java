@@ -108,11 +108,11 @@ public class Memento extends Model {
 		Location place = memento.getLocation();
 		
 		if (start != null)
-			memento.setStartDate(FuzzyDate.createIfNotExist(start));
+			memento.setStartDate(FuzzyDate.createOrUpdateIfNotExist(start));
 		if (end != null)
-			memento.setEndDate(FuzzyDate.createIfNotExist(end));	
+			memento.setEndDate(FuzzyDate.createOrUpdateIfNotExist(end));	
 		if (place != null)
-			memento.setLocation(Location.createIfNotExist(place));
+			memento.setLocation(Location.createOrUpdateIfNotExist(place));
 		
 		List<MentionPerson> participantList = memento.getParticipants();
 		List<MentionPerson> newParticipantList = new ArrayList<MentionPerson>();

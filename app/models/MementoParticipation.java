@@ -59,11 +59,10 @@ public class MementoParticipation extends Model {
 		List<models.MentionPerson> mp = models.MentionPerson.readByPersonId(personId);
 		models.Memento m = models.Memento.read(mementoId);
 		
-		
 		for (MentionPerson mentionPerson : mp) {
 			MementoParticipation p = find.where().eq("mentionPerson", mentionPerson)
 					.eq("memento", m).findUnique();
-			Long mentionPersonId = mentionPerson.getMentionPersonId();
+			//Long mentionPersonId = mentionPerson.getMentionPersonId();
 		
 			if (p!=null) {
 				p.deleteManyToManyAssociations("Memento.participants");
