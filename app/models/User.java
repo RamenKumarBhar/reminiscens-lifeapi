@@ -178,7 +178,7 @@ public class User extends Model implements Subject {
 		Ebean.save(Arrays.asList(new User[] { otherUser, this }));
 	}
 
-	public static User create(final AuthUser authUser) throws ParseException {
+	public static User create(final AuthUser authUser) {
 		/*
 		 * 0. Zero step, create a new User instance
 		 */

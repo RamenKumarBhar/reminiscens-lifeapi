@@ -37,11 +37,7 @@ import controllers.routes;
 
 public class MyUsernamePasswordAuthProvider
 		extends
-		UsernamePasswordAuthProvider<String, 
-										MyLoginUsernamePasswordAuthUser, 
-										MyUsernamePasswordAuthUser,
-										MyUsernamePasswordAuthProvider.MyLogin, 
-										MyUsernamePasswordAuthProvider.MySignup> {
+		UsernamePasswordAuthProvider<String, MyLoginUsernamePasswordAuthUser, MyUsernamePasswordAuthUser, MyUsernamePasswordAuthProvider.MyLogin, MyUsernamePasswordAuthProvider.MySignup> {
 
 	private static final String SETTING_KEY_VERIFICATION_LINK_SECURE = SETTING_KEY_MAIL
 			+ "." + "verificationLink.secure";
@@ -158,6 +154,7 @@ public class MyUsernamePasswordAuthProvider
 			}
 		}
 		// The user either does not exist or is inactive - create a new one
+
 		final User newUser = User.create(user);
 		user.setUserId(newUser.getUserId());
 		// Usually the email should be verified before allowing login, however
@@ -351,7 +348,7 @@ public class MyUsernamePasswordAuthProvider
 		Class<?> cls = null;
 		String ret = null;
 		String locale = "";
-		
+
 		if (langCode.equals("it_IT") || langCode.equals("it-IT")) {
 			locale = "it";
 		} else if (langCode.equals("es_ES") || langCode.equals("es-ES")) {
@@ -359,7 +356,7 @@ public class MyUsernamePasswordAuthProvider
 		} else {
 			locale = langCode;
 		}
-		
+
 		try {
 			cls = Class.forName(template + "_" + locale);
 		} catch (ClassNotFoundException e) {
@@ -401,15 +398,15 @@ public class MyUsernamePasswordAuthProvider
 	protected Body getVerifyEmailMailingBodyAfterSignup(final String token,
 			final User user, final Context ctx) {
 
-//		final boolean isSecure = getConfiguration().getBoolean(
-//				SETTING_KEY_VERIFICATION_LINK_SECURE);
+		// final boolean isSecure = getConfiguration().getBoolean(
+		// SETTING_KEY_VERIFICATION_LINK_SECURE);
 		// TODO find out how to return just json
 		// final String url = "";
-//		final String url = routes.Signup.verify(token).absoluteURL(
-//				ctx.request(), isSecure);
-		String baseURL = Play.application().configuration().getString("application.baseUrl");
-		final String url = baseURL+routes.Signup.verify(token).url();
-
+		// final String url = routes.Signup.verify(token).absoluteURL(
+		// ctx.request(), isSecure);
+		String baseURL = Play.application().configuration()
+				.getString("application.baseUrl");
+		final String url = baseURL + routes.Signup.verify(token).url();
 
 		final Lang lang = Lang.preferred(ctx.request().acceptLanguages());
 		final String langCode = lang.code();
@@ -419,14 +416,17 @@ public class MyUsernamePasswordAuthProvider
 		if (user.getLocale() != null) {
 			locale = user.getLocale();
 		}
-		
-		if (locale.equals("it_IT")||locale.equals("it-IT")||locale.equals("it")) {
-			locale="it";
-		} else if (locale.equals("es_ES")||locale.equals("es-ES")||locale.equals("es")) {
-			locale="es";
-		} else if (locale.equals("en_EN")||locale.equals("en-EN")||locale.equals("en")) {
-			locale="en";
-		} 
+
+		if (locale.equals("it_IT") || locale.equals("it-IT")
+				|| locale.equals("it")) {
+			locale = "it";
+		} else if (locale.equals("es_ES") || locale.equals("es-ES")
+				|| locale.equals("es")) {
+			locale = "es";
+		} else if (locale.equals("en_EN") || locale.equals("en-EN")
+				|| locale.equals("en")) {
+			locale = "en";
+		}
 
 		String name = user.getPerson().getFirstname() + " "
 				+ user.getPerson().getLastname();
