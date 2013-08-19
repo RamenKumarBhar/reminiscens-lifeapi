@@ -8,4 +8,5 @@ public interface SecurityModelConstants {
 	public static final String ID_FROM_MEMENTO = "memento/";
 	public static final String ID_FROM_CONTEXT = "context/";
 	public static final String ID_FROM_RELATIONSHIPS = "relationships/";
+	public static final String ID_FROM_RELATIONSHIP = "relationship/";
 }

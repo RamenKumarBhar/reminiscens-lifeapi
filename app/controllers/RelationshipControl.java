@@ -97,4 +97,17 @@ public class RelationshipControl extends Controller {
 			return badRequest(toJson(res));
 		}
 	}
+	
+	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_PERSON)
+	public static Result getRelationshipById(Long id, Long rid) {
+		try {
+			RelationshipBean relationshipBean = RelationshipDelegate.getInstance().getPersonRelationship(rid);
+			return ok(toJson(relationshipBean));
+		} catch (Exception e) {
+			ResponseStatusBean res = new ResponseStatusBean(
+					ResponseStatus.SERVERERROR, "Entity does not exist",
+					e.getMessage());
+			return internalServerError(toJson(res));
+		}
+	}
 }

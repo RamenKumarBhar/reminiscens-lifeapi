@@ -56,7 +56,7 @@ public class LifeStory extends Model {
 
 	@ManyToOne
 	@MapsId
-	@JoinColumn(name = "location_id")
+	@JoinColumn(name = "location_id", updatable=true, insertable=true)
 	private Location location;
 
 	@ManyToOne
@@ -66,12 +66,12 @@ public class LifeStory extends Model {
 
 	@ManyToOne
 	@MapsId
-	@JoinColumn(name = "fuzzy_startdate", updatable = true, insertable = true)
+	@JoinColumn(name = "fuzzy_startdate", updatable=true, insertable=true)
 	private FuzzyDate startDate;
 
 	@ManyToOne
 	@MapsId
-	@JoinColumn(name = "fuzzy_enddate", updatable = true, insertable = true)
+	@JoinColumn(name = "fuzzy_enddate", updatable=true, insertable=true)
 	private FuzzyDate endDate;
 
 	@OneToMany(mappedBy = "lifeStory", cascade = CascadeType.ALL)
@@ -109,12 +109,12 @@ public class LifeStory extends Model {
 			place.setLocale(storyLang);
 		
 		// we need at least a "start"
-		lifestory.setStartDate(FuzzyDate.createIfNotExist(start));
+		lifestory.setStartDate(FuzzyDate.createOrUpdateIfNotExist(start));
 		if (end != null) {
-			lifestory.setEndDate(FuzzyDate.createIfNotExist(end));	
+			lifestory.setEndDate(FuzzyDate.createOrUpdateIfNotExist(end));	
 		}
 		
-		lifestory.setLocation(Location.createIfNotExist(place));
+		lifestory.setLocation(Location.createOrUpdateIfNotExist(place));
 		
 		// 2. Save the new life story
 		lifestory.setSynced(true);
@@ -138,6 +138,33 @@ public class LifeStory extends Model {
 		return lifestory;
 	}
 
+	public static LifeStory update(LifeStory lifestory) {
+		// 1. Update first dates and locations
+		FuzzyDate start = lifestory.getStartDate();
+		FuzzyDate end = lifestory.getEndDate();
+		Location place = lifestory.getLocation();
+
+		if (start != null) {
+			start = FuzzyDate.createOrUpdateIfNotExist(start);
+			lifestory.setStartDate(start);
+		}
+
+		if (end != null) {
+			end = FuzzyDate.createOrUpdateIfNotExist(start);
+			lifestory.setStartDate(end);
+		}
+
+		if (place != null) {
+			place = Location.createOrUpdateIfNotExist(place);
+			lifestory.setLocation(place);
+		}
+
+		Long id = lifestory.getLifeStoryId();
+		lifestory.update(id);
+		lifestory.refresh();
+		return lifestory;
+	}
+	
 	public static void delete(Long id) {
 		find.ref(id).delete();
 	}

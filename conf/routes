@@ -29,7 +29,7 @@ POST    /user/email                                  controllers.UserControl.get
 
 
 #####################################################################################
-# People, Life Stories and Timeline
+# People, Relationships, Timeline, Life Stories and Mementos
 GET     /person                                 controllers.PersonControl.getPersonAll() 
 GET     /person/:id                             controllers.PersonControl.getPerson(id: Long) 
 POST    /person                                 controllers.PersonControl.createPerson() 
@@ -43,6 +43,7 @@ GET     /person/:id/relationships               controllers.RelationshipControl.
 GET     /person/:id/relationships/:network      controllers.RelationshipControl.getPersonRelationshipsByNetwork(id: Long, network: String) 
 PUT     /person/:id/relationship/:rid           controllers.RelationshipControl.updateRelationship(id: Long, rid: Long) 
 POST    /person/:id/relationship                controllers.RelationshipControl.addRelationship(id: Long) 
+GET     /person/:id/relationship/:rid           controllers.RelationshipControl.getRelationshipById(id: Long, rid: Long) 
 DELETE  /person/:id/relationship/:rid           controllers.RelationshipControl.deleteRelationship(id: Long, rid: Long) 
 GET     /person/:id/memento                     controllers.MementoControl.getAllPersonMemento(id: Long) 
 GET     /person/:id/memento/:type               controllers.MementoControl.getPersonMementoByParticipationType(id: Long, type: String)
@@ -61,6 +62,7 @@ POST    /lifestory/:lsid/memento/:id/mention     controllers.MementoControl.addM
 POST    /lifestory/:lsid/memento/:id/mention/:pid controllers.MementoControl.addMementoParticipantByPersonId(lsid: Long, id: Long, pid: Long)
 DELETE  /lifestory/:lsid/memento/:id/mention/:pid controllers.MementoControl.deleteMementoParticipantByPersonId(lsid: Long, id: Long, pid: Long)
 
+#####################################################################################
 # Contextual Reminiscence
 GET     /context/:cid                   controllers.ContextControl.getContext(cid: Long)
 GET     /context/:cid/curators          controllers.ContextControl.getContextCurators(cid: Long)
@@ -82,6 +84,7 @@ GET     /memento/random/:lang           controllers.PublicMementoControl.getRand
 GET     /memento/:mid                   controllers.PublicMementoControl.getMemento(mid: Long)
 GET     /memento/:decade/:place         controllers.PublicMementoControl.getMementoList(decade: Long, place: String, lat ?= null, lon ?= null, rad ?= null, lang: String ?= "it_IT")
 
+#####################################################################################
 # Utilities (cities, countries, other stuff)
 GET     /city                           controllers.Utilities.getCities() 
 GET     /country/:country/city          controllers.Utilities.getCitiesByCountryName(country: String) 
@@ -104,7 +107,7 @@ GET     /accounts/exists                controllers.Signup.exists()
 
 # Play Authenticate endpoints to validate/integrate
 GET     /login/denied                   controllers.UserControl.onLoginUserNotFound()
+GET     /authenticate/:provider/denied  controllers.UserControl.oAuthDenied(provider: String)
 GET     /authenticated                  controllers.Restricted.index()
 GET     /login/:id                      controllers.Restricted.id(id: String)
 GET     /authenticate/:provider         controllers.AuthenticateLocal.authenticate(provider: String)
-GET     /authenticate/:provider/denied  controllers.UserControl.oAuthDenied(provider: String)

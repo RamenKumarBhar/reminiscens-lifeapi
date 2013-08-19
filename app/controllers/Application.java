@@ -1,21 +1,7 @@
 package controllers;
 
-import static play.libs.Json.toJson;
-
-import models.User;
-import play.data.Form;
-import play.i18n.Messages;
 import play.mvc.Controller;
-import play.mvc.Http.Session;
 import play.mvc.Result;
-import pojos.ResponseStatusBean;
-import providers.MyUsernamePasswordAuthProvider;
-import providers.MyUsernamePasswordAuthProvider.MyLogin;
-import providers.MyUsernamePasswordAuthProvider.MySignup;
-
-import com.feth.play.module.pa.PlayAuthenticate;
-
-import enums.ResponseStatus;
 
 public class Application extends Controller {
 

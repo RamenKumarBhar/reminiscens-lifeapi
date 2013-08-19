@@ -127,6 +127,23 @@ historical knowledge base, or it is simply a named mentioned within a story or m
     }
 </pre></code></p>
 
+<h3><b><a id="relationship">Relationship Resource:</a></b></h3>
+<p><pre><code>
+{
+    "relationshipId": 7,
+    "personToId": 2,
+    "personFromId": 3,
+    "directed": false,
+    "toIsCurator": false,
+    "fromIsCurator": false,
+    "roleTo": "SON",
+    "roleFrom": "FATHER",
+    "network": "FAMILY",
+    "personTo": { },
+    "personFrom": { }
+}
+</pre></code></p>
+<p>The <a href="#relationship">Relationship</a> resource it is used to connect people in social networks </p>
 
 <p> 
 TODO: RESOURCES BELOW ARE STILL TO BE UPDATED 
@@ -736,19 +753,12 @@ POST /user
 
 
 --
-People, Life Stories and Timelines  (TO UPDATE)
+People, timelines and relationships
 
-<p> In this section we group API endpoints that allow applications to access personal information and 
-stories of both public people and registered <a href="#user">Users</a> that interact with the system by adding, 
-visualizing or editing life stories and exploring the surrounding <a href="#context">Context</a> 
-(composed by public related content).</p>
+<p> In this section we group API endpoints that allow applications to access personal information, timelines and 
+relationships of both public people and registered <a href="#user">Users</a> that interact with the system </p>
 
-<p> The life API provides endpoints to read, update, delete and create life stories and multimedia related to 
-them (i.e., mementos). Moreover, stories and mementos are organized in a timeline that is about a particular
-person (that represents the user or a friend of the user). </p>
-
-<p>Through these endpoints, users can only access a person's available information. For creation and update operations on the 
-<a href="person">Person</a> resource, the <a href="#user">User's</a> endpoints must be used</p>
+<p> This information is mainly organized under the <a href="#person">Person</a>, <a href="#timeline">Timeline</a> and <a href="#relationship">Relationship</a> resources </p>
 --
 
 <p> Get the basic information related to the Person identified by <code>id</code>
@@ -2342,6 +2352,1048 @@ PUT /lifestory/{id}
             ]
         }
 
+Get list of contacts (or relationships) of a person
+GET	/person/{id}/relationships
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/relationships"}
+< 200
+< Content-Type: application/json
+[
+    {
+        "relationshipId": 1,
+        "personToId": 6,
+        "personFromId": 3,
+        "directed": true,
+        "toIsCurator": true,
+        "fromIsCurator": false,
+        "roleTo": "SON",
+        "roleFrom": "FATHER",
+        "network": "FAMILY",
+        "personTo": {
+            "personId": 6,
+            "firstname": "Cristhian",
+            "lastname": "Parra",
+            "birthdate": 456616800000,
+            "deathdate": null,
+            "gender": "male",
+            "contactEmail": null,
+            "birthplace": {
+                "cityId": 9092,
+                "name": "Luque",
+                "country": {
+                    "countryId": 172,
+                    "short_name": "Paraguay",
+                    "spanish_name": "Paraguay",
+                    "italian_name": null
+                },
+                "lat": -25.27,
+                "lon": -57.487222
+            },
+            "famous": null,
+            "birthdateAsString": "1984-06-21 00:00:00",
+            "deathdateAsString": null,
+            "famousId": null
+        },
+        "personFrom": {
+            "personId": 3,
+            "firstname": "Ygnacio",
+            "lastname": "Parra",
+            "birthdate": -881892000000,
+            "deathdate": null,
+            "gender": "male",
+            "contactEmail": null,
+            "birthplace": {
+                "cityId": 9092,
+                "name": "Luque",
+                "country": {
+                    "countryId": 172,
+                    "short_name": "Paraguay",
+                    "spanish_name": "Paraguay",
+                    "italian_name": null
+                },
+                "lat": -25.27,
+                "lon": -57.487222
+            },
+            "famous": null,
+            "birthdateAsString": "1942-01-21 00:00:00",
+            "deathdateAsString": null,
+            "famousId": null
+        }
+    },
+    {
+        "relationshipId": 7,
+        "personToId": 2,
+        "personFromId": 3,
+        "directed": false,
+        "toIsCurator": false,
+        "fromIsCurator": false,
+        "roleTo": "SON",
+        "roleFrom": "FATHER",
+        "network": "FAMILY",
+        "personTo": {
+            "personId": 2,
+            "firstname": "Daniel",
+            "lastname": "Sam",
+            "birthdate": 456616800000,
+            "deathdate": null,
+            "gender": "male",
+            "contactEmail": null,
+            "birthplace": {
+                "cityId": 9093,
+                "name": "Asunción",
+                "country": {
+                    "countryId": 172,
+                    "short_name": "Paraguay",
+                    "spanish_name": "Paraguay",
+                    "italian_name": null
+                },
+                "lat": -25.282197,
+                "lon": -57.6351
+            },
+            "famous": null,
+            "birthdateAsString": "1984-06-21 00:00:00",
+            "deathdateAsString": null,
+            "famousId": null
+        },
+        "personFrom": {
+            "personId": 3,
+            "firstname": "Ygnacio",
+            "lastname": "Parra",
+            "birthdate": -881892000000,
+            "deathdate": null,
+            "gender": "male",
+            "contactEmail": null,
+            "birthplace": {
+                "cityId": 9092,
+                "name": "Luque",
+                "country": {
+                    "countryId": 172,
+                    "short_name": "Paraguay",
+                    "spanish_name": "Paraguay",
+                    "italian_name": null
+                },
+                "lat": -25.27,
+                "lon": -57.487222
+            },
+            "famous": null,
+            "birthdateAsString": "1942-01-21 00:00:00",
+            "deathdateAsString": null,
+            "famousId": null
+        }
+    }
+]
+
+Get list of contacts (or relationships) of a person within a network (i.e., "family", "curators", etc.)
+GET	/person/{id}/relationships/{network}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/relationships/curators"}
+< 200
+< Content-Type: application/json
+[
+    {
+        "relationshipId": 1,
+        "personToId": 6,
+        "personFromId": 3,
+        "directed": true,
+        "toIsCurator": true,
+        "fromIsCurator": false,
+        "roleTo": "SON",
+        "roleFrom": "FATHER",
+        "network": "FAMILY",
+        "personTo": {
+            "personId": 6,
+            "firstname": "Cristhian",
+            "lastname": "Parra",
+            "birthdate": 456616800000,
+            "deathdate": null,
+            "gender": "male",
+            "contactEmail": null,
+            "birthplace": {
+                "cityId": 9092,
+                "name": "Luque",
+                "country": {
+                    "countryId": 172,
+                    "short_name": "Paraguay",
+                    "spanish_name": "Paraguay",
+                    "italian_name": null
+                },
+                "lat": -25.27,
+                "lon": -57.487222
+            },
+            "famous": null,
+            "birthdateAsString": "1984-06-21 00:00:00",
+            "deathdateAsString": null,
+            "famousId": null
+        },
+        "personFrom": {
+            "personId": 3,
+            "firstname": "Ygnacio",
+            "lastname": "Parra",
+            "birthdate": -881892000000,
+            "deathdate": null,
+            "gender": "male",
+            "contactEmail": null,
+            "birthplace": {
+                "cityId": 9092,
+                "name": "Luque",
+                "country": {
+                    "countryId": 172,
+                    "short_name": "Paraguay",
+                    "spanish_name": "Paraguay",
+                    "italian_name": null
+                },
+                "lat": -25.27,
+                "lon": -57.487222
+            },
+            "famous": null,
+            "birthdateAsString": "1942-01-21 00:00:00",
+            "deathdateAsString": null,
+            "famousId": null
+        }
+    }
+]
+
+Get a relationship by Id
+GET	/person/{id}/relationship/{rid}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/relationship/1"}    
+< 200
+< Content-Type: application/json
+{
+    "relationshipId": 1,
+    "personToId": 3,
+    "personFromId": 6,
+    "directed": false,
+    "toIsCurator": false,
+    "fromIsCurator": false,
+    "roleTo": "CHILD",
+    "roleFrom": "FATHER",
+    "network": "FAMILY",
+    "personTo": {
+        "personId": 3,
+        "firstname": "Ygnacio",
+        "lastname": "Parra",
+        "birthdate": -881892000000,
+        "deathdate": null,
+        "gender": "male",
+        "contactEmail": null,
+        "birthplace": {
+            "cityId": 9092,
+            "name": "Luque",
+            "country": {
+                "countryId": 172,
+                "short_name": "Paraguay",
+                "spanish_name": "Paraguay",
+                "italian_name": null
+            },
+            "lat": -25.27,
+            "lon": -57.487222
+        },
+        "famous": null,
+        "birthdateAsString": "1942-01-21 00:00:00",
+        "deathdateAsString": null,
+        "famousId": null
+    },
+    "personFrom": {
+        "personId": 6,
+        "firstname": "Cristhian",
+        "lastname": "Parra",
+        "birthdate": 456616800000,
+        "deathdate": null,
+        "gender": "male",
+        "contactEmail": null,
+        "birthplace": {
+            "cityId": 9092,
+            "name": "Luque",
+            "country": {
+                "countryId": 172,
+                "short_name": "Paraguay",
+                "spanish_name": "Paraguay",
+                "italian_name": null
+            },
+            "lat": -25.27,
+            "lon": -57.487222
+        },
+        "famous": null,
+        "birthdateAsString": "1984-06-21 00:00:00",
+        "deathdateAsString": null,
+        "famousId": null
+    }
+}
+
+Update a relationship by Id
+PUT	/person/{id}/relationship/{rid}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{
+    "url":"/person/3/relationship/1",
+    "personFromId": 6,
+    "personToId": 3,
+    "roleTo": "CHILD",
+    "roleFrom": "FATHER",
+    "network": "FAMILY"
+}    
+< 200
+< Content-Type: application/json
+{
+    "relationshipId": 1,
+    "personToId": 3,
+    "personFromId": 6,
+    "directed": false,
+    "toIsCurator": false,
+    "fromIsCurator": false,
+    "roleTo": "CHILD",
+    "roleFrom": "FATHER",
+    "network": "FAMILY",
+    "personTo": {
+        "personId": 3,
+        "firstname": "Ygnacio",
+        "lastname": "Parra",
+        "birthdate": -881892000000,
+        "deathdate": null,
+        "gender": "male",
+        "contactEmail": null,
+        "birthplace": {
+            "cityId": 9092,
+            "name": "Luque",
+            "country": {
+                "countryId": 172,
+                "short_name": "Paraguay",
+                "spanish_name": "Paraguay",
+                "italian_name": null
+            },
+            "lat": -25.27,
+            "lon": -57.487222
+        },
+        "famous": null,
+        "birthdateAsString": "1942-01-21 00:00:00",
+        "deathdateAsString": null,
+        "famousId": null
+    },
+    "personFrom": {
+        "personId": 6,
+        "firstname": "Cristhian",
+        "lastname": "Parra",
+        "birthdate": 456616800000,
+        "deathdate": null,
+        "gender": "male",
+        "contactEmail": null,
+        "birthplace": {
+            "cityId": 9092,
+            "name": "Luque",
+            "country": {
+                "countryId": 172,
+                "short_name": "Paraguay",
+                "spanish_name": "Paraguay",
+                "italian_name": null
+            },
+            "lat": -25.27,
+            "lon": -57.487222
+        },
+        "famous": null,
+        "birthdateAsString": "1984-06-21 00:00:00",
+        "deathdateAsString": null,
+        "famousId": null
+    }
+}
+
+Create a relationship for person identified by id
+POST	/person/{id}/relationship
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{
+    "url":"/person/3/relationship",
+        "personToId": 6,
+        "personFromId": 2,
+        "roleTo": "SON",
+        "roleFrom": "FATHER",
+        "network": "FAMILY"
+}
+< 200
+< Content-Type: application/json
+{
+    "relationshipId": 1,
+    "personToId": 3,
+    "personFromId": 6,
+    "directed": false,
+    "toIsCurator": false,
+    "fromIsCurator": false,
+    "roleTo": "CHILD",
+    "roleFrom": "FATHER",
+    "network": "FAMILY",
+    "personTo": {
+        "personId": 3,
+        "firstname": "Ygnacio",
+        "lastname": "Parra",
+        "birthdate": -881892000000,
+        "deathdate": null,
+        "gender": "male",
+        "contactEmail": null,
+        "birthplace": {
+            "cityId": 9092,
+            "name": "Luque",
+            "country": {
+                "countryId": 172,
+                "short_name": "Paraguay",
+                "spanish_name": "Paraguay",
+                "italian_name": null
+            },
+            "lat": -25.27,
+            "lon": -57.487222
+        },
+        "famous": null,
+        "birthdateAsString": "1942-01-21 00:00:00",
+        "deathdateAsString": null,
+        "famousId": null
+    },
+    "personFrom": {
+        "personId": 6,
+        "firstname": "Cristhian",
+        "lastname": "Parra",
+        "birthdate": 456616800000,
+        "deathdate": null,
+        "gender": "male",
+        "contactEmail": null,
+        "birthplace": {
+            "cityId": 9092,
+            "name": "Luque",
+            "country": {
+                "countryId": 172,
+                "short_name": "Paraguay",
+                "spanish_name": "Paraguay",
+                "italian_name": null
+            },
+            "lat": -25.27,
+            "lon": -57.487222
+        },
+        "famous": null,
+        "birthdateAsString": "1984-06-21 00:00:00",
+        "deathdateAsString": null,
+        "famousId": null
+    }
+}
+
+Delete a relationship of person identified by id
+DELETE	/person/{id}/relationship/{rid}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/relationship/1"}
+< 200
+< Content-Type: application/json
+{
+    "responseStatus": "OK",
+    "statusMessage": "Entity deleted with success",
+    "errorTrace": null,
+    "newResourceId": null
+}
+
+Get list of mementos for person
+GET	/person/{id}/memento
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/4/memento"}
+< 200
+< Content-Type: application/json
+[
+    {
+        "mementoId": 2,
+        "headline": "\"A picture of Bruno in his childhood aroud 1935. In the picture, Bruno is with his older brother\"",
+        "text": null,
+        "type": "PHOTO",
+        "url": "http://dl.dropbox.com/u/2797542/timeline/bkessler/childhood-fake.JPG",
+        "thumbnailUrl": null,
+        "category": "PICTURE",
+        "isCover": true,
+        "position": 1,
+        "publicMemento": true,
+        "location": null,
+        "startDate": null,
+        "participants": [],
+        "lifeStoryId": 2
+    },
+    {
+        "mementoId": 3,
+        "headline": null,
+        "text": null,
+        "type": "PHOTO",
+        "url": "http://dl.dropbox.com/u/2797542/timeline/bkessler/kessler.jpeg",
+        "thumbnailUrl": null,
+        "category": "PICTURE",
+        "isCover": true,
+        "position": 1,
+        "publicMemento": true,
+        "location": null,
+        "startDate": null,
+        "participants": [],
+        "lifeStoryId": 3
+    },
+    {
+        "mementoId": 4,
+        "headline": null,
+        "text": null,
+        "type": "PHOTO",
+        "url": "http://dl.dropbox.com/u/2797542/timeline/bkessler/bruno_kessler_imagelarge.jpeg",
+        "thumbnailUrl": null,
+        "category": "PICTURE",
+        "isCover": true,
+        "position": 1,
+        "publicMemento": true,
+        "location": null,
+        "startDate": null,
+        "participants": [],
+        "lifeStoryId": 4
+    },
+    {
+        "mementoId": 9,
+        "headline": null,
+        "text": null,
+        "type": "PHOTO",
+        "url": "http://dl.dropbox.com/u/2797542/timeline/bkessler/kessler-1.jpeg",
+        "thumbnailUrl": null,
+        "category": "PICTURE",
+        "isCover": true,
+        "position": 1,
+        "publicMemento": true,
+        "location": null,
+        "startDate": null,
+        "participants": [],
+        "lifeStoryId": 9
+    },
+    {
+        "mementoId": 10,
+        "headline": null,
+        "text": null,
+        "type": "PHOTO",
+        "url": "http://dl.dropbox.com/u/2797542/timeline/bkessler/FBK_polo_scientifico.png",
+        "thumbnailUrl": null,
+        "category": "PICTURE",
+        "isCover": true,
+        "position": 1,
+        "publicMemento": true,
+        "location": null,
+        "startDate": null,
+        "participants": [],
+        "lifeStoryId": 10
+    }
+]
+
+Get list of mementos for person filtering by type of participation of the person in the memory
+GET	/person/{id}/memento/{type}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/memento/protagonist"}
+< 200
+< Content-Type: application/json
+[
+    {
+        "mementoId": 41,
+        "headline": "Fotos de Ygnacio y Aurora hace algunos años",
+        "text": null,
+        "type": "photo",
+        "url": "https://dl.dropbox.com/u/2797542/timeline/fliaparra/ygnacio/Papa%20y%20companheros.JPG",
+        "thumbnailUrl": null,
+        "category": "PICTURE",
+        "isCover": false,
+        "position": null,
+        "publicMemento": null,
+        "location": null,
+        "startDate": null,
+        "participants": [
+            {
+                "mentionPersonId": 2,
+                "fullname": "Cristhian Parra",
+                "person": {
+                    "personId": 6,
+                    "firstname": "Cristhian",
+                    "lastname": "Parra",
+                    "birthdate": 456616800000,
+                    "deathdate": null,
+                    "gender": "male",
+                    "contactEmail": null,
+                    "birthplace": {
+                        "cityId": 9092,
+                        "name": "Luque",
+                        "country": {
+                            "countryId": 172,
+                            "short_name": "Paraguay",
+                            "spanish_name": "Paraguay",
+                            "italian_name": null
+                        },
+                        "lat": -25.27,
+                        "lon": -57.487222
+                    },
+                    "famous": null,
+                    "birthdateAsString": "1984-06-21 00:00:00",
+                    "deathdateAsString": null,
+                    "famousId": null
+                }
+            },
+            {
+                "mentionPersonId": 3,
+                "fullname": "Ygnacio Parra",
+                "person": {
+                    "personId": 3,
+                    "firstname": "Ygnacio",
+                    "lastname": "Parra",
+                    "birthdate": -881892000000,
+                    "deathdate": null,
+                    "gender": "male",
+                    "contactEmail": null,
+                    "birthplace": {
+                        "cityId": 9092,
+                        "name": "Luque",
+                        "country": {
+                            "countryId": 172,
+                            "short_name": "Paraguay",
+                            "spanish_name": "Paraguay",
+                            "italian_name": null
+                        },
+                        "lat": -25.27,
+                        "lon": -57.487222
+                    },
+                    "famous": null,
+                    "birthdateAsString": "1942-01-21 00:00:00",
+                    "deathdateAsString": null,
+                    "famousId": null
+                }
+            },
+            {
+                "mentionPersonId": 4,
+                "fullname": "Aurora",
+                "person": null
+            },
+            {
+                "mentionPersonId": 14,
+                "fullname": "Aurora",
+                "person": null
+            }
+        ],
+        "lifeStoryId": 27
+    }
+]
+
+--
+Lifestories and mementos
+
+<p> In this section we group API endpoints that allow applications to access life stories 
+and related mementos (i.e., multimedia attachments to stories) of both public people and 
+registered <a href="#user">Users</a> that interact with the system by adding, 
+visualizing or editing life stories and exploring the surrounding <a href="#context">Context</a> 
+(composed by public related content).</p>
+
+<p> The life API provides endpoints to read, update, delete and create life stories and multimedia related to 
+them (i.e., mementos). Moreover, stories and mementos are organized in a timeline that is about a particular
+person (that represents the user or a friend of the user). </p>
+
+--
+
+Get lifestory by id
+GET	/lifestory/{lsid}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/lifestory/10"}
+< 200
+< Content-Type: application/json
+{
+    "lifeStoryId": 10,
+    "headline": "Bruno Kessler Foundation",
+    "text": "\"The Foundation was created on 1 March 2007. FBK inherits the activities of the Istituto Trentino di Cultura, which was based on the ideas of Bruno Kessler, a long-time member of the local government and founder of the University of Trento. \"",
+    "richtext": null,
+    "creationDate": 1348696800000,
+    "locale": "it_IT",
+    "location": {
+        "locationId": 477,
+        "location_textual": "Trento",
+        "name": null,
+        "country": "Italia",
+        "region": "Trentino-Alto Adige/Sudtirol",
+        "cityName": "Trento",
+        "coordinates_trust": 1,
+        "lat": 46.069692,
+        "lon": 11.121089,
+        "locale": "it_IT",
+        "city": {
+            "cityId": 4015,
+            "name": "Trento",
+            "country": {
+                "countryId": 109,
+                "short_name": "Italy",
+                "spanish_name": "Italia",
+                "italian_name": null
+            },
+            "lat": 46.069692,
+            "lon": 11.121089
+        },
+        "accuracy": 11
+    },
+    "question": null,
+    "startDate": {
+        "fuzzyDateId": 10468,
+        "textual_date": null,
+        "exactDate": 1172703600000,
+        "decade": null,
+        "year": null,
+        "month": null,
+        "day": null,
+        "accuracy": 11,
+        "locale": null,
+        "exactDateAsString": "2007-03-01 00:00:00"
+    },
+    "synced": false,
+    "participationList": [
+        {
+            "participationId": 9,
+            "contributorId": 1,
+            "lifeStoryId": 10,
+            "protagonist": true,
+            "personId": 4
+        }
+    ],
+    "mementoList": [
+        {
+            "mementoId": 10,
+            "headline": null,
+            "text": null,
+            "type": "PHOTO",
+            "url": "http://dl.dropbox.com/u/2797542/timeline/bkessler/FBK_polo_scientifico.png",
+            "thumbnailUrl": null,
+            "category": "PICTURE",
+            "isCover": true,
+            "position": 1,
+            "publicMemento": true,
+            "location": null,
+            "startDate": null,
+            "participants": [],
+            "lifeStoryId": 10
+        }
+    ],
+    "contributorId": 2,
+    "creationDateAsString": "2012-09-27 00:00:00"
+}
+
+Create a new lifestory (user who creates the story is automatically added to the participants list as a protagonist unless a participant list is provided)
+POST	/lifestory
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{
+    "headline": "LUQUE CAMPEON!",
+    "text": "Después de 53 años, el querido Kure Luque salió campeón",
+    "type": "great times",
+    "locale": "es_ES",
+    "location": {
+        "locationId": 2
+    },
+    "startDate": {
+        "exactDate": "2007-06-23 00:00:00"
+    },
+    "endDate": {
+        "exactDate": "2007-06-23 23:59:59"
+    },
+    "mementoList": [
+        {
+            "headline": "Luque Campeon!!!",
+            "text": null,
+            "type": "photo",
+            "source": null,
+            "sourceUrl": null,
+            "url": "https://dl.dropboxusercontent.com/u/2797542/timeline/fliaparra/ygnacio/luque-campeon.jpeg",
+            "thumbnailUrl": null,
+            "category": "photo",
+            "isCover": true,
+            "position": 1,
+            "publicMemento": false,
+            "location": null,
+            "startDate": null,
+            "endDate": null,
+            "question": null,
+            "participants": [],
+            "lifeStoryId": 30
+        }
+    ],
+    "creationDateAsString": "2012-09-27 00:00:00"
+}
+< 200
+< Content-Type: application/json
+{
+    "lifeStoryId": 141,
+    "headline": "LUQUE CAMPEON!",
+    "text": "Después de 53 años, el querido Kure Luque salió campeón",
+    "richtext": null,
+    "creationDate": 1376864567000,
+    "locale": "es_ES",
+    "location": {
+        "locationId": 2,
+        "location_textual": "Creator Birthplace",
+        "name": "República de Luque",
+        "country": "Paraguay",
+        "region": null,
+        "cityName": "Luque",
+        "coordinates_trust": null,
+        "lat": -25.262085,
+        "lon": -57.489109,
+        "locale": null,
+        "city": {
+            "cityId": 9092,
+            "name": "Luque",
+            "country": {
+                "countryId": 172,
+                "short_name": "Paraguay",
+                "spanish_name": "Paraguay",
+                "italian_name": null
+            },
+            "lat": -25.27,
+            "lon": -57.487222
+        },
+        "accuracy": 1
+    },
+    "question": null,
+    "startDate": {
+        "fuzzyDateId": 14544,
+        "textual_date": null,
+        "exactDate": 1182549600000,
+        "decade": null,
+        "year": null,
+        "month": null,
+        "day": null,
+        "accuracy": 11,
+        "locale": "it_IT",
+        "exactDateAsString": "2007-06-23 00:00:00"
+    },
+    "synced": false,
+    "participationList": [
+        {
+            "participationId": 115,
+            "contributorId": 2,
+            "lifeStoryId": 141,
+            "protagonist": true,
+            "personId": 6
+        }
+    ],
+    "mementoList": [
+        {
+            "mementoId": 48,
+            "headline": "Luque Campeon!!!",
+            "text": null,
+            "type": "photo",
+            "url": "https://dl.dropboxusercontent.com/u/2797542/timeline/fliaparra/ygnacio/luque-campeon.jpeg",
+            "thumbnailUrl": null,
+            "category": "photo",
+            "isCover": true,
+            "position": 1,
+            "publicMemento": false,
+            "location": null,
+            "startDate": null,
+            "participants": [],
+            "lifeStoryId": 141
+        }
+    ],
+    "contributorId": 2,
+    "creationDateAsString": "2013-08-19 00:22:47"
+}
+
+Update a lifestory
+PUT	/lifestory/{lsid}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/lifestory/999", 
+    "headline": "LUQUE CAMPEON!",
+    "text": "Después de 53 años, el querido Kure Luque salió campeón de Paraguay!",
+    "type": "great times",
+    "locale": "es_ES",
+    "location": {
+        "locationId": 2,
+      "region" : "Central"
+    },
+    "startDate": {
+      "fuzzyDateId" : 14544,
+        "exactDate": "2007-06-24 12:00:00"
+    },
+    "mementoList": [
+        {
+            "headline": "Luque Campeon!!!",
+            "text": null,
+            "type": "photo",
+            "source": null,
+            "sourceUrl": null,
+            "url": "https://dl.dropboxusercontent.com/u/2797542/timeline/fliaparra/ygnacio/luque-campeon.jpeg",
+            "thumbnailUrl": null,
+            "category": "photo",
+            "isCover": true,
+            "position": 1,
+            "publicMemento": false,
+            "location": null,
+            "startDate": null,
+            "endDate": null,
+            "question": null,
+            "participants": [],
+            "lifeStoryId": 30
+        }
+    ],
+    "contributorId": 2,
+    "creationDateAsString": "2012-09-27 00:00:00"
+}
+< 200
+< Content-Type: application/json
+{
+    "lifeStoryId": 141,
+    "headline": "LUQUE CAMPEON!",
+    "text": "Después de 53 años, el querido Kure Luque salió campeón de Paraguay!",
+    "richtext": null,
+    "creationDate": 1376871312000,
+    "locale": "es_ES",
+    "location": {
+        "locationId": 2299,
+        "location_textual": "Creator Birthplace",
+        "name": "República de Luque",
+        "country": "Paraguay",
+        "region": "Central",
+        "cityName": "Luque",
+        "coordinates_trust": null,
+        "lat": -25.262085,
+        "lon": -57.489109,
+        "locale": null,
+        "city": {
+            "cityId": 9092,
+            "name": "Luque",
+            "country": {
+                "countryId": 172,
+                "short_name": "Paraguay",
+                "spanish_name": "Paraguay",
+                "italian_name": null
+            },
+            "lat": -25.27,
+            "lon": -57.487222
+        },
+        "accuracy": 19
+    },
+    "question": null,
+    "startDate": {
+        "fuzzyDateId": 14556,
+        "textual_date": null,
+        "exactDate": 1182636000000,
+        "decade": 2000,
+        "year": 2007,
+        "month": "6",
+        "day": "24",
+        "accuracy": 7,
+        "locale": null,
+        "exactDateAsString": "2007-06-24 00:00:00"
+    },
+    "synced": false,
+    "participationList": [
+        {
+            "participationId": 115,
+            "contributorId": 2,
+            "lifeStoryId": 141,
+            "protagonist": true,
+            "personId": 6
+        }
+    ],
+    "mementoList": [
+        {
+            "mementoId": 53,
+            "headline": "Luque Campeon!!!",
+            "text": null,
+            "type": "photo",
+            "url": "https://dl.dropboxusercontent.com/u/2797542/timeline/fliaparra/ygnacio/luque-campeon.jpeg",
+            "thumbnailUrl": null,
+            "category": "photo",
+            "isCover": true,
+            "position": 1,
+            "publicMemento": false,
+            "location": null,
+            "startDate": null,
+            "participants": [],
+            "lifeStoryId": 141
+        }
+    ],
+    "contributorId": 2,
+    "creationDateAsString": "2013-08-19 02:15:12"
+}
+
+PUT	/lifestory/{lsid}?token=:token
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/memento/protagonist"}
+< 200
+< Content-Type: application/json
+{}
+
+DELETE	/lifestory/{lsid}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/lifestory/138"}
+< 200
+< Content-Type: application/json
+{
+    "responseStatus": "OK",
+    "statusMessage": "Entity deleted with success",
+    "errorTrace": null,
+    "newResourceId": null
+}
+
+POST	/lifestory/{lsid}/person/{id}/{type}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/memento/protagonist"}
+< 200
+< Content-Type: application/json
+{}
+
+DELETE	/lifestory/{lsid}/person/{id}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/memento/protagonist"}
+< 200
+< Content-Type: application/json
+{}
+
+DELETE	/lifestory/{lsid}/person/{id}/protagonist
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/memento/protagonist"}
+< 200
+< Content-Type: application/json
+{}
+
+POST	/lifestory/{lsid}/memento
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/memento/protagonist"}
+< 200
+< Content-Type: application/json
+{}
+
+PUT	/lifestory/{lsid}/memento/{id}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/memento/protagonist"}
+< 200
+< Content-Type: application/json
+{}
+
+DELETE	/lifestory/{lsid}/memento/{id}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/memento/protagonist"}
+< 200
+< Content-Type: application/json
+{}
+
+GET	/lifestory/{lsid}/memento/{id}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/memento/protagonist"}
+< 200
+< Content-Type: application/json
+{}
+
+POST	/lifestory/{lsid}/memento/{id}/mention
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/memento/protagonist"}
+< 200
+< Content-Type: application/json
+{}
+
+POST	/lifestory/{lsid}/memento/{id}/mention/{pid}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/memento/protagonist"}
+< 200
+< Content-Type: application/json
+{}
+
+DELETE	/lifestory/{lsid}/memento/{id}/mention/{pid}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/person/3/memento/protagonist"}
+< 200
+< Content-Type: application/json
+{}
+
+
+
 --
 Contextual Reminiscence  (TO UPDATE)
 
@@ -3154,80 +4206,28 @@ GET /question/{lifechapter}
     }
 ]
 
+--
+Utilities
+
+<p> In this section we group API endpoints for general utilities used to support the other services </p>
+--
+
+
 
 --
 Work-In-Progress
 
 <p> API endpoints currently still in development process. Some might be included in final version while other might not. </p>
 
-# Account verification
-GET     /accounts/verify/:token         controllers.Signup.verify(token: String)
-GET     /accounts/unverified            controllers.Signup.unverified()
-GET     /accounts/exists                controllers.Signup.exists()
-GET     /login/denied                    controllers.Application.onLoginUserNotFound()
-
-### Authentication
-GET     /login                          controllers.Application.index()
-GET     /authenticated                  controllers.Restricted.index()
-GET     /login/:id                      controllers.Restricted.id(id: String)
-GET     /logout                         com.feth.play.module.pa.controllers.Authenticate.logout()
-GET     /authenticate/:provider         controllers.AuthenticateLocal.authenticate(provider: String)
-GET     /authenticate/:provider/denied  controllers.Application.oAuthDenied(provider: String)
-
-# People, Life Stories and Timeline
-POST    /person                         controllers.PersonControl.createPerson()
-POST    /person/mention                 controllers.PersonControl.createMentionPerson()
-PUT     /person/:id                     controllers.PersonControl.updatePerson(id: Long)
-DELETE  /person/:id                     controllers.PersonControl.deletePerson(id: Long)
-
-GET     /person/:id/lifestory           controllers.LifeStoryControl.getPersonLifeStoryAll(id: Long)
-GET     /person/:id/lifestory/proganist controllers.LifeStoryControl.getProtagonistLifeStoryAll(id: Long)
-DELETE  /lifestory/:lsid                controllers.LifeStoryControl.deleteLifeStory(lsid: Long)
-POST    /lifestory/:lsid/person/:id     controllers.LifeStoryControl.addParticipantToLifeStory(lsid: Long, id: Long)
-POST    /lifestory/:lsid/protag/:id     controllers.LifeStoryControl.addProtagonistToLifeStory(lsid: Long, id: Long)
-DELETE  /lifestory/:lsid/person/:id     controllers.LifeStoryControl.deletePersonFromLifeStory(lsid: Long, id: Long)
-POST    /lifestory/:lsid/memento/:mid   controllers.LifeStoryControl.addMementoToLifeStory(lsid: Long, mid: Long)
-POST    /lifestory/:lsid/memento        controllers.LifeStoryControl.addNewMementoToLifeStory(lsid: Long)
-
-GET     /person/:id/memento             controllers.MementoControl.getAllPersonMemento(id: Long)
-#GET     /person/:id/memento/protagonist controllers.MementoControl.getAllPersonMemento(id: Long)
-#GET     /person/:id/memento/mention     controllers.MementoControl.getAllPersonMemento(id: Long)
-GET     /memento/:id                    controllers.MementoControl.getMemento(id: Long)
-POST    /memento                        controllers.MementoControl.createMemento()
-PUT     /memento/:id                    controllers.MementoControl.updateMemento(id: Long)
-DELETE  /memento/:id                    controllers.MementoControl.deleteMemento(id: Long)
-POST    /memento/:id/person             controllers.MementoControl.addMementoParticipant(id: Long)
-POST    /memento/:id/person/:pid        controllers.MementoControl.addMementoParticipantByPersonId(id: Long, pid: Long)
-
-GET     /person/:id/relationships       controllers.RelationshipControl.getPersonRelationships(id: Long)
-GET     /person/:id/curators            controllers.RelationshipControl.getPersonCurators(id: Long)
-PUT     /relationship/:id               controllers.RelationshipControl.updateRelationship(id: Long)
-POST    /relationship                   controllers.RelationshipControl.addRelationship()
-DELETE  /relationship/:id               controllers.RelationshipControl.deleteRelationship(id: Long)
-
-# Contextual Reminiscence
-GET     /context/:cid                   controllers.ContextControl.getContext(cid: Long)
-GET     /context/:cid/curators          controllers.ContextControl.getContextCurators(cid: Long)
-GET     /context/:cid/memento/:mid      controllers.ContextControl.getContextMemento(cid: Long, mid: Long)
-POST    /context/:cid/memento           controllers.ContextControl.createContextMemento(cid: Long)
-PUT     /context/:cid/memento           controllers.ContextControl.updateContextMemento(cid: Long)
-DELETE  /context/:cid/memento/:mid      controllers.ContextControl.deleteContextMemento(cid: Long, mid: Long)
-GET     /context/:cid/question          controllers.ContextControl.getContextQuestions(cid: Long)
-GET     /context/:cid/question/:decade  controllers.ContextControl.getContextQuestionsForDecade(cid: Long, decade: Long)
-GET     /context/:cid/question/curated  controllers.ContextControl.getContextQuestionsByCurators(cid: Long)
-POST    /context/:cid/question          controllers.ContextControl.createContextCuratedQuestions(cid: Long)
-
-# General Public Mementos API (lifecontext proxy)
-GET     /memento/random/:lang           controllers.PublicMementoControl.getRandomMemento(lang: String)
-GET     /memento/:mid                   controllers.PublicMementoControl.getMemento(mid: Long)
-GET     /memento/:decade/:place         controllers.PublicMementoControl.getMementoList(decade: Long, place: String, lat ?= null, lon ?= null, rad ?= null, lang: String ?= "it_IT")
-
-# Utilities (cities, countries, other stuff)
-GET     /city                           controllers.Application.getCities()
-GET     /country/:countryId/city        controllers.Application.getCitiesByCountryId(countryId: Long)
-GET     /country/:countryName/city      controllers.Application.getCitiesByCountryName(countryName: String)
-GET     /city/sync/:lastCityId          controllers.Application.getNewCities(lastCityId: Long)
-GET     /city/:cityName                 controllers.Application.getCitiesByCountryName(cityName: String)
-
-
+GET	/question/{byear}/{fyear}/
+GET	/question/{chapter}
+GET	/city
+GET	/country/{country}/city
+GET	/country/{country}/{region}/city
+GET	/city/id/{cityId}
+GET	/city/sync/{lastCityId}
+GET	/city/{name}
+GET	/upload
+POST /upload
+GET	/file/{hashcode}
 --

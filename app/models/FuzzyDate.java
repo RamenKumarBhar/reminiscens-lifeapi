@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -68,6 +69,23 @@ public class FuzzyDate extends Model {
 	@Column
 	private String locale;
 
+	// Foreign Keys
+	@JsonIgnore
+	@OneToMany(mappedBy = "startDate", cascade = CascadeType.ALL)
+	private List<LifeStory> lifeStoriesStart;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "endDate", cascade = CascadeType.ALL)
+	private List<LifeStory> lifeStoriesEnd;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "startDate", cascade = CascadeType.ALL)
+	private List<LifeStory> mementosStart;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "endDate", cascade = CascadeType.ALL)
+	private List<LifeStory> mementosEnd;
+	
 	public static Model.Finder<Long, FuzzyDate> find = new Model.Finder<Long, FuzzyDate>(
 			Long.class, FuzzyDate.class);
 
@@ -79,7 +97,7 @@ public class FuzzyDate extends Model {
 		fuzzyDate.save();
 	}
 	
-	public static FuzzyDate createIfNotExist(FuzzyDate fuzzyDate) {
+	public static FuzzyDate createOrUpdateIfNotExist(FuzzyDate fuzzyDate) {
 		if (fuzzyDate != null) {
 			Long id = fuzzyDate.getFuzzyDateId();
 			DateTime exactDate = fuzzyDate.getExactDate();
@@ -88,15 +106,19 @@ public class FuzzyDate extends Model {
 			FuzzyDate existing = null;
 			if (id != null) {
 				existing = read(id);
-				if (existing != null) {
+				// if the existing date with the provided id is equal, there is nothing to create or update
+				if (existing.isEqualTo(fuzzyDate)){
 					return existing;
 				}
 			} else if (exactDate != null) {
 				existing = readByExactDate(exactDate);
-				if (existing != null) {
+				// if the existing date with the provided id is equal, there is nothing to create or update
+				if (existing.isEqualTo(fuzzyDate)){
 					return existing;
 				}
 			}
+			
+			fuzzyDate.setFuzzyDateId(null);
 
 			// 2. make sure all important fields are compiled
 			// fuzzy date parts
@@ -174,6 +196,31 @@ public class FuzzyDate extends Model {
 		}
 	}
 
+	private boolean isEqualTo(FuzzyDate fd) {
+		DateTime exact = fd.getExactDate();
+		Long decade = fd.getDecade();
+		Long year = fd.getYear();
+		String month = fd.getMonth();
+		String day = fd.getDay();
+		String hour = fd.getHour();
+		String minute = fd.getMinute();
+		String second = fd.getSecond();
+		String textual = fd.getTextual_date();
+		
+		boolean result = (this.exactDate == exact);
+		if (!result) {
+			result = (this.decade == decade) 
+					&& (this.year == year)
+					&& (this.month == month)
+					&& (this.day == day)
+					&& (this.hour == hour)
+					&& (this.minute == minute)
+					&& (this.second == second)
+					&& (this.textual_date == textual);
+		}
+		return result;
+	}
+
 	public static FuzzyDate createObject(FuzzyDate fuzzyDate) {
 		fuzzyDate.save();
 		return fuzzyDate;
@@ -188,7 +235,9 @@ public class FuzzyDate extends Model {
 	}
 
 	public static FuzzyDate readByExactDate(DateTime exactDate) {
-		return find.where().eq("exactDate", exactDate).findUnique();
+		List<FuzzyDate> fList = find.where().eq("exactDate", exactDate).findList();
+		
+		return fList!=null && !fList.isEmpty() ? fList.get(0) : null;
 	}
 
 	/**

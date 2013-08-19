@@ -46,6 +46,9 @@ public class Person extends Model {
 	
 	@Column
 	private String gender;
+	
+	@Column(name="contact_email")
+	private String contactEmail;
 
 	@ManyToOne
 	@MapsId
@@ -223,5 +226,13 @@ public class Person extends Model {
 
 	public void setParticipationList(List<Participation> participationList) {
 		this.participationList = participationList;
+	}
+
+	public String getContactEmail() {
+		return contactEmail;
+	}
+
+	public void setContactEmail(String contactEmail) {
+		this.contactEmail = contactEmail;
 	}	
 }
