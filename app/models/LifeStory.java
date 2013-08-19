@@ -14,7 +14,6 @@ import org.joda.time.DateTime;
 
 import play.db.ebean.Model;
 import play.i18n.Messages;
-import pojos.ParticipationBean;
 
 @Entity
 @Table(name = "Life_Event")
@@ -426,7 +425,7 @@ public class LifeStory extends Model {
 		return synced;
 	}
 
-	public static void createBirthStory(User user) throws ParseException {
+	public static void createBirthStory(User user) {
 		LifeStory birth = new LifeStory();
 		birth.setHeadline(Messages.get("reminiscens.birth.headline"));
 		birth.setText(Messages.get("reminiscens.birth.text"));
@@ -436,7 +435,11 @@ public class LifeStory extends Model {
 
 		DateTime birthdate = user.getPerson().getBirthdate();
 		FuzzyDate fuzzyBirth = new FuzzyDate();
-		fuzzyBirth.setExactDate(birthdate);
+		try {
+			fuzzyBirth.setExactDate(birthdate);
+		} catch (ParseException e) {
+			// TODO change to stop user from being created if no birthdate is provided
+		}
 		birth.setStartDate(fuzzyBirth);
 		
 		City birthPlace = user.getPerson().getBirthplace();
