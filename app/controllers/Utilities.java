@@ -150,21 +150,22 @@ public class Utilities extends Controller {
 			return unauthorized(toJson(response));
 		}
 	}
-	
+
 	@SubjectPresent
 	public static Result getFileBySize(String hashcode, String size) {
 		String userEmail = session().get("pa.u.id");
 		User user = User.getByEmail(userEmail);
 		String upSize = size.toUpperCase();
-		
-		if (!upSize.equals("THUMBNAIL") && !upSize.equals("MEDIUM") && !upSize.equals("LARGE")) {
-			flash("error", "Size "+size+" not available");
+
+		if (!upSize.equals("THUMBNAIL") && !upSize.equals("SMALL")
+				&& !upSize.equals("MEDIUM") && !upSize.equals("LARGE")) {
+			flash("error", "Size " + size + " not available");
 			ResponseStatusBean response = new ResponseStatusBean();
 			response.setResponseStatus(ResponseStatus.NOTAVAILABLE);
-			response.setStatusMessage("Size "+size+"not available");
+			response.setStatusMessage("Size " + size + "not available");
 			return notFound(toJson(response));
 		}
-		
+
 		if (user != null) {
 			java.io.File f = UtilitiesDelegate.getInstance().getFile(hashcode,
 					user.getUserId(), size);
@@ -189,46 +190,49 @@ public class Utilities extends Controller {
 			return unauthorized(toJson(response));
 		}
 	}
-	
+
 	public static Result getFileNoLogin(String hashcode) {
-					java.io.File f = UtilitiesDelegate.getInstance().getFileNoLogin(hashcode);
-			if (f != null) {
-				return ok(f);
-			} else {
-				// TODO remove once authentication is fully tested, @security
-				// should be enough
-				flash("error", "Missing file");
-				ResponseStatusBean response = new ResponseStatusBean();
-				response.setResponseStatus(ResponseStatus.NOTAVAILABLE);
-				response.setStatusMessage("File does not exist");
-				return notFound(toJson(response));
-			}
-		
-	}
-	
-	public static Result getFileBySizeNoLogin(String hashcode, String size) {
-		String upSize = size.toUpperCase();
-		
-		if (!upSize.equals("THUMBNAIL") && !upSize.equals("MEDIUM") && !upSize.equals("LARGE")) {
-			flash("error", "Size "+size+" not available");
+		java.io.File f = UtilitiesDelegate.getInstance().getFileNoLogin(
+				hashcode);
+		if (f != null) {
+			return ok(f);
+		} else {
+			// TODO remove once authentication is fully tested, @security
+			// should be enough
+			flash("error", "Missing file");
 			ResponseStatusBean response = new ResponseStatusBean();
 			response.setResponseStatus(ResponseStatus.NOTAVAILABLE);
-			response.setStatusMessage("Size "+size+"not available");
+			response.setStatusMessage("File does not exist");
 			return notFound(toJson(response));
 		}
-		
-			java.io.File f = UtilitiesDelegate.getInstance().getFileNoLogin(hashcode, size);
-			if (f != null) {
-				return ok(f);
-			} else {
-				// TODO remove once authentication is fully tested, @security
-				// should be enough
-				flash("error", "Missing file");
-				ResponseStatusBean response = new ResponseStatusBean();
-				response.setResponseStatus(ResponseStatus.NOTAVAILABLE);
-				response.setStatusMessage("Missing file");
-				return notFound(toJson(response));
-			}
+
 	}
-	
+
+	public static Result getFileBySizeNoLogin(String hashcode, String size) {
+		String upSize = size.toUpperCase();
+
+		if (!upSize.equals("THUMBNAIL") && !upSize.equals("MEDIUM")
+				&& !upSize.equals("LARGE")) {
+			flash("error", "Size " + size + " not available");
+			ResponseStatusBean response = new ResponseStatusBean();
+			response.setResponseStatus(ResponseStatus.NOTAVAILABLE);
+			response.setStatusMessage("Size " + size + "not available");
+			return notFound(toJson(response));
+		}
+
+		java.io.File f = UtilitiesDelegate.getInstance().getFileNoLogin(
+				hashcode, size);
+		if (f != null) {
+			return ok(f);
+		} else {
+			// TODO remove once authentication is fully tested, @security
+			// should be enough
+			flash("error", "Missing file");
+			ResponseStatusBean response = new ResponseStatusBean();
+			response.setResponseStatus(ResponseStatus.NOTAVAILABLE);
+			response.setStatusMessage("Missing file");
+			return notFound(toJson(response));
+		}
+	}
+
 }
