@@ -93,10 +93,11 @@ public class Global extends GlobalSettings {
 				MyUsernamePasswordAuthUser auth = null;
 
 				auth = new MyUsernamePasswordAuthUser("First Member", person,
-						null, "first@example.com", "password", "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png");
+						null, "first@example.com", "password",
+						"http://s3.amazonaws.com/37assets/svn/765-default-avatar.png");
 
-				User user = models.User.create(auth);
-
+				User user;
+				user = models.User.create(auth);
 				user.setEmailValidated(true);
 				user.setRoles(Collections.singletonList(SecurityRole
 						.findByRoleName(MyRoles.MEMBER.toString())));
@@ -240,7 +241,7 @@ public class Global extends GlobalSettings {
 						});
 
 	}
-	
+
 }
 
 // @SuppressWarnings("rawtypes")

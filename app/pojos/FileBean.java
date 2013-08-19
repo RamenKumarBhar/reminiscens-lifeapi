@@ -17,6 +17,8 @@ public class FileBean  implements Serializable {
 	private String filename;
 	private String URI;
 	private String thumbnailURI;
+	private String mediumURI;
+	private String largeURI;
 	private String contentType;
 	private String extension; 
 	private String hashcode; 
@@ -81,5 +83,17 @@ public class FileBean  implements Serializable {
 	}
 	public void setThumbnailURI(String thumbnailURI) {
 		this.thumbnailURI = thumbnailURI;
+	}
+	public String getMediumURI() {
+		return mediumURI;
+	}
+	public void setMediumURI(String mediumURI) {
+		this.mediumURI = mediumURI;
+	}
+	public String getLargeURI() {
+		return largeURI;
+	}
+	public void setLargeURI(String largeURI) {
+		this.largeURI = largeURI;
 	}
 }

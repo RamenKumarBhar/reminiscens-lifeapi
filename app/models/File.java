@@ -26,8 +26,14 @@ public class File extends Model {
 	private String filename;
 	@Column
 	private String URI;
-	@Column
+	@Column(name="thumbnail_uri")
 	private String thumbnailURI;
+	@Column(name="small_uri")
+	private String smallURI;
+	@Column(name="medium_uri")
+	private String mediumURI;
+	@Column(name="large_uri")
+	private String largeURI;
 	@Column
 	private String contentType;
 	@Column
@@ -148,5 +154,29 @@ public class File extends Model {
 
 	public void setThumbnailURI(String thumbnailURI) {
 		this.thumbnailURI = thumbnailURI;
+	}
+
+	public String getSmallURI() {
+		return smallURI;
+	}
+
+	public void setSmallURI(String smallURI) {
+		this.smallURI = smallURI;
+	}
+
+	public String getMediumURI() {
+		return mediumURI;
+	}
+
+	public void setMediumURI(String mediumURI) {
+		this.mediumURI = mediumURI;
+	}
+
+	public String getLargeURI() {
+		return largeURI;
+	}
+
+	public void setLargeURI(String largeURI) {
+		this.largeURI = largeURI;
 	}	
 }
