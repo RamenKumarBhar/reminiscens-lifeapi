@@ -22,4 +22,4 @@ The API is developed partly in Java, using the play framework, and partly in Rub
 (check https://github.com/cdparra/reminiscensui). 
 
 Please, be gentle. This is all work-in-progress made by students that learning by doing :-).
-Of course, feedback is always
+Of course, feedback is always welcomed!
