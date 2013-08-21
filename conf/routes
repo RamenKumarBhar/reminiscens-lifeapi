@@ -64,16 +64,22 @@ DELETE  /lifestory/:lsid/memento/:id/mention/:pid controllers.MementoControl.del
 
 #####################################################################################
 # Contextual Reminiscence
-GET     /context/:cid                   controllers.ContextControl.getContext(cid: Long)
-GET     /context/:cid/curators          controllers.ContextControl.getContextCurators(cid: Long)
-GET     /context/:cid/memento/:mid      controllers.ContextControl.getContextMemento(cid: Long, mid: Long)
-POST    /context/:cid/memento           controllers.ContextControl.createContextMemento(cid: Long)
-PUT     /context/:cid/memento           controllers.ContextControl.updateContextMemento(cid: Long)
-DELETE  /context/:cid/memento/:mid      controllers.ContextControl.deleteContextMemento(cid: Long, mid: Long)
-GET     /context/:cid/question          controllers.ContextControl.getContextQuestions(cid: Long)
-GET     /context/:cid/question/:decade  controllers.ContextControl.getContextQuestionsForDecade(cid: Long, decade: Long)
-GET     /context/:cid/question/curated  controllers.ContextControl.getContextQuestionsByCurators(cid: Long)
-POST    /context/:cid/question          controllers.ContextControl.createContextCuratedQuestions(cid: Long)
+POST    /context                                controllers.ContextControl.initContext()
+POST    /context/person/:id                     controllers.ContextControl.initContextForPerson(id: Long)
+POST    /context/person/:id/:decade             controllers.ContextControl.initContextForPersonAndDecade(id: Long, decade: Long)
+POST    /context/person/:id/:decade/:cityId     controllers.ContextControl.initContextForPersonAndDecadeAndCity(id: Long, decade: Long, cityId: Long)
+PUT     /context/:cid                           controllers.ContextControl.refreshContext(cid: Long)
+PUT     /context/:cid/:decade                   controllers.ContextControl.refreshContextForDecade(cid: Long, decade: Long)
+PUT     /context/:cid/:decade/:cityId           controllers.ContextControl.refreshContextForDecadeAndCity(cid: Long, decade: Long, cityId: Long)
+GET     /context/:cid                           controllers.ContextControl.getContext(cid: Long)
+GET     /context/:cid/:decade                   controllers.ContextControl.getContextForDecade(cid: Long, decade: Long)
+GET     /context/:cid/:decade/:cityId           controllers.ContextControl.getContextForDecadeAndCity(cid: Long, decade: Long, cityId: Long)
+GET     /context/:cid/category/:cat             controllers.ContextControl.getContextFilterCategory(cid: Long, cat: String)
+POST    /context/:cid/memento                   controllers.ContextControl.createContextMemento(cid: Long)
+PUT     /context/:cid/memento/:mid              controllers.ContextControl.updateContextMemento(cid: Long, mid: Long)
+DELETE  /context/:cid/memento/:mid              controllers.ContextControl.deleteContextMemento(cid: Long, mid: Long)
+GET     /context/:cid/curators                  controllers.ContextControl.getContextCurators(cid: Long)
+GET     /context/:cid/memento/:mid              controllers.ContextControl.getContextMemento(cid: Long, mid: Long)
 
 # General Questions
 GET     /question/:byear/:fyear/        controllers.QuestionsControl.getGeneralQuestionsForYear(byear: Integer, fyear: Integer) 
