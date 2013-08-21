@@ -7,6 +7,8 @@ import javax.persistence.*;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import enums.MementoCategory;
+
 import play.db.ebean.Model;
 
 @Entity
@@ -110,6 +112,45 @@ public class PublicMemento extends Model {
     	
     	return finalList;
     }
+    
+	public static List<PublicMemento> readByDecadeAndCityIdAndCategoryWithLimit(
+			Long decade, Long city, MementoCategory category, int limit, List<PublicMemento> exclusionList) {
+		// TODO see how to filter a list of items in the exclusionList
+    	List<PublicMemento> pmList = find.where()
+				.eq("decade", decade)
+				.eq("closestCity.cityId",city)
+				.eq("category", category)
+				.setOrderBy("distance desc")
+				.setMaxRows(limit)
+				.findList();
+    	return pmList;
+	}	
+	
+	public static List<PublicMemento> readByDecadeAndCountryIdAndCategoryWithLimit(
+			Long decade, Long countryId, MementoCategory category, int limit, List<PublicMemento> exclusionList) {
+		List<PublicMemento> pmList = find.where()
+				.eq("decade", decade)
+				.eq("closestCity.country.countryId", countryId)
+				.eq("category", category)
+				.setOrderBy("distance desc")
+				.setMaxRows(limit)
+				.findList();
+    	return pmList;		
+	}
+	
+
+	public static List<PublicMemento> readByDecadeAndCategoryWithLimit(
+			Long decade, MementoCategory category, int limit, List<PublicMemento> exclusionList) {
+		List<PublicMemento> pmList = find.where()
+				.eq("decade", decade)
+				.eq("category", category)
+				.setOrderBy("rand()")
+				.setMaxRows(limit)
+				.findList();
+    	return pmList;	
+	} 
+	
+    
 
 	public Long getPublicMementoId() {
 		return publicMementoId;
@@ -197,7 +238,5 @@ public class PublicMemento extends Model {
 
 	public void setFamousParticipants(List<PublicParticipation> participants) {
 		this.publicParticipants = participants;
-	}	
-
-    
+	}   
 }
