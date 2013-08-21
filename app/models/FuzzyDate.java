@@ -108,14 +108,14 @@ public class FuzzyDate extends Model {
 				existing = read(id);
 				// if the existing date with the provided id is equal, there is
 				// nothing to create or update
-				if (existing.isEqualTo(fuzzyDate)) {
+				if (existing != null && existing.isEqualTo(fuzzyDate)) {
 					return existing;
 				}
 			} else if (exactDate != null) {
 				existing = readByExactDate(exactDate);
 				// if the existing date with the provided id is equal, there is
 				// nothing to create or update
-				if (existing.isEqualTo(fuzzyDate)) {
+				if (existing != null && existing.isEqualTo(fuzzyDate)) {
 					return existing;
 				}
 			}
