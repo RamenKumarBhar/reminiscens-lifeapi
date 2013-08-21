@@ -211,8 +211,8 @@ public class Utilities extends Controller {
 	public static Result getFileBySizeNoLogin(String hashcode, String size) {
 		String upSize = size.toUpperCase();
 
-		if (!upSize.equals("THUMBNAIL") && !upSize.equals("MEDIUM")
-				&& !upSize.equals("LARGE")) {
+		if (!upSize.equals("THUMBNAIL") && !upSize.equals("SMALL")
+				&& !upSize.equals("MEDIUM") && !upSize.equals("LARGE")) {
 			flash("error", "Size " + size + " not available");
 			ResponseStatusBean response = new ResponseStatusBean();
 			response.setResponseStatus(ResponseStatus.NOTAVAILABLE);
