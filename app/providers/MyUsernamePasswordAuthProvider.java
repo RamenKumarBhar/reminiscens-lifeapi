@@ -100,19 +100,19 @@ public class MyUsernamePasswordAuthProvider
 
 		@Required
 		@MinLength(5)
-		public String repeatPassword;
+		private String repeatPassword;
 
 		public String name;
 
 		@Required
-		public PersonBean person;
+		private PersonBean person;
 
-		public Long userId;
+		private Long userId;
 
-		public String profilePic;
+		private String profilePic;
 
 		public String validate() {
-			if (password == null || !password.equals(repeatPassword)) {
+			if (password == null || !password.equals(getRepeatPassword())) {
 				// ResponseStatusBean response = ResponseStatusBean();
 				// response.setResponseStatus(ResponseStatus.BADREQUEST);
 				// response.setStatusMessage("playauthenticate.password.signup.error.passwords_not_same");
@@ -122,6 +122,39 @@ public class MyUsernamePasswordAuthProvider
 			}
 			return null;
 		}
+
+		public String getRepeatPassword() {
+			return repeatPassword;
+		}
+
+		public void setRepeatPassword(String repeatPassword) {
+			this.repeatPassword = repeatPassword;
+		}
+
+		public PersonBean getPerson() {
+			return person;
+		}
+
+		public void setPerson(PersonBean person) {
+			this.person = person;
+		}
+
+		public Long getUserId() {
+			return userId;
+		}
+
+		public void setUserId(Long userId) {
+			this.userId = userId;
+		}
+
+		public String getProfilePic() {
+			return profilePic;
+		}
+
+		public void setProfilePic(String profilePic) {
+			this.profilePic = profilePic;
+		}
+		
 	}
 
 	public static final Form<MySignup> SIGNUP_FORM = form(MySignup.class);

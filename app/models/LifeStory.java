@@ -442,6 +442,7 @@ public class LifeStory extends Model {
 			fuzzyBirth.setExactDate(birthdate);
 		} catch (ParseException e) {
 			// TODO change to stop user from being created if no birthdate is provided
+			e.printStackTrace();
 		}
 		FuzzyDate.createOrUpdateIfNotExist(fuzzyBirth);
 		birth.setStartDate(fuzzyBirth);
