@@ -112,6 +112,4 @@ public class LifeStoryDelegate {
 		lifeStory.deleteProtagonist(id);
 		lifeStory.update();	
 	}
-	
-	
 }
