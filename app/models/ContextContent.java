@@ -40,6 +40,11 @@ public class ContextContent extends Model {
 	@JoinColumn(name = "context_index_id", updatable = false, insertable = false)
 	private PublicMemento publicMemento;
 
+	public ContextContent(PublicMemento pm) {
+		super();
+		this.setPublicMemento(pm);
+	}
+	
 	public static Model.Finder<Long, ContextContent> find = new Finder<Long, ContextContent>(
 			Long.class, ContextContent.class);
 
