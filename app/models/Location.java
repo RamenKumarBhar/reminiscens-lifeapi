@@ -110,7 +110,7 @@ public class Location extends Model {
 			Location existing = null;
 			if (id != null) {
 				existing = read(id);
-				if (existing.isEqualTo(location)) {
+				if (existing != null && existing.isEqualTo(location)) {
 					return existing;
 				} else {
 					location.copyNotNullsFrom(existing);
