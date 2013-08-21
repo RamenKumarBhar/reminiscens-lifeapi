@@ -439,24 +439,27 @@ public class LifeStory extends Model {
 			fuzzyBirth.setExactDate(birthdate);
 		} catch (ParseException e) {
 			// TODO change to stop user from being created if no birthdate is provided
+			e.printStackTrace();
 		}
 		FuzzyDate.createOrUpdateIfNotExist(fuzzyBirth);
+		fuzzyBirth.refresh();
 		birth.setStartDate(fuzzyBirth);
 		
 		City birthPlace = user.getPerson().getBirthplace();
 		Location loc = new Location();
 		loc.setCity(birthPlace);
+		Location.createOrUpdateIfNotExist(loc);
+		loc.refresh();
 		birth.setLocation(loc);
+		
+		birth.save();
+		birth.refresh();
 		
 		Participation part = new Participation();
 		part.setContributorId(user.getUserId());
 		part.setProtagonist(true);
 		part.setPerson(user.getPerson());
 		part.setLifeStory(birth);
-		birth.addParticipant(part);
-		
-		
-		birth.save();
-		birth.refresh();
+		birth.addParticipant(part);	
 	}
 }
