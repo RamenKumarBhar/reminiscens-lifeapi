@@ -445,79 +445,24 @@ public class LifeStory extends Model {
 			e.printStackTrace();
 		}
 		FuzzyDate.createOrUpdateIfNotExist(fuzzyBirth);
+		fuzzyBirth.refresh();
 		birth.setStartDate(fuzzyBirth);
 		
 		City birthPlace = user.getPerson().getBirthplace();
 		Location loc = new Location();
 		loc.setCity(birthPlace);
+		Location.createOrUpdateIfNotExist(loc);
+		loc.refresh();
 		birth.setLocation(loc);
+		
+		birth.save();
+		birth.refresh();
 		
 		Participation part = new Participation();
 		part.setContributorId(user.getUserId());
 		part.setProtagonist(true);
 		part.setPerson(user.getPerson());
 		part.setLifeStory(birth);
-		birth.addParticipant(part);
-		
-		birth.save();
-		birth.refresh();
-	}
-	
-	public static List<Long> getDecades(List<LifeStory> stories) {
-		if (stories != null) {
-
-			List<Long> decades = new ArrayList<Long>();
-			
-			for (LifeStory story: stories) {
-				FuzzyDate start = story.getStartDate();
-
-				if (start != null) {
-					Long decade = start.getDecade();
-					if (decade != null) {
-						decades.add(decade);
-					} else {
-						Long year = start.getYear();
-						decade = year - year%10;
-						if (decade != null) {
-							decades.add(decade);
-						} 
-					} 
-				}
-			}	
-			return decades;
-		} else {
-			return null;
-		}
-	}
-	
-	public static List<Long> getCities(List<LifeStory> stories) {
-		if (stories != null) {
-
-			List<Long> cities = new ArrayList<Long>();
-			
-			for (LifeStory story: stories) {
-				Location location = story.getLocation();
-
-				if (location != null) {
-					City c = location.getCity();
-					if (c != null) {
-						Long cityId = c.getCityId();
-						if (cityId != null) {
-							cities.add(cityId);
-						} else {
-							String cityName = location.getCityName();
-							City cByName = City.getCityByName(cityName);
-							if (cByName != null) {
-								cities.add(cByName.getCityId());
-							} 
-						// TODO find the closest city to the place based on location other attributes
-						}	
-					} 
-				}
-			}	
-			return cities;
-		} else {
-			return null;
-		}
+		birth.addParticipant(part); 
 	}
 }
