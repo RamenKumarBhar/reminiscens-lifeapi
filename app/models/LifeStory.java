@@ -10,10 +10,7 @@ import play.data.validation.Constraints.*;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Type;
-import org.hibernate.ejb.EntityManagerImpl;
 import org.joda.time.DateTime;
-
-import com.avaje.ebean.RawSql;
 
 import play.db.ebean.Model;
 import play.i18n.Messages;
@@ -464,5 +461,15 @@ public class LifeStory extends Model {
 		part.setPerson(user.getPerson());
 		part.setLifeStory(birth);
 		birth.addParticipant(part); 
+	}
+
+	public static ArrayList<Long> getDecades(List<LifeStory> stories) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static ArrayList<Long> getCities(List<LifeStory> stories) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
