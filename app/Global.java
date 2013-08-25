@@ -13,6 +13,7 @@ import enums.MyRoles;
 
 import play.Application;
 import play.GlobalSettings;
+import play.Logger;
 import play.data.format.Formatters;
 import play.mvc.Action;
 import play.mvc.Call;
@@ -32,6 +33,9 @@ import controllers.routes;
 
 public class Global extends GlobalSettings {
 
+	
+	
+	
 	/**
 	 * Call to create the root Action of a request for a Java application. The
 	 * request and actionMethod values are passed for information.
@@ -56,6 +60,13 @@ public class Global extends GlobalSettings {
 				// Configuration.root().getString("application.context");
 				// ctx.response().discardCookie("PLAY_SESSION");
 				// ctx.response().discardCookie("PLAY_SESSION", context);
+				Logger.debug("-----> setting CORS response headers");
+				ctx.response().setHeader("Access-Control-Allow-Origin", "*");
+				ctx.response().setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS");
+				ctx.response()
+						.setHeader("Access-Control-Allow-Headers",
+								"accept, origin, Content-type, x-json, x-prototype-version, x-requested-with, PLAY_SESSION");
+				
 				return r;
 			}
 		};

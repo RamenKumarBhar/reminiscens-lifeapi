@@ -11,6 +11,8 @@ import utils.PlayDozerMapper;
 import models.City;
 import models.Context;
 import models.ContextContent;
+import models.ContextContributed;
+import models.ContributedMemento;
 import models.LifeStory;
 import models.Person;
 import models.PublicMemento;
@@ -70,58 +72,73 @@ public class ContextDelegate {
 				+ person.getLastname());
 
 		/*
-		 * 4. Create the new list of ContextContent
+		 * 4. Create the new lists of items (ContextMedia, ContextContributed, ContextPeople, ContextEvent, ContextWorks)
 		 */
 
-		List<ContextContent> content = new ArrayList<ContextContent>();
+		List<ContextContributed> contributedContent = getContributedContextList(decades,cities);
+//		List<ContextMedia> mediaContent = new ArrayList<ContextMedia>();
+//		List<ContextEvent> eventContent = new ArrayList<ContextEvent>();
+//		List<ContextCreativeWorks> creativeWorkContent = new ArrayList<ContextCreativeWorks>();
+//		List<ContextPeople> peopleContent = new ArrayList<ContextPeope>();
+		
+		/*
+		 * 6. Add the lists of  contents to the context
+		 */
+		newContext.setContributedMementoList(contributedContent);
+		
+		ContextBean newContextBean = PlayDozerMapper.getInstance().map(Context.class,ContextBean.class);
+		return newContextBean;
+	}
 
+	private List<ContextContributed> getContributedContextList(
+			List<Long> decades, List<Long> cities) {
+		
+
+		List<ContextContributed> contributedContent = new ArrayList<ContextContributed>();
+		
 		// TODO everything from here
 
 		/*
 		 * 5. Prepare content related to both the country of the person
 		 */
-		for (MementoCategory category : MementoCategory.values()) { // x 4
-
-			for (Long dec : decades) { // x N
-				List<PublicMemento> pmCities = null; 
-				for (Long city : cities) { // x M
-					pmCities = PublicMemento.readByDecadeAndCityIdAndCategoryWithLimit(dec, city, category, 2, null);
-					for (PublicMemento publicMemento : pmCities) {
-						ContextContent c = new ContextContent(publicMemento);
-						content.add(c);
-					}
-					// TODO add the 2 closest items to "city" and "dec" in
-					// "category" from the contributed index of knowledge
-				}
-
-				List<PublicMemento> pmCountry = PublicMemento.readByDecadeAndCountryIdAndCategoryWithLimit(dec, countryId, category, 2, pmCities);
-				
-				for (PublicMemento publicMemento : pmCountry) {
-					ContextContent c = new ContextContent(publicMemento);
-					content.add(c);
-				}
-
-				pmCities.addAll(pmCountry);
-				
-				// TODO add the 2 closest items to "city" and "dec" in
-				// "category" from the contributed index of knowledge
-				
-
-				List<PublicMemento> pm = PublicMemento.readByDecadeAndCategoryWithLimit(dec, category, 2, pmCities);
-				for (PublicMemento publicMemento : pm) {
-					ContextContent c = new ContextContent(publicMemento);
-					content.add(c);
-				}
-				
-				// TODO add the 2 random item within and "dec" in
-				// "category" from the contributed index of knowledge
-			}
-		}
-		
-		newContext.setPublicContextContent(content);
-		
-		ContextBean newContextBean = PlayDozerMapper.getInstance().map(Context.class,ContextBean.class);
-		return newContextBean;
+//		for (MementoCategory category : MementoCategory.values()) { // x 4
+//
+//			for (Long dec : decades) { // x N
+//				List<ContributedMemento> cmCities = null; 
+//				for (Long city : cities) { // x M
+//					cmCities = ContributedMemento.readByDecadeAndCityIdAndCategoryWithLimit(dec, city, category, 2, null);
+//					for (ContextContributed publicMemento : cmCities) {
+//						ContextContributed c = new ContextContributed(publicMemento);
+//						contributedContent.add(c);
+//					}
+//					// TODO add the 2 closest items to "city" and "dec" in
+//					// "category" from the contributed index of knowledge
+//				}
+//
+//				List<PublicMemento> pmCountry = PublicMemento.readByDecadeAndCountryIdAndCategoryWithLimit(dec, countryId, category, 2, cmCities);
+//				
+//				for (PublicMemento publicMemento : pmCountry) {
+//					ContextContent c = new ContextContent(publicMemento);
+//					contributedContent.add(c);
+//				}
+//
+//				cmCities.addAll(pmCountry);
+//				
+//				// TODO add the 2 closest items to "city" and "dec" in
+//				// "category" from the contributed index of knowledge
+//				
+//
+//				List<PublicMemento> pm = PublicMemento.readByDecadeAndCategoryWithLimit(dec, category, 2, cmCities);
+//				for (PublicMemento publicMemento : pm) {
+//					ContextContent c = new ContextContent(publicMemento);
+//					content.add(c);
+//				}
+//				
+//				// TODO add the 2 random item within and "dec" in
+//				// "category" from the contributed index of knowledge
+//			}
+//		}
+		return null;
 	}
 
 	public static ContextDelegate getInstance() {

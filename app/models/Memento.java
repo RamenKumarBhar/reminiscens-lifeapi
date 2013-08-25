@@ -83,6 +83,9 @@ public class Memento extends Model {
 	
 	@Column(name="file_hashcode")
 	private String fileHashcode;
+
+	@Column
+	private String locale;
 	
 	// @OneToMany(mappedBy="memento")
 	// private List<MementoParticipation> participantList;
