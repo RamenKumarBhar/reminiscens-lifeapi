@@ -15,9 +15,6 @@ import play.db.ebean.Model;
 @Table(name="Contex_Index")
 public class PublicMemento extends Model {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2021927948308276540L;
 
 	@Id

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import play.db.ebean.Model;
@@ -39,7 +40,9 @@ public class Context extends Model {
 	@Column(name="city_ratio")
 	private Long cityRatio;
 
+	@Temporal(TemporalType.DATE)
 	@Column
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime date;
 
 	@Column
@@ -55,10 +58,29 @@ public class Context extends Model {
 //        )
 //    public List<PublicMemento> publicMementoList;
 	
+//	@JsonIgnore
+//	@OneToMany(mappedBy="context")
+//	private List<ContextContent> publicContextContent;
+	
 	@JsonIgnore
-	@OneToMany(mappedBy="context")
-	private List<ContextContent> publicContextContent;
+	@OneToMany(mappedBy = "context", cascade = CascadeType.ALL)
+	private List<ContextContributed> contributedMementoList;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "context", cascade = CascadeType.ALL)
+	private List<ContextMedia> mediaList;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "context", cascade = CascadeType.ALL)
+	private List<ContextEvent> eventList;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "context", cascade = CascadeType.ALL)
+	private List<ContextCreativeWork> creativeWorkList;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "context", cascade = CascadeType.ALL)
+	private List<ContextPeople> famousPeopleList;
 	
 	public static Model.Finder<Long,Context> find = new Model.Finder<Long, Context>(
             Long.class,Context.class
@@ -69,6 +91,19 @@ public class Context extends Model {
     }
     
     public static void create(Context context){
+    	// 1. save contributedMementos
+//    	for (ContextContributed contributed : context.getContributedMementos()) {
+//			ContextContributed.create(contributed);
+//		}
+//    	
+    	// 2. save contextMedias
+    	// TODO implement save one by one if cascade does not work
+    	// 3. save contextWorks
+    	// TODO implement save one by one if cascade does not work
+    	// 3. save contextPeople
+    	// TODO implement save one by one if cascade does not work
+    	// 4. save contextEvents
+    	// TODO implement save one by one if cascade does not work
         context.save();
     }
     
@@ -165,11 +200,51 @@ public class Context extends Model {
 		this.dateRatio = dateRatio;
 	}
 
-	public List<ContextContent> getPublicContextContent() {
-		return publicContextContent;
+	public List<ContextContributed> getContributedMementoList() {
+		return contributedMementoList;
 	}
 
-	public void setPublicContextContent(List<ContextContent> publicContextContent) {
-		this.publicContextContent = publicContextContent;
+	public void setContributedMementoList(List<ContextContributed> contributedMementos) {
+		this.contributedMementoList = contributedMementos;
 	}
+
+	public List<ContextMedia> getMediaList() {
+		return mediaList;
+	}
+
+	public void setMediaList(List<ContextMedia> mediaList) {
+		this.mediaList = mediaList;
+	}
+
+	public List<ContextEvent> getEventList() {
+		return eventList;
+	}
+
+	public void setEventList(List<ContextEvent> eventList) {
+		this.eventList = eventList;
+	}
+
+	public List<ContextCreativeWork> getCreativeWorkList() {
+		return creativeWorkList;
+	}
+
+	public void setCreativeWorkList(List<ContextCreativeWork> creativeWorkList) {
+		this.creativeWorkList = creativeWorkList;
+	}
+
+	public List<ContextPeople> getFamousPeopleList() {
+		return famousPeopleList;
+	}
+
+	public void setFamousPeopleList(List<ContextPeople> famousPeopleList) {
+		this.famousPeopleList = famousPeopleList;
+	}
+
+//	public List<ContextContent> getPublicContextContent() {
+//		return publicContextContent;
+//	}
+//
+//	public void setPublicContextContent(List<ContextContent> publicContextContent) {
+//		this.publicContextContent = publicContextContent;
+//	}
 }

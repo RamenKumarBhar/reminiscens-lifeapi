@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,6 +41,36 @@ public class Log extends Model{
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
+    
+    public static Model.Finder<Long,Log> find = new Model.Finder<Long, Log>(
+            Long.class,Log.class
+    );
+    
+    public static List<Log> all(){
+        return find.all();
+    }
+    
+    public static void create(Log log){
+        log.save();
+    }
+    
+    public static Log createObject(Log log){
+        log.save();
+        return log;
+    }
+    
+    public static void delete(Long id){
+        find.ref(id).delete();
+    }
+    
+    public static Log read(Long id){
+        return find.byId(id);
+    }
+    
+    public static List<Log> readByUser(User user) {
+    	return find.where().eq("user", user).findList();
+    }
+    
     
     //Getters & Setters
     

@@ -17,6 +17,7 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
+    javaJpa,
     "org.jadira.usertype" % "usertype.jodatime" % "1.8",
     "org.hibernate" % "hibernate-annotations" % "3.5.6-Final",
     "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final", 

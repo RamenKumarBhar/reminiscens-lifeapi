@@ -84,14 +84,37 @@ public class Location extends Model {
 	
 	// foreign keys
 	@JsonIgnore
-	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<LifeStory> lifeStoriesLocation;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Memento> mementosLocation;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "startLocation", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<ContributedMemento> contributedMementoStartLocation;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "endLocation", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<ContributedMemento> contributedMementoEndLocation;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<Media> mediaLocation;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<Event> eventLocation;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "birthplace", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<FamousPerson> famousBirthPlace;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "deathplace", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<FamousPerson> famousDeathPlace;
+	
 	public static Model.Finder<Long,Location> find = new Model.Finder<Long, Location>(
             Long.class,Location.class
     );

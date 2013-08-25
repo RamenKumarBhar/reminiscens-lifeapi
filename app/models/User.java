@@ -54,7 +54,7 @@ public class User extends Model implements Subject {
 	@Column(length = 50)
 	private String email;
 
-	@Column(length = 45, name = "lang")
+	@Column
 	private String locale;
 
 	@Column(name = "email_verified")

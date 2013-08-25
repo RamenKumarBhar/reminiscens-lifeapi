@@ -24,7 +24,8 @@ public class ContextBean  implements Serializable {
 	@JodaDateTime(format = "yyyy-MM-dd HH:mm:ss")
 	private DateTime date;
 	private Long dateRatio;
-	private List<ContextContentBean> publicContextContent;
+//	private List<ContextContentBean> publicContextContent;
+	private List<ContextContributedBean> contributedList;
 	public Long getContextId() {
 		return contextId;
 	}
@@ -73,11 +74,17 @@ public class ContextBean  implements Serializable {
 	public void setDateRatio(Long dateRatio) {
 		this.dateRatio = dateRatio;
 	}
-	public List<ContextContentBean> getPublicContextContent() {
-		return publicContextContent;
+//	public List<ContextContentBean> getPublicContextContent() {
+//		return publicContextContent;
+//	}
+//	public void setPublicContextContent(
+//			List<ContextContentBean> publicContextContent) {
+//		this.publicContextContent = publicContextContent;
+//	}
+	public List<ContextContributedBean> getContributedList() {
+		return contributedList;
 	}
-	public void setPublicContextContent(
-			List<ContextContentBean> publicContextContent) {
-		this.publicContextContent = publicContextContent;
+	public void setContributedList(List<ContextContributedBean> contributedList) {
+		this.contributedList = contributedList;
 	}	
 }
