@@ -131,11 +131,14 @@ public class User extends Model implements Subject {
 		find.ref(uid).delete();
 	}
 	
-
 	public static User read(Long id) {
 		return find.byId(id);
 	}
 
+	public static String readLocaleByPersonId(Long personId) {
+		return find.where().eq("person.personId", personId).findUnique().getLocale();
+	}
+	
 	public static User getByEmail(String email) {
 		return find.where().eq("email", email).findUnique();
 	}

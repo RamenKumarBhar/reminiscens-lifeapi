@@ -22,6 +22,8 @@ public class FamousPersonBean implements Serializable {
 	private String locale;
 	private String tags;
 	private boolean indexed;
+    private String resourceType;
+    private String category;
 	@JodaDateTime(format = "yyyy-MM-dd HH:mm:ss")
 	private DateTime lastUpdate;
 	
@@ -32,7 +34,7 @@ public class FamousPersonBean implements Serializable {
 	private String famousFor;
 	private FuzzyDateBean birthDate;
     private FuzzyDateBean deathDate;
-    private LocationBean birhplace;
+    private LocationBean birthplace;
     private LocationBean deathplace;
     private CountryBean country;
 	private String status;
@@ -126,11 +128,11 @@ public class FamousPersonBean implements Serializable {
 	public void setDeathDate(FuzzyDateBean deathDate) {
 		this.deathDate = deathDate;
 	}
-	public LocationBean getBirhplace() {
-		return birhplace;
+	public LocationBean getBirthplace() {
+		return birthplace;
 	}
-	public void setBirhplace(LocationBean birhplace) {
-		this.birhplace = birhplace;
+	public void setBirthplace(LocationBean birhplace) {
+		this.birthplace = birhplace;
 	}
 	public LocationBean getDeathplace() {
 		return deathplace;
@@ -164,6 +166,18 @@ public class FamousPersonBean implements Serializable {
 	}
 	public void setCreationDate(DateTime dateAdded) {
 		this.creationDate = dateAdded;
+	}
+	public String getResourceType() {
+		return resourceType;
+	}
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	
 	

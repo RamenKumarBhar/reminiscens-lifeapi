@@ -14,6 +14,7 @@ public class ContributedMementoBean implements Serializable {
 	private String headline;
     private String text;
     private String type;
+    private String resourceType;
     private String category;
     private String source;
     private String sourceUrl;
@@ -193,6 +194,14 @@ public class ContributedMementoBean implements Serializable {
 
 	public void setEndLocation(LocationBean endLocation) {
 		this.endLocation = endLocation;
+	}
+
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
 	}
 	
     

@@ -108,7 +108,7 @@ public class Country extends Model {
     }
 
     // TODO change the model to store translations in a separated table
-    public String getNameByLocale(String name, String locale){
+    public String getNameByLocale(String locale){
 		return locale.equals("it_IT") ? this.italian_name
 				: locale.equals("es_ES") ? this.spanish_name
 						: locale.equals("fr_FR") ? this.french_name 

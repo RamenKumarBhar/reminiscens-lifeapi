@@ -27,6 +27,8 @@ public class EventBean  implements Serializable {
 	private String locale;
 	private String tags;
 	private boolean indexed;	
+    private String resourceType;
+    private String category;
 	private FuzzyDateBean startDate;
 	@JodaDateTime(format = "yyyy-MM-dd HH:mm:ss")
 	private DateTime lastUpdate;
@@ -121,5 +123,17 @@ public class EventBean  implements Serializable {
 	}
 	public void setLocation(LocationBean location) {
 		this.location = location;
+	}
+	public String getResourceType() {
+		return resourceType;
+	}
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
 	}
 }

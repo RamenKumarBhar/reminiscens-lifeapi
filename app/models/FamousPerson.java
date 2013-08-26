@@ -69,6 +69,12 @@ public class FamousPerson extends Model {
 	@Column
 	private boolean indexed;
 	
+
+    @Column (name="resource_type")
+    private String resourceType;
+    @Column
+    private String category;
+	
 	@ManyToOne
 	@MapsId
     @JoinColumn(name="birthdate_fuzzy_id")
@@ -82,7 +88,7 @@ public class FamousPerson extends Model {
 	@ManyToOne
 	@MapsId
     @JoinColumn(name="birthplace_id")
-	private Location birhplace;
+	private Location birthplace;
 	
 	@ManyToOne
 	@MapsId
@@ -248,12 +254,12 @@ public class FamousPerson extends Model {
 		this.deathDate = deathDate;
 	}
 
-	public Location getBirhplace() {
-		return birhplace;
+	public Location getBirthplace() {
+		return birthplace;
 	}
 
-	public void setBirhplace(Location birhplace) {
-		this.birhplace = birhplace;
+	public void setBirthplace(Location birhplace) {
+		this.birthplace = birhplace;
 	}
 
 	public Location getDeathplace() {
@@ -278,6 +284,22 @@ public class FamousPerson extends Model {
 
 	public void setTags(String tags) {
 		this.tags = tags;
+	}
+
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	
 }

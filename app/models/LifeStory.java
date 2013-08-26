@@ -13,6 +13,8 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import play.db.ebean.Model;
+import play.db.jpa.JPA;
+import play.db.jpa.Transactional;
 import play.i18n.Messages;
 
 @Entity
@@ -58,7 +60,7 @@ public class LifeStory extends Model {
 
 	@ManyToOne
 	@MapsId
-	@JoinColumn(name = "location_id", updatable=true, insertable=true)
+	@JoinColumn(name = "location_id", updatable = true, insertable = true)
 	private Location location;
 
 	@ManyToOne
@@ -68,12 +70,12 @@ public class LifeStory extends Model {
 
 	@ManyToOne
 	@MapsId
-	@JoinColumn(name = "fuzzy_startdate", updatable=true, insertable=true)
+	@JoinColumn(name = "fuzzy_startdate", updatable = true, insertable = true)
 	private FuzzyDate startDate;
 
 	@ManyToOne
 	@MapsId
-	@JoinColumn(name = "fuzzy_enddate", updatable=true, insertable=true)
+	@JoinColumn(name = "fuzzy_enddate", updatable = true, insertable = true)
 	private FuzzyDate endDate;
 
 	@OneToMany(mappedBy = "lifeStory", cascade = CascadeType.ALL)
@@ -100,24 +102,24 @@ public class LifeStory extends Model {
 		FuzzyDate end = lifestory.getEndDate();
 		Location place = lifestory.getLocation();
 		String storyLang = lifestory.getLocale();
-		
-		if (start!=null)
+
+		if (start != null)
 			start.setLocale(storyLang);
-		
-		if (end!=null) 
+
+		if (end != null)
 			end.setLocale(storyLang);
-		
-		if (place!=null)
+
+		if (place != null)
 			place.setLocale(storyLang);
-		
+
 		// we need at least a "start"
 		lifestory.setStartDate(FuzzyDate.createOrUpdateIfNotExist(start));
 		if (end != null) {
-			lifestory.setEndDate(FuzzyDate.createOrUpdateIfNotExist(end));	
+			lifestory.setEndDate(FuzzyDate.createOrUpdateIfNotExist(end));
 		}
-		
+
 		lifestory.setLocation(Location.createOrUpdateIfNotExist(place));
-		
+
 		// 2. Save the new life story
 		lifestory.setSynced(true);
 		lifestory.setCreationDate(DateTime.now());
@@ -166,7 +168,7 @@ public class LifeStory extends Model {
 		lifestory.refresh();
 		return lifestory;
 	}
-	
+
 	public static void delete(Long id) {
 		find.ref(id).delete();
 	}
@@ -202,35 +204,34 @@ public class LifeStory extends Model {
 		}
 		return lifeStories;
 	}
-	
 
 	public static List<LifeStory> readByPersonByDecade(Long personId,
 			Long decade) {
 		// TODO change to a specialized query
 		List<Participation> participationList = Participation
-			.participationByPersonProtagonist(personId);
-//		find.where()
-//			.eq("participationList.person.personId", personId)
-//			.or(		
-//		
-//		
+				.participationByPersonProtagonist(personId);
+		// find.where()
+		// .eq("participationList.person.personId", personId)
+		// .or(
+		//
+		//
 		List<LifeStory> lifeStories = new ArrayList<LifeStory>();
-		for (int i = 0 ; i < participationList.size(); i++) {
+		for (int i = 0; i < participationList.size(); i++) {
 			Participation participation = participationList.get(i);
 			LifeStory ls = participation.getLifeStory();
 			FuzzyDate d = ls.getStartDate();
-			
+
 			Long fuzzydecade = d.getDecade();
 			Long year = d.getYear();
 			DateTime exact = d.getExactDate();
-			
+
 			if (exact != null) {
 				year = new Long(exact.getYear());
 			} else if (fuzzydecade != null) {
 				year = fuzzydecade;
 			}
-			
-			if (year >= decade && year < (decade+10)) {
+
+			if (year >= decade && year < (decade + 10)) {
 				lifeStories.add(ls);
 			}
 		}
@@ -438,38 +439,161 @@ public class LifeStory extends Model {
 		try {
 			fuzzyBirth.setExactDate(birthdate);
 		} catch (ParseException e) {
-			// TODO change to stop user from being created if no birthdate is provided
+			// TODO change to stop user from being created if no birthdate is
+			// provided
 			e.printStackTrace();
 		}
 		FuzzyDate.createOrUpdateIfNotExist(fuzzyBirth);
 		fuzzyBirth.refresh();
 		birth.setStartDate(fuzzyBirth);
-		
+
 		City birthPlace = user.getPerson().getBirthplace();
 		Location loc = new Location();
 		loc.setCity(birthPlace);
 		Location.createOrUpdateIfNotExist(loc);
 		loc.refresh();
 		birth.setLocation(loc);
-		
+
 		birth.save();
 		birth.refresh();
-		
+
 		Participation part = new Participation();
 		part.setContributorId(user.getUserId());
 		part.setProtagonist(true);
 		part.setPerson(user.getPerson());
 		part.setLifeStory(birth);
-		birth.addParticipant(part); 
+		birth.addParticipant(part);
 	}
 
+	@Transactional
+	public static List<Long> getDecadesByPerson(Long personId) {
+
+		EntityManager em = JPA.em();
+		/*
+		 * select distinct d.decade from Person p, Participant part, Life_Event
+		 * le, Fuzzy_Date d where p.person_id = part.person_id and
+		 * part.life_event_id = le.life_event_id and le.fuzzy_startdate =
+		 * d.fuzzy_date_id and p.person_id = 3;
+		 */
+		String query = "select distinct d.decade from Person p, Participant part, LifeStory l, FuzzyDate d"
+				+ "where p.personId = part.personId"
+				+ "and part.lifeStoryId = le.lifeStoryId"
+				+ "and l.startDate.fuzzyDateId = d.fuzzyDateId"
+				+ "and p.personId =" + personId;
+		Query q = em.createQuery(query);
+		@SuppressWarnings("unchecked")
+		List<Long> decades = q.getResultList();
+		return decades;
+	}
+
+	@Transactional
+	public static List<Long> getCitiesByPerson(Long personId) {
+
+		EntityManager em = JPA.em();
+		/*
+		 * select distinct d.decade from Person p, Participant part, Life_Event
+		 * le, Fuzzy_Date d where p.person_id = part.person_id and
+		 * part.life_event_id = le.life_event_id and le.fuzzy_startdate =
+		 * d.fuzzy_date_id and p.person_id = 3;
+		 */
+		String query = "select distinct FuzzyDate.decade from Person, Participant, LifeStory, FuzzyDate"
+				+ "where Person.personId = Participant.personId"
+				+ "and Participant.lifeStoryId = LifeStory.lifeStoryId"
+				+ "and LifeStory.startDate.fuzzyDateId = FuzzyDate.fuzzyDateId"
+				+ "and Person.personId =" + personId;
+		Query q = em.createQuery(query);
+		@SuppressWarnings("unchecked")
+		List<Long> decades = q.getResultList();
+		return decades;
+	}
+
+	@Transactional
+	public static List<Location> getLocationNamesByDecade(Long personId,
+			Long decade) {
+
+		EntityManager em = JPA.em();
+		/*
+		 * select distinct d.decade from Person p, Participant part, Life_Event
+		 * le, Fuzzy_Date d where p.person_id = part.person_id and
+		 * part.life_event_id = le.life_event_id and le.fuzzy_startdate =
+		 * d.fuzzy_date_id and p.person_id = 3;
+		 */
+		String query = "select Location"
+				+ "from Person, Participant, LifeStory, FuzzyDate, Location"
+				+ "where Person.personId = Participant.personId"
+				+ "and Participant.lifeStoryId = LifeStory.lifeStoryId"
+				+ "and LifeStory.startDate.fuzzyDateId = FuzzyDate.fuzzyDateId"
+				+ "and LifeStory.location.locationId = Location.locationId"
+				+ "and Person.personId =" + personId + "and Location.decade ="
+				+ decade;
+		Query q = em.createQuery(query);
+		@SuppressWarnings("unchecked")
+		List<Location> decades = q.getResultList();
+		return decades;
+	}
+
+	// TODO replace with an optimized query
 	public static ArrayList<Long> getDecades(List<LifeStory> stories) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Long> decades = new ArrayList<Long>();
+		if (stories != null) {
+			for (LifeStory lifeStory : stories) {
+				FuzzyDate d = lifeStory.getStartDate();
+				Long decade = d != null ? d.getDecade() : null;
+				if (decade != null && !decades.contains(decade))
+					decades.add(decade);
+			}
+		}
+		return decades;
 	}
 
 	public static ArrayList<Long> getCities(List<LifeStory> stories) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Long> cities = new ArrayList<Long>();
+		if (stories != null) {
+			for (LifeStory lifeStory : stories) {
+				City city = lifeStory.getLocation().getCity();
+				Long cityId = null;
+
+				if (city != null) {
+					cityId = city.getCityId();
+					if (!cities.contains(cityId)) {
+						cities.add(cityId);
+					}
+				}
+			}
+		}
+		return cities;
+	}
+
+	public static ArrayList<Location> getLocations(List<LifeStory> stories) {
+		ArrayList<Location> locations = new ArrayList<Location>();
+		if (stories != null) {
+			for (LifeStory lifeStory : stories) {
+				Location location = lifeStory.getLocation();
+				if (location != null) {
+					if (!locations.contains(location)) {
+						locations.add(location);
+					}
+				}
+			}
+		}
+		return locations;
+	}
+
+	public static ArrayList<Location> getLocationsByDecade(
+			List<LifeStory> stories, Long decade) {
+		ArrayList<Location> locations = new ArrayList<Location>();
+		if (stories != null) {
+			for (LifeStory lifeStory : stories) {
+				Location location = lifeStory.getLocation();
+				FuzzyDate sDate = lifeStory.getStartDate();
+				if (location != null && sDate != null
+						&& sDate.getDecade() == decade) {
+					if (!locations.contains(location)) {
+						locations.add(location);
+					}
+				}
+			}
+		}
+		return locations;
 	}
 }

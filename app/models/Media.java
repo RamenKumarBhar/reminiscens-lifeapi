@@ -71,6 +71,11 @@ public class Media extends Model {
 	@Column
 	private boolean indexed;
 
+    @Column (name="resource_type")
+    private String resourceType;
+    @Column
+    private String category;
+
 	public static Model.Finder<Long, Media> find = new Model.Finder<Long, Media>(
 			Long.class, Media.class);
 
@@ -205,6 +210,22 @@ public class Media extends Model {
 
 	public void setIndexed(boolean indexed) {
 		this.indexed = indexed;
+	}
+
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 }

@@ -32,9 +32,7 @@ import play.libs.F.*;
 import play.mvc.Result;
 import pojos.FileBean;
 
-import static play.test.Helpers.*;
 import static org.fest.assertions.Assertions.*;
-import controllers.routes;
 
 public class IntegrationTest {
 
