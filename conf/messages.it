@@ -3,6 +3,8 @@
 # --- reminiscens
 reminiscens.birth.headline = Nascita
 reminiscens.birth.text = La storia della mia nascita
+reminiscens.context.person.title=Collezione contestuale per i riccordi di
+reminiscens.context.person.subtitle=Collezione di contenuto storico per la stimulazione dei riccordi di
 
 # --- Constraints
 constraint.required=Required

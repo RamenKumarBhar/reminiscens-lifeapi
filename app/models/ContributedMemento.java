@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
-
-import com.avaje.ebean.Expression;
 import com.avaje.ebean.ExpressionList;
 
 import enums.MementoCategory;
@@ -24,7 +22,7 @@ public class ContributedMemento extends Model {
 	
 	@Id
 	@GeneratedValue
-    @Column(name="contributed_contributedMemento_id")
+    @Column(name="contributed_memento_id")
     private Long contributedMementoId;
     @Column
     private String headline;
@@ -300,7 +298,7 @@ public class ContributedMemento extends Model {
 			List<LocationMinimalBean> locations, String level,
 			int itemsPerLevel) {
 		
-		List<ContributedMemento> result = null;
+		List<ContributedMemento> result = new ArrayList<ContributedMemento>();
 		ExpressionList<ContributedMemento> el = find.where();
 		
 		if (level.equals("WORLD")) {
@@ -309,7 +307,7 @@ public class ContributedMemento extends Model {
 				.eq("startDate.decade",decade)
 				.orderBy("rand()")
 				.setMaxRows(itemsPerLevel);
-				result = el.findList();
+				result.addAll(el.findList());
 			// TODO find a way to exclude the list of locations passed as argument if the level is WORLD
 			//	    	el.raw("CONCAT(firstname,' ',lastname) = ?",fullname);
 //			List<String> countries = new ArrayList<String>();
@@ -338,12 +336,11 @@ public class ContributedMemento extends Model {
 			el.eq("locale", locale)
 			.eq("category", category.toString())
 			.eq("startDate.decade",decade)
-			.in("location.country", countries)
+			.in("startLocation.country", countries)
 			.orderBy("rand()")
-			.setMaxRows(itemsPerLevel);			
-			result = el.findList();
+			.setMaxRows(itemsPerLevel);	
+			result.addAll(el.findList());
 		} else if (level.equals("REGION")) {
-			List<ContributedMemento> tempResult = new ArrayList<ContributedMemento>();;
 			for (LocationMinimalBean loc : locations) {
 				el.eq("locale", locale)
 				.eq("category", category.toString())
@@ -351,21 +348,17 @@ public class ContributedMemento extends Model {
 				
 				String country = loc.getCountry();
 				if (country != null && !country.isEmpty()) {
-					el.eq("location.country", country);
+					el.eq("startLocation.country", country);
 					String region = loc.getRegion();
 					if (region != null && !region.isEmpty()) {
-						el.eq("location.region", region);
+						el.eq("startLocation.region", region);
 					}
 				}
 				el.orderBy("rand()")
-				.setMaxRows(itemsPerLevel);			
-				tempResult.addAll(el.findList());
-			}
-			if (!tempResult.isEmpty()) {
-				result = tempResult;
+				.setMaxRows(itemsPerLevel);		
+				result.addAll(el.findList());
 			}
 		}
-
 		return result;
 	}
 }

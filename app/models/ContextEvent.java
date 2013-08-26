@@ -24,6 +24,8 @@ public class ContextEvent extends Model {
 	@Column
 	private String level; // 'WORLD, COUNTRY, REGION' 
 	@Column
+	private Long decade; 
+	@Column
 	private String type; // 'VIDEO,IMAGE,AUDIO,TEXT'
 	@Column
 	private String category; // 'PICTURES,SONG,PEOPLE,STORY,FILM,TV,ARTWORK,BOOK,OBJECT' ,
@@ -39,7 +41,7 @@ public class ContextEvent extends Model {
 
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "event_id", updatable = false, insertable = false)
+	@JoinColumn(name = "event_id", updatable = true, insertable = true)
 	private Event event;
 
 	public ContextEvent(Event event, Context context) {
@@ -168,6 +170,14 @@ public class ContextEvent extends Model {
 
 	public void setDetailViews(Long detailViews) {
 		this.detailViews = detailViews;
+	}
+
+	public Long getDecade() {
+		return decade;
+	}
+
+	public void setDecade(Long decade) {
+		this.decade = decade;
 	}
 
 }

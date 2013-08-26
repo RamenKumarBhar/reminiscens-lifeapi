@@ -22,7 +22,9 @@ public class ContextPeople extends Model {
     @Column(name="context_famous_id")
     private Long contextItemId;
 	@Column
-	private String level; // 'WORLD, COUNTRY, REGION' 
+	private String level; // 'WORLD, COUNTRY, REGION'
+	@Column
+	private Long decade;  
 	@Column
 	private String type; // 'VIDEO,IMAGE,AUDIO,TEXT'
 	@Column
@@ -39,7 +41,7 @@ public class ContextPeople extends Model {
 
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "famous_id", updatable = false, insertable = false)
+	@JoinColumn(name = "famous_id", updatable = true, insertable = true)
 	private FamousPerson famousPerson;
 
 	public ContextPeople(FamousPerson famousPerson, Context context) {
@@ -168,6 +170,14 @@ public class ContextPeople extends Model {
 
 	public void setDetailViews(Long detailViews) {
 		this.detailViews = detailViews;
+	}
+
+	public Long getDecade() {
+		return decade;
+	}
+
+	public void setDecade(Long decade) {
+		this.decade = decade;
 	}
 
 }

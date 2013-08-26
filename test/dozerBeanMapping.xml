@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+	<configuration>
+		<date-format>yyyy-MM-dd HH:mm:ss</date-format>
+		<copy-by-references>
+			<copy-by-reference>
+       org.joda.time.DateTime
+     </copy-by-reference>
+		</copy-by-references>
+	</configuration>
+
+	<!-- mappings for user -->
+	<mapping map-null="false" map-empty-string="false">
+		<class-a>models.User</class-a>
+		<class-b>pojos.UserBean</class-b>
+		<field>
+			<a>active</a>
+			<b>active</b>
+		</field>
+
+	</mapping>
+
+	<!-- <mapping> <class-a>net.comdynamics.myapp.Product</class-a> <class-b>net.comdynamics.myapp.ProductOffering</class-b> 
+		<field> <a>name</a> <b>nameOutput</b> </field> <field> <a>description</a> 
+		<b>descriptionOutput</b> </field> <field> <a>price</a> <b>priceOnline</b> 
+		</field> </mapping> -->
+
+</mappings>

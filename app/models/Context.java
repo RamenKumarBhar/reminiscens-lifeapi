@@ -105,6 +105,7 @@ public class Context extends Model {
     	// 4. save contextEvents
     	// TODO implement save one by one if cascade does not work
         context.save();
+        context.refresh();
     }
     
     public static Context read(Long contextId) {
@@ -124,10 +125,11 @@ public class Context extends Model {
         find.ref(id).update();
     }
 
+    // TODO change model to keep the official context with a "flag"
     public static Context findByPerson(Long personId) {
-    	Context contextOfPerson = find.where()
-				.eq("personForId", personId).findUnique();
-		return contextOfPerson;
+    	List<Context> contextOfPerson = find.where()
+				.eq("personForId", personId).findList();
+		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
     }
     
     public static List<Context> findByCity(Long cityId) {
