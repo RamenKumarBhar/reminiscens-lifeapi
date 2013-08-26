@@ -308,25 +308,6 @@ public class ContributedMemento extends Model {
 				.orderBy("rand()")
 				.setMaxRows(itemsPerLevel);
 				result.addAll(el.findList());
-			// TODO find a way to exclude the list of locations passed as argument if the level is WORLD
-			//	    	el.raw("CONCAT(firstname,' ',lastname) = ?",fullname);
-//			List<String> countries = new ArrayList<String>();
-//			List<String> cities  = new ArrayList<String>();
-//			List<String> regions  = new ArrayList<String>();
-//			for (LocationMinimalBean loc : locations) {
-//				String country = loc.getCountry();
-//				String city = loc.getCity();
-//				String region = loc.getRegion();
-//				if (country != null && !country.isEmpty())
-//					countries.add(country);
-//				if (city != null && !city.isEmpty())
-//					cities.add(city);
-//				if (region != null && !region.isEmpty())
-//					regions.add(region);
-//			}
-//			
-//			Expression exp = el.in("location.country", countries);
-//			
 		} else if (level.equals("COUNTRY")) {
 			List<String> countries = new ArrayList<String>();
 			for (LocationMinimalBean loc : locations) {

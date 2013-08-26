@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -7,7 +8,10 @@ import javax.persistence.*;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.avaje.ebean.ExpressionList;
+
 import play.db.ebean.Model;
+import pojos.LocationMinimalBean;
 
 @Entity
 @Table(name="Event")
@@ -29,7 +33,7 @@ public class Event extends Model {
 	@Column
 	private String text;
 
-	@Column(name = "event_type")
+	@Column(name = "type")
 	private String type;
 
 	@Column
@@ -214,5 +218,54 @@ public class Event extends Model {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public static List<Event> readForContext(String locale, String category,
+			Long decade, List<LocationMinimalBean> locations, String level,
+			int itemsPerLevel) {
+
+		List<Event> result = new ArrayList<Event>();
+		ExpressionList<Event> el = find.where();
+		
+		if (level.equals("WORLD")) {
+			el.eq("locale", locale)
+				.eq("category", category.toString())
+				.eq("startDate.decade",decade)
+				.orderBy("rand()")
+				.setMaxRows(itemsPerLevel);
+				result.addAll(el.findList());
+		} else if (level.equals("COUNTRY")) {
+			List<String> countries = new ArrayList<String>();
+			for (LocationMinimalBean loc : locations) {
+				String country = loc.getCountry();
+				countries.add(country);
+			}
+			el.eq("locale", locale)
+			.eq("category", category.toString())
+			.eq("startDate.decade",decade)
+			.in("location.country", countries)
+			.orderBy("rand()")
+			.setMaxRows(itemsPerLevel);	
+			result.addAll(el.findList());
+		} else if (level.equals("REGION")) {
+			for (LocationMinimalBean loc : locations) {
+				el.eq("locale", locale)
+				.eq("category", category.toString())
+				.eq("startDate.decade",decade);
+				
+				String country = loc.getCountry();
+				if (country != null && !country.isEmpty()) {
+					el.eq("location.country", country);
+					String region = loc.getRegion();
+					if (region != null && !region.isEmpty()) {
+						el.eq("location.region", region);
+					}
+				}
+				el.orderBy("rand()")
+				.setMaxRows(itemsPerLevel);		
+				result.addAll(el.findList());
+			}
+		}
+		return result;
 	}
 }

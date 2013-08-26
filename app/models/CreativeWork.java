@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -7,7 +8,12 @@ import javax.persistence.*;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.avaje.ebean.ExpressionList;
+
+import enums.MementoCategory;
+
 import play.db.ebean.Model;
+import pojos.LocationMinimalBean;
 
 @Entity
 @Table(name = "Works")
@@ -235,4 +241,38 @@ public class CreativeWork extends Model {
 		this.category = category;
 	}
 
+	public static List<CreativeWork> readForContext(String locale,
+			MementoCategory category, Long decade,
+			List<LocationMinimalBean> locations, String level,
+			int itemsPerLevel) {
+
+		List<CreativeWork> result = new ArrayList<CreativeWork>();
+		ExpressionList<CreativeWork> el = find.where();
+		
+		if (level.equals("WORLD")) {
+			el.eq("locale", locale)
+				.eq("category", category.toString())
+				.eq("startDate.decade",decade)
+				.orderBy("rand()")
+				.setMaxRows(itemsPerLevel);
+				result.addAll(el.findList());
+		} else if (level.equals("COUNTRY")) {
+			List<String> countries = new ArrayList<String>();
+			String countryField = Country.getFieldForLocale(locale);
+			for (LocationMinimalBean loc : locations) {
+				String country = loc.getCountry();
+				countries.add(country);
+			}
+			el.eq("locale", locale)
+			.eq("category", category.toString())
+			.eq("startDate.decade",decade)
+			.in("authorCountry."+countryField, countries)
+			.orderBy("rand()")
+			.setMaxRows(itemsPerLevel);	
+			result.addAll(el.findList());
+		} else if (level.equals("REGION")) {
+			// TODO
+		}
+		return result;
+	}
 }

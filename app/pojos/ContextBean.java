@@ -26,6 +26,10 @@ public class ContextBean  implements Serializable {
 	private Long dateRatio;
 //	private List<ContextContentBean> publicContextContent;
 	private List<ContextContributedBean> contributedMementoList;
+	private List<ContextMediaBean> mediaList;
+	private List<ContextEventBean> eventList;
+	private List<ContextCreativeWorkBean> creativeWorkList;
+	private List<ContextPeopleBean> famousPeopleList;
 	public Long getContextId() {
 		return contextId;
 	}
@@ -86,5 +90,29 @@ public class ContextBean  implements Serializable {
 	}
 	public void setContributedMementoList(List<ContextContributedBean> contributedList) {
 		this.contributedMementoList = contributedList;
+	}
+	public List<ContextMediaBean> getMediaList() {
+		return mediaList;
+	}
+	public void setMediaList(List<ContextMediaBean> mediaList) {
+		this.mediaList = mediaList;
+	}
+	public List<ContextEventBean> getEventList() {
+		return eventList;
+	}
+	public void setEventList(List<ContextEventBean> eventList) {
+		this.eventList = eventList;
+	}
+	public List<ContextCreativeWorkBean> getCreativeWorkList() {
+		return creativeWorkList;
+	}
+	public void setCreativeWorkList(List<ContextCreativeWorkBean> creativeWorkList) {
+		this.creativeWorkList = creativeWorkList;
+	}
+	public List<ContextPeopleBean> getFamousPeopleList() {
+		return famousPeopleList;
+	}
+	public void setFamousPeopleList(List<ContextPeopleBean> famousPeopleList) {
+		this.famousPeopleList = famousPeopleList;
 	}	
 }

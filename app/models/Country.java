@@ -236,4 +236,13 @@ public class Country extends Model {
 	public void setEnglish_name(String english_name) {
 		this.english_name = english_name;
 	}
+
+	public static String getFieldForLocale(String locale) {
+		return locale.equals("it_IT") ? "italian_name" 
+						: locale.equals("es_ES") ? "spanish_name"
+								: locale.equals("fr_FR") ? "french_name" 
+										: locale.equals("en_US") ? "english_name" 
+												: locale.equals("pt_PT") ? "portuguese_name" 
+														: locale.equals("de_DE") ? "german_name" : "short_name";
+	}
 }

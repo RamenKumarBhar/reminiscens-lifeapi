@@ -1,5 +1,5 @@
 package enums;
 
 public enum MementoCategory {
-    STORY, PICTURE, PEOPLE, SONG, AUDIO, FILM
+    STORY, PICTURE, PEOPLE, SONG, AUDIO, FILM, TV
 }

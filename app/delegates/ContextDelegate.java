@@ -20,9 +20,12 @@ import models.ContextEvent;
 import models.ContextMedia;
 import models.ContextPeople;
 import models.ContributedMemento;
+import models.CreativeWork;
+import models.Event;
 import models.FuzzyDate;
 import models.LifeStory;
 import models.Location;
+import models.Media;
 import models.Person;
 import models.User;
 import play.Play;
@@ -102,7 +105,12 @@ public class ContextDelegate {
 		}
 
 		/*
-		 * 3. Create the new context object
+		 * 3. Disable old context for person
+		 */
+		Context.disableContextsForPerson(personId);
+
+		/*
+		 * 4. Create the new context object
 		 */
 		Context newContext = new Context();
 		newContext.setCityFor(null);
@@ -116,6 +124,7 @@ public class ContextDelegate {
 				.get("reminiscens.context.person.subtitle")
 				+ " "
 				+ person.getFirstname() + " " + person.getLastname());
+		newContext.setEnabled(true);
 
 		// save the newly created context
 		Context.createObject(newContext);
@@ -147,10 +156,11 @@ public class ContextDelegate {
 		newContext.setCreativeWorkList(creativeWorkContent);
 		newContext.setFamousPeopleList(peopleContent);
 
-//		newContext.update();
-//		newContext.refresh();
+		// newContext.update();
+		// newContext.refresh();
 
-		ContextBean newContextBean = PlayDozerMapper.getInstance().map(newContext, ContextBean.class);
+		ContextBean newContextBean = PlayDozerMapper.getInstance().map(
+				newContext, ContextBean.class);
 		return newContextBean;
 	}
 
@@ -164,22 +174,186 @@ public class ContextDelegate {
 	private List<ContextCreativeWork> getCreativeWorkContextList(
 			Map<Long, List<LocationMinimalBean>> decadesLocationsMap,
 			String locale, Context newContext) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Long> decades = decadesLocationsMap.keySet();
+		List<ContextCreativeWork> content = new ArrayList<ContextCreativeWork>();
+		int itemsPerLevel = Play.application().configuration()
+				.getInt("context.algorithm.item.count");
+		if (itemsPerLevel <= 0) {
+			itemsPerLevel = 1;
+		}
+
+		for (Long decade : decades) {
+			for (MementoCategory category : MementoCategory.values()) {
+				// 1. read 1 random element related only to the decade
+				List<LocationMinimalBean> locations = decadesLocationsMap
+						.get(decade);
+				List<CreativeWork> worldLevelList = CreativeWork
+						.readForContext(locale, category, decade, locations,
+								"WORLD", itemsPerLevel);
+				List<CreativeWork> countryLevelList = CreativeWork
+						.readForContext(locale, category, decade, locations,
+								"COUNTRY", itemsPerLevel);
+				List<CreativeWork> regionLevelList = CreativeWork
+						.readForContext(locale, category, decade, locations,
+								"REGION", itemsPerLevel);
+
+				for (CreativeWork contributed : worldLevelList) {
+					ContextCreativeWork contextItem = new ContextCreativeWork(
+							contributed, newContext);
+					contextItem.setLevel("WORLD");
+					contextItem.setDecade(decade);
+					contextItem.setCategory(contributed.getCategory());
+					contextItem.setType(contributed.getResourceType());
+					ContextCreativeWork.create(contextItem);
+					content.add(contextItem);
+
+				}
+				for (CreativeWork contributed : countryLevelList) {
+					ContextCreativeWork contextItem = new ContextCreativeWork(
+							contributed, newContext);
+					contextItem.setLevel("COUNTRY");
+					contextItem.setDecade(decade);
+					contextItem.setCategory(contributed.getCategory());
+					contextItem.setType(contributed.getResourceType());
+					ContextCreativeWork.create(contextItem);
+					content.add(contextItem);
+				}
+				for (CreativeWork contributed : regionLevelList) {
+					ContextCreativeWork contextItem = new ContextCreativeWork(
+							contributed, newContext);
+					contextItem.setLevel("REGION");
+					contextItem.setDecade(decade);
+					contextItem.setCategory(contributed.getCategory());
+					contextItem.setType(contributed.getResourceType());
+					ContextCreativeWork.create(contextItem);
+					content.add(contextItem);
+				}
+			}
+		}
+		return content;
 	}
 
 	private List<ContextEvent> getEventContextList(
 			Map<Long, List<LocationMinimalBean>> decadesLocationsMap,
 			String locale, Context newContext) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Long> decades = decadesLocationsMap.keySet();
+		List<ContextEvent> content = new ArrayList<ContextEvent>();
+		int itemsPerLevel = Play.application().configuration()
+				.getInt("context.algorithm.item.count");
+		if (itemsPerLevel <= 0) {
+			itemsPerLevel = 1;
+		}
+
+		String category = "STORY";
+		for (Long decade : decades) {
+			// 1. read 1 random element related only to the decade
+			List<LocationMinimalBean> locations = decadesLocationsMap
+					.get(decade);
+			List<Event> worldLevelList = Event.readForContext(locale, category,
+					decade, locations, "WORLD", itemsPerLevel);
+			List<Event> countryLevelList = Event.readForContext(locale,
+					category, decade, locations, "COUNTRY", itemsPerLevel);
+			List<Event> regionLevelList = Event.readForContext(locale,
+					category, decade, locations, "REGION", itemsPerLevel);
+
+			for (Event contributed : worldLevelList) {
+				ContextEvent contextItem = new ContextEvent(contributed,
+						newContext);
+				contextItem.setLevel("WORLD");
+				contextItem.setDecade(decade);
+				contextItem.setCategory(contributed.getCategory());
+				contextItem.setType(contributed.getResourceType());
+				ContextEvent.create(contextItem);
+				content.add(contextItem);
+
+			}
+			for (Event contributed : countryLevelList) {
+				ContextEvent contextItem = new ContextEvent(contributed,
+						newContext);
+				contextItem.setLevel("COUNTRY");
+				contextItem.setDecade(decade);
+				contextItem.setCategory(contributed.getCategory());
+				contextItem.setType(contributed.getResourceType());
+				ContextEvent.create(contextItem);
+				content.add(contextItem);
+			}
+			for (Event contributed : regionLevelList) {
+				ContextEvent contextItem = new ContextEvent(contributed,
+						newContext);
+				contextItem.setLevel("REGION");
+				contextItem.setDecade(decade);
+				contextItem.setCategory(contributed.getCategory());
+				contextItem.setType(contributed.getResourceType());
+				ContextEvent.create(contextItem);
+				content.add(contextItem);
+			}
+		}
+
+		return content;
 	}
 
 	private List<ContextMedia> getMediaContextList(
 			Map<Long, List<LocationMinimalBean>> decadesLocationsMap,
 			String locale, Context newContext) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Set<Long> decades = decadesLocationsMap.keySet();
+		List<ContextMedia> content = new ArrayList<ContextMedia>();
+		int itemsPerLevel = Play.application().configuration()
+				.getInt("context.algorithm.item.count");
+		if (itemsPerLevel <= 0) {
+			itemsPerLevel = 1;
+		}
+
+		for (Long decade : decades) {
+			for (MementoCategory category : MementoCategory.values()) {
+				// 1. read 1 random element related only to the decade
+				List<LocationMinimalBean> locations = decadesLocationsMap
+						.get(decade);
+				List<Media> worldLevelList = Media
+						.readForContext(locale, category, decade, locations,
+								"WORLD", itemsPerLevel);
+				List<Media> countryLevelList = Media
+						.readForContext(locale, category, decade, locations,
+								"COUNTRY", itemsPerLevel);
+				List<Media> regionLevelList = Media
+						.readForContext(locale, category, decade, locations,
+								"REGION", itemsPerLevel);
+
+				for (Media contributed : worldLevelList) {
+					ContextMedia contextItem = new ContextMedia(
+							contributed, newContext);
+					contextItem.setLevel("WORLD");
+					contextItem.setDecade(decade);
+					contextItem.setCategory(contributed.getCategory());
+					contextItem.setType(contributed.getResourceType());
+					ContextMedia.create(contextItem);
+					content.add(contextItem);
+
+				}
+				for (Media contributed : countryLevelList) {
+					ContextMedia contextItem = new ContextMedia(
+							contributed, newContext);
+					contextItem.setLevel("COUNTRY");
+					contextItem.setDecade(decade);
+					contextItem.setCategory(contributed.getCategory());
+					contextItem.setType(contributed.getResourceType());
+					ContextMedia.create(contextItem);
+					content.add(contextItem);
+				}
+				for (Media contributed : regionLevelList) {
+					ContextMedia contextItem = new ContextMedia(
+							contributed, newContext);
+					contextItem.setLevel("REGION");
+					contextItem.setDecade(decade);
+					contextItem.setCategory(contributed.getCategory());
+					contextItem.setType(contributed.getResourceType());
+					ContextMedia.create(contextItem);
+					content.add(contextItem);
+				}
+			}
+		}
+
+		return content;
 	}
 
 	private List<ContextContributed> getContributedContextList(
@@ -308,10 +482,11 @@ public class ContextDelegate {
 							.configuration().getString("default.language") : c
 							.getLocale();
 
-// 					TODO manage localization of locations
-//					String localizedCountry = Country.readByName(c.getCountry()).getNameByLocale(locale);
-//					String localizedCity = Country
-							
+					// TODO manage localization of locations
+					// String localizedCountry =
+					// Country.readByName(c.getCountry()).getNameByLocale(locale);
+					// String localizedCity = Country
+
 					LocationMinimalBean loc = new LocationMinimalBean(
 							c.getCountry(), c.getRegion(), c.getCityName(),
 							locale);
