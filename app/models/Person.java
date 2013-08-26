@@ -97,14 +97,12 @@ public class Person extends Model {
     public static Person read(Long id){
         return find.byId(id);
     }
-    
 
     public static Person searchByFullname(String fullname){
     	ExpressionList<Person> el = find.where();
     	el.raw("CONCAT(firstname,' ',lastname) = ?",fullname);
         return el.findUnique();
     }
-    
     
 	/**
 	 * @return the personId

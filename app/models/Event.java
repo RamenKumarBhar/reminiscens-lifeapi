@@ -66,6 +66,10 @@ public class Event extends Model {
 
 	@Column
 	private boolean indexed;	
+    @Column (name="resource_type")
+    private String resourceType;
+    @Column
+    private String category;
 	
 	public static Model.Finder<Long,Event> find = new Model.Finder<Long, Event>(
             Long.class,Event.class
@@ -194,5 +198,21 @@ public class Event extends Model {
 
 	public void setIndexed(boolean indexed) {
 		this.indexed = indexed;
+	}
+
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 }

@@ -1,10 +1,17 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
 
+import com.avaje.ebean.Expression;
+import com.avaje.ebean.ExpressionList;
+
+import enums.MementoCategory;
+
 import play.db.ebean.Model;
+import pojos.LocationMinimalBean;
 
 @Entity
 @Table(name = "Contributed_Memento")
@@ -25,6 +32,8 @@ public class ContributedMemento extends Model {
     private String text;
     @Column
     private String type;
+    @Column (name="resource_type")
+    private String resourceType;
     @Column
     private String category;
     @Column
@@ -276,5 +285,87 @@ public class ContributedMemento extends Model {
 
 	public void setAddedBy(String addedBy) {
 		this.addedBy = addedBy;
+	}
+
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	public static List<ContributedMemento> readForContext(String locale,
+			MementoCategory category, Long decade,
+			List<LocationMinimalBean> locations, String level,
+			int itemsPerLevel) {
+		
+		List<ContributedMemento> result = null;
+		ExpressionList<ContributedMemento> el = find.where();
+		
+		if (level.equals("WORLD")) {
+			el.eq("locale", locale)
+				.eq("category", category.toString())
+				.eq("startDate.decade",decade)
+				.orderBy("rand()")
+				.setMaxRows(itemsPerLevel);
+				result = el.findList();
+			// TODO find a way to exclude the list of locations passed as argument if the level is WORLD
+			//	    	el.raw("CONCAT(firstname,' ',lastname) = ?",fullname);
+//			List<String> countries = new ArrayList<String>();
+//			List<String> cities  = new ArrayList<String>();
+//			List<String> regions  = new ArrayList<String>();
+//			for (LocationMinimalBean loc : locations) {
+//				String country = loc.getCountry();
+//				String city = loc.getCity();
+//				String region = loc.getRegion();
+//				if (country != null && !country.isEmpty())
+//					countries.add(country);
+//				if (city != null && !city.isEmpty())
+//					cities.add(city);
+//				if (region != null && !region.isEmpty())
+//					regions.add(region);
+//			}
+//			
+//			Expression exp = el.in("location.country", countries);
+//			
+		} else if (level.equals("COUNTRY")) {
+			List<String> countries = new ArrayList<String>();
+			for (LocationMinimalBean loc : locations) {
+				String country = loc.getCountry();
+				countries.add(country);
+			}
+			el.eq("locale", locale)
+			.eq("category", category.toString())
+			.eq("startDate.decade",decade)
+			.in("location.country", countries)
+			.orderBy("rand()")
+			.setMaxRows(itemsPerLevel);			
+			result = el.findList();
+		} else if (level.equals("REGION")) {
+			List<ContributedMemento> tempResult = new ArrayList<ContributedMemento>();;
+			for (LocationMinimalBean loc : locations) {
+				el.eq("locale", locale)
+				.eq("category", category.toString())
+				.eq("startDate.decade",decade);
+				
+				String country = loc.getCountry();
+				if (country != null && !country.isEmpty()) {
+					el.eq("location.country", country);
+					String region = loc.getRegion();
+					if (region != null && !region.isEmpty()) {
+						el.eq("location.region", region);
+					}
+				}
+				el.orderBy("rand()")
+				.setMaxRows(itemsPerLevel);			
+				tempResult.addAll(el.findList());
+			}
+			if (!tempResult.isEmpty()) {
+				result = tempResult;
+			}
+		}
+
+		return result;
 	}
 }

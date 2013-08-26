@@ -65,6 +65,10 @@ public class CreativeWork extends Model {
 
 	@Column
 	private boolean indexed;
+    @Column (name="resource_type")
+    private String resourceType;
+    @Column
+    private String category;
 
 	@Temporal(TemporalType.DATE)
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -213,6 +217,22 @@ public class CreativeWork extends Model {
 
 	public void setLastUpdate(DateTime lastUpdate) {
 		this.lastUpdate = lastUpdate;
+	}
+
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 }
