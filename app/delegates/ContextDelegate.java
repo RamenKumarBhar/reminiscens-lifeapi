@@ -179,8 +179,7 @@ public class ContextDelegate {
 			}
 		}
 		
-		
-		return null;
+		return content;
 	}
 
 	/**
