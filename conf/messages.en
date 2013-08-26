@@ -3,6 +3,8 @@
 # --- reminiscens
 reminiscens.birth.headline = Birth
 reminiscens.birth.text = The story of my birth
+reminiscens.context.person.title=Contextual Reminiscence Collection for
+reminiscens.context.person.subtitle=Collection of historical items that stimulate the practice of reminiscence for
 
 # --- Constraints
 constraint.required=Required

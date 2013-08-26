@@ -25,7 +25,7 @@ public class ContextBean  implements Serializable {
 	private DateTime date;
 	private Long dateRatio;
 //	private List<ContextContentBean> publicContextContent;
-	private List<ContextContributedBean> contributedList;
+	private List<ContextContributedBean> contributedMementoList;
 	public Long getContextId() {
 		return contextId;
 	}
@@ -81,10 +81,10 @@ public class ContextBean  implements Serializable {
 //			List<ContextContentBean> publicContextContent) {
 //		this.publicContextContent = publicContextContent;
 //	}
-	public List<ContextContributedBean> getContributedList() {
-		return contributedList;
+	public List<ContextContributedBean> getContributedMementoList() {
+		return contributedMementoList;
 	}
-	public void setContributedList(List<ContextContributedBean> contributedList) {
-		this.contributedList = contributedList;
+	public void setContributedMementoList(List<ContextContributedBean> contributedList) {
+		this.contributedMementoList = contributedList;
 	}	
 }

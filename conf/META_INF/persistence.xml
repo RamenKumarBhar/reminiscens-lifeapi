@@ -1,17 +1,27 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-             version="2.0">
-             
-    <persistence-unit name="defaultPersistenceUnit" transaction-type="RESOURCE_LOCAL">
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <non-jta-data-source>default</non-jta-data-source>
-        <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/reminiscensdb?characterEncoding=UTF-8"/>
-            <property name="hibernate.connection.user" value="reminiscens"/>
-            <property name="hibernate.connection.password" value="reminiscens@2013"/>
-        </properties>
-    </persistence-unit>
-    
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+
+	<persistence-unit name="defaultPersistenceUnit"
+		transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<non-jta-data-source>default</non-jta-data-source>
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.connection.url"
+				value="jdbc:mysql://localhost:3306/reminiscensdb?characterEncoding=UTF-8" />
+			<property name="hibernate.connection.user" value="reminiscens" />
+			<property name="hibernate.connection.password" value="reminiscens@2013" />
+		</properties>
+	</persistence-unit>
+
+	<persistence-unit name="testUnit">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.connection.url" value="jdbc:h2:mem:play;MODE=MYSQL;INIT=RUNSCRIPT FROM '~/evolutions/default/1.sql';DB_CLOSE_DELAY=-1" />
+		</properties>
+	</persistence-unit>
 </persistence>

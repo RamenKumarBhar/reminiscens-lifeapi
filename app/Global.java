@@ -1,16 +1,17 @@
 import java.lang.reflect.Method;
 import java.text.ParseException;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
-
+import models.FuzzyDate;
+import models.LifeStory;
+import models.Location;
+import models.Memento;
 import models.SecurityRole;
 import models.User;
-
+import models.Participation;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-
-import enums.MyRoles;
-
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
@@ -32,10 +33,6 @@ import com.feth.play.module.pa.exceptions.AuthException;
 import controllers.routes;
 
 public class Global extends GlobalSettings {
-
-	
-	
-	
 	/**
 	 * Call to create the root Action of a request for a Java application. The
 	 * request and actionMethod values are passed for information.
@@ -77,6 +74,8 @@ public class Global extends GlobalSettings {
 		@SuppressWarnings("deprecation")
 		public static void insert(Application app) {
 
+			
+			
 			/*
 			 * Insert enumerated Security Roles in DB if none exist
 			 */
@@ -106,25 +105,68 @@ public class Global extends GlobalSettings {
 				auth = new MyUsernamePasswordAuthUser("First Member", person,
 						null, "first@example.com", "password",
 						"http://s3.amazonaws.com/37assets/svn/765-default-avatar.png");
-
+				
 				User user;
 				user = models.User.create(auth);
-				user.setEmailValidated(true);
-				user.setRoles(Collections.singletonList(SecurityRole
-						.findByRoleName(MyRoles.MEMBER.toString())));
-				user.setCreationDate(DateTime.now());
-				user.setLocale("it_IT");
-				user.setUsername("first.member");
 				user.setUsernameVerified(true);
 				user.setActive(true);
 				user.setEmailValidated(true);
 				user.update();
-
-				// TODO add users of other ROLES
 				// TODO add one complete timeline, with stories and mementos
+				
+				LifeStory s = new LifeStory();
+				s.setContributorId(user.getUserId());
+				s.setLocale(user.getLocale());
+				s.setHeadline("Il mio viaggio a Francia");
+				s.setText("È stata la prima volta che sono mai uscito dall'Italia, e anche il viaggio più bello della mia vita");
+				
+				Location loc = new Location();
+				loc.setCityName("Parigi");
+				loc.setCountry("Francia");
+				loc.setRegion("");
+				s.setLocation(loc);
+				
+				FuzzyDate start = new FuzzyDate();
+				FuzzyDate end = new FuzzyDate();
+				
+				try {
+					start.setExactDate(new DateTime("1980-09-02"));
+					end.setExactDate(new DateTime("1980-09-08"));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				s.setStartDate(start);
+				s.setEndDate(end);
+				
+				List<Participation> pList = new ArrayList<Participation>();
+				Participation p = new Participation();
+				p.setContributorId(user.getUserId());
+				p.setPerson(user.getPerson());
+				p.setLifeStory(s);
+				p.setProtagonist(true);
+				pList.add(p);
+				s.setParticipationList(pList);
+				
+				Memento m = new Memento();
+				m.setCategory("PICTURES");
+				m.setHeadline("Torre Eiffel");
+				m.setText("Serata un po' bruta, pero bella da vedere comunque");
+				m.setLocation(loc);
+				m.setStartDate(start);
+				m.setLifeStory(s);
+				m.setIsCover(true);
+				m.setUrl("http://data.whicdn.com/images/29636378/city-paris-photografy-torre-eiffel-vintage-Favim.com-401868_large.jpg");
+				m.setType("IMAGE");
+				List<Memento> mList = new ArrayList<Memento>();
+				mList.add(m);
+				mList.add(m);
+				
+				LifeStory.create(s);
+				s.refresh();
 			}
 		}
-
 	}
 
 	public void onStart(final Application app) {
@@ -254,74 +296,3 @@ public class Global extends GlobalSettings {
 	}
 
 }
-
-// @SuppressWarnings("rawtypes")
-// @Override
-// public Action onRequest(Request request, Method actionMethod) {
-// String play_session = request.getHeader("PLAY_SESSION");
-// Logger.debug("play session header: " + play_session);
-// if(play_session != null && !"".trim().equals(play_session)){
-// scala.collection.immutable.Map<String, String> values =
-// Session.decode(play_session);
-// if(values.isEmpty()){
-// Logger.warn("ignoring a not valid session ! : " + play_session);
-// }else{
-// try {
-// //getting the request field from anon class
-// Field requestField = request.getClass().getDeclaredField("req$2");
-// play.api.mvc.Request requestInstance = (play.api.mvc.Request)
-// requestField.get(request);
-// // getting the session field
-// Field sessionField =
-// requestInstance.getClass().getDeclaredField("session");
-// sessionField.setAccessible(true);
-// Session sessionInstance = (Session) sessionField.get(requestInstance);
-// //getting the data from the session
-// Field dataField = sessionInstance.getClass().getDeclaredField("data");
-// dataField.setAccessible(true);
-// dataField.set(sessionInstance, Session.decode(play_session));
-// //everything was ok, so we'll add the cookie to the session because maybe
-// is going to be used later
-// // Field cookiesField =
-// requestInstance.getClass().getDeclaredField("cookies");
-// // cookiesField.setAccessible(true);
-// // cookiesField.set(requestInstance,
-// Session.encodeAsCookie(play_session));
-// Logger.debug("added to the session: " + sessionInstance);
-// } catch (SecurityException e) {
-// Logger.error(e.getMessage());
-// } catch (NoSuchFieldException e) {
-// Logger.error(e.getMessage());
-// }catch (IllegalAccessException e) {
-// Logger.error(e.getMessage());
-// }
-// }
-//
-// }
-// return super.onRequest(request, actionMethod);
-// }
-
-// /**
-// * Call to create the root Action of a request for a Java application.
-// * The request and actionMethod values are passed for information.
-// *
-// * @param request The HTTP Request
-// * @param actionMethod The action method containing the user code for this
-// Action.
-// * @return The default implementation returns a raw Action calling the
-// method.
-// */
-// @SuppressWarnings("rawtypes")
-// @Override
-// public Action onRequest(Request request, Method actionMethod) {
-// return new Action.Simple() {
-// public Result call(Context ctx) throws Throwable {
-// ctx.session().clear();
-// return delegate.call(ctx);
-// }
-// };
-// }
-
-// public void onStart(Application app) {
-// InitialData.insert(app);
-// }

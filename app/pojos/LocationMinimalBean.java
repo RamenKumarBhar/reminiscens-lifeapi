@@ -1,5 +1,7 @@
 package pojos;
 
+import models.Location;
+
 public class LocationMinimalBean {
 	private String country;
 	private String city;
@@ -11,6 +13,13 @@ public class LocationMinimalBean {
 		this.region = region;
 		this.city = city;
 		this.locale = locale;
+	}
+	
+	public LocationMinimalBean(Location loc) {
+		this.country = loc.getCountry();
+		this.region = loc.getRegion();
+		this.city = loc.getCityName();
+		this.locale = loc.getLocale();
 	}
 	
 	@Override

@@ -582,12 +582,13 @@ public class LifeStory extends Model {
 	public static ArrayList<Location> getLocationsByDecade(
 			List<LifeStory> stories, Long decade) {
 		ArrayList<Location> locations = new ArrayList<Location>();
+		
 		if (stories != null) {
 			for (LifeStory lifeStory : stories) {
 				Location location = lifeStory.getLocation();
 				FuzzyDate sDate = lifeStory.getStartDate();
 				if (location != null && sDate != null
-						&& sDate.getDecade() == decade) {
+						&& sDate.getDecade().equals(decade)) {
 					if (!locations.contains(location)) {
 						locations.add(location);
 					}

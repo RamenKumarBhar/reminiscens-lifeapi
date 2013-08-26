@@ -20,7 +20,6 @@ import models.ContextEvent;
 import models.ContextMedia;
 import models.ContextPeople;
 import models.ContributedMemento;
-import models.Country;
 import models.FuzzyDate;
 import models.LifeStory;
 import models.Location;
@@ -29,6 +28,48 @@ import models.User;
 import play.Play;
 
 public class ContextDelegate {
+
+	public static ContextDelegate getInstance() {
+		return new ContextDelegate();
+	}
+
+	public ContextBean getContext(Long contextId) {
+		models.Context context = models.Context.read(contextId);
+		if (context != null) {
+			ContextBean contextBean = PlayDozerMapper.getInstance().map(
+					context, ContextBean.class);
+			return contextBean;
+		} else {
+			return null;
+		}
+	}
+
+	public ContextBean getContextForPerson(Long personId) {
+		models.Context context = models.Context.findByPerson(personId);
+		if (context != null) {
+			ContextBean contextBean = PlayDozerMapper.getInstance().map(
+					context, ContextBean.class);
+			return contextBean;
+		} else {
+			return null;
+		}
+	}
+
+	public ContextBean initContextForPersonAndDecadeAndCity(Long personId,
+			Long decade, Long cityId) throws EntityDoesNotExist,
+			NotEnoughInformation {
+		return initContext(personId, decade, cityId);
+	}
+
+	public ContextBean initContextForPersonAndDecade(Long personId, Long decade)
+			throws EntityDoesNotExist, NotEnoughInformation {
+		return initContext(personId, decade, null);
+	}
+
+	public ContextBean initContextForPerson(Long personId)
+			throws EntityDoesNotExist, NotEnoughInformation {
+		return initContext(personId, null, null);
+	}
 
 	private ContextBean initContext(Long personId, Long decade, Long cityId)
 			throws EntityDoesNotExist, NotEnoughInformation {
@@ -60,7 +101,6 @@ public class ContextDelegate {
 			decadesLocationsMap.put(decade, locList);
 		}
 
-
 		/*
 		 * 3. Create the new context object
 		 */
@@ -68,18 +108,18 @@ public class ContextDelegate {
 		newContext.setCityFor(null);
 		newContext.setPersonForId(personId);
 		newContext.setCityRatio(null);
-		newContext.setTitle(play.i18n.Messages.get("context.person.title")
+		newContext.setTitle(play.i18n.Messages
+				.get("reminiscens.context.person.title")
+				+ " "
 				+ person.getFirstname() + " " + person.getLastname());
 		newContext.setSubtitle(play.i18n.Messages
-				.get("context.person.subtitle")
-				+ person.getFirstname()
+				.get("reminiscens.context.person.subtitle")
 				+ " "
-				+ person.getLastname());
+				+ person.getFirstname() + " " + person.getLastname());
 
 		// save the newly created context
-		newContext.save();
-		newContext.refresh();
-		
+		Context.createObject(newContext);
+
 		/*
 		 * 4 For each decade, prepare content to put in context creating new
 		 * lists of items (ContextMedia, ContextContributed, ContextPeople,
@@ -87,11 +127,16 @@ public class ContextDelegate {
 		 * story in those decades
 		 */
 
-		List<ContextContributed> contributedContent = getContributedContextList(decadesLocationsMap,locale,newContext);
-		List<ContextMedia> mediaContent = getMediaContextList(decadesLocationsMap,locale,newContext);
-		List<ContextEvent> eventContent = getEventContextList(decadesLocationsMap,locale,newContext);
-		List<ContextCreativeWork> creativeWorkContent = getCreativeWorkContextList(decadesLocationsMap,locale,newContext);
-		List<ContextPeople> peopleContent = getPeopleContextList(decadesLocationsMap,locale,newContext);
+		List<ContextContributed> contributedContent = getContributedContextList(
+				decadesLocationsMap, locale, newContext);
+		List<ContextMedia> mediaContent = getMediaContextList(
+				decadesLocationsMap, locale, newContext);
+		List<ContextEvent> eventContent = getEventContextList(
+				decadesLocationsMap, locale, newContext);
+		List<ContextCreativeWork> creativeWorkContent = getCreativeWorkContextList(
+				decadesLocationsMap, locale, newContext);
+		List<ContextPeople> peopleContent = getPeopleContextList(
+				decadesLocationsMap, locale, newContext);
 
 		/*
 		 * 5. Add the lists of contents to the context
@@ -101,76 +146,94 @@ public class ContextDelegate {
 		newContext.setEventList(eventContent);
 		newContext.setCreativeWorkList(creativeWorkContent);
 		newContext.setFamousPeopleList(peopleContent);
-		
-		newContext.update();
-		newContext.refresh();
-		
-		ContextBean newContextBean = PlayDozerMapper.getInstance().map(
-				Context.class, ContextBean.class);
+
+//		newContext.update();
+//		newContext.refresh();
+
+		ContextBean newContextBean = PlayDozerMapper.getInstance().map(newContext, ContextBean.class);
 		return newContextBean;
 	}
 
 	private List<ContextPeople> getPeopleContextList(
-			Map<Long, List<LocationMinimalBean>> decadesLocationsMap, String locale, Context newContext) {
+			Map<Long, List<LocationMinimalBean>> decadesLocationsMap,
+			String locale, Context newContext) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	private List<ContextCreativeWork> getCreativeWorkContextList(
-			Map<Long, List<LocationMinimalBean>> decadesLocationsMap, String locale, Context newContext) {
+			Map<Long, List<LocationMinimalBean>> decadesLocationsMap,
+			String locale, Context newContext) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	private List<ContextEvent> getEventContextList(
-			Map<Long, List<LocationMinimalBean>> decadesLocationsMap, String locale, Context newContext) {
+			Map<Long, List<LocationMinimalBean>> decadesLocationsMap,
+			String locale, Context newContext) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	private List<ContextMedia> getMediaContextList(
-			Map<Long, List<LocationMinimalBean>> decadesLocationsMap, String locale, Context newContext) {
+			Map<Long, List<LocationMinimalBean>> decadesLocationsMap,
+			String locale, Context newContext) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	private List<ContextContributed> getContributedContextList(
-			Map<Long, List<LocationMinimalBean>> decadesLocationsMap, String locale, Context newContext) {
+			Map<Long, List<LocationMinimalBean>> decadesLocationsMap,
+			String locale, Context newContext) {
 		Set<Long> decades = decadesLocationsMap.keySet();
 		List<ContextContributed> content = new ArrayList<ContextContributed>();
-		int itemsPerLevel = Play.application().configuration().getInt("context.algorithm.item.count");
+		int itemsPerLevel = Play.application().configuration()
+				.getInt("context.algorithm.item.count");
 		if (itemsPerLevel <= 0) {
 			itemsPerLevel = 1;
 		}
-		
+
 		for (Long decade : decades) {
 			for (MementoCategory category : MementoCategory.values()) {
 				// 1. read 1 random element related only to the decade
-				List<LocationMinimalBean> locations = decadesLocationsMap.get(decade);
-				List<ContributedMemento> worldLevelList = ContributedMemento.readForContext(locale,category,decade,locations,"WORLD",itemsPerLevel);
-				List<ContributedMemento> countryLevelList = ContributedMemento.readForContext(locale,category,decade,locations,"COUNTRY",itemsPerLevel);
-				List<ContributedMemento> regionLevelList = ContributedMemento.readForContext(locale,category,decade,locations,"REGION",itemsPerLevel);
+				List<LocationMinimalBean> locations = decadesLocationsMap
+						.get(decade);
+				List<ContributedMemento> worldLevelList = ContributedMemento
+						.readForContext(locale, category, decade, locations,
+								"WORLD", itemsPerLevel);
+				List<ContributedMemento> countryLevelList = ContributedMemento
+						.readForContext(locale, category, decade, locations,
+								"COUNTRY", itemsPerLevel);
+				List<ContributedMemento> regionLevelList = ContributedMemento
+						.readForContext(locale, category, decade, locations,
+								"REGION", itemsPerLevel);
 
 				for (ContributedMemento contributed : worldLevelList) {
-					ContextContributed contextItem = new ContextContributed(contributed, newContext);
+					ContextContributed contextItem = new ContextContributed(
+							contributed, newContext);
 					contextItem.setLevel("WORLD");
+					contextItem.setDecade(decade);
 					contextItem.setCategory(contributed.getCategory());
 					contextItem.setType(contributed.getResourceType());
 					ContextContributed.create(contextItem);
 					content.add(contextItem);
-					
-				}				
+
+				}
 				for (ContributedMemento contributed : countryLevelList) {
-					ContextContributed contextItem = new ContextContributed(contributed, newContext);
+					ContextContributed contextItem = new ContextContributed(
+							contributed, newContext);
 					contextItem.setLevel("COUNTRY");
+					contextItem.setDecade(decade);
 					contextItem.setCategory(contributed.getCategory());
 					contextItem.setType(contributed.getResourceType());
 					ContextContributed.create(contextItem);
 					content.add(contextItem);
-				}				
+				}
 				for (ContributedMemento contributed : regionLevelList) {
-					ContextContributed contextItem = new ContextContributed(contributed, newContext);
+					ContextContributed contextItem = new ContextContributed(
+							contributed, newContext);
 					contextItem.setLevel("REGION");
+					contextItem.setDecade(decade);
 					contextItem.setCategory(contributed.getCategory());
 					contextItem.setType(contributed.getResourceType());
 					ContextContributed.create(contextItem);
@@ -178,13 +241,13 @@ public class ContextDelegate {
 				}
 			}
 		}
-		
+
 		return content;
 	}
 
 	/**
-	 * Prepare a HastTable of the form decade => list of locations which will be used to iterate
-	 * and generate the context
+	 * Prepare a HastTable of the form decade => list of locations which will be
+	 * used to iterate and generate the context
 	 * 
 	 * @param decade
 	 * @param cityId
@@ -193,7 +256,7 @@ public class ContextDelegate {
 	 */
 	private Map<Long, List<LocationMinimalBean>> prepareDecadesLocationsMap(
 			Long decade, Long cityId, Long personId) {
-		// TODO replace with reading directly the distinct decades and locations 
+		// TODO replace with reading directly the distinct decades and locations
 		List<LifeStory> stories = decade == null || cityId == null ? LifeStory
 				.readByPerson(personId) : null;
 		return decade == null ? storiesToDecadeLocationsMap(stories)
@@ -210,8 +273,13 @@ public class ContextDelegate {
 				Long localDecade = d != null ? d.getDecade() : null;
 				if (localDecade == decade) {
 					Location c = lifeStory.getLocation();
-					String locale = c.getLocale() == null || c.getLocale() == "" ? Play.application().configuration().getString("default.language") : c.getLocale();
-					LocationMinimalBean loc = new LocationMinimalBean(c.getCountry(), c.getRegion(), c.getCityName(),locale);
+					String locale = c.getLocale() == null
+							|| c.getLocale() == "" ? Play.application()
+							.configuration().getString("default.language") : c
+							.getLocale();
+					LocationMinimalBean loc = new LocationMinimalBean(
+							c.getCountry(), c.getRegion(), c.getCityName(),
+							locale);
 					List<LocationMinimalBean> locList = map.get(decade);
 					if (locList == null) {
 						locList = new ArrayList<LocationMinimalBean>();
@@ -235,8 +303,18 @@ public class ContextDelegate {
 				Long decade = d != null ? d.getDecade() : null;
 				if (decade != null) {
 					Location c = lifeStory.getLocation();
-					String locale = c.getLocale() == null || c.getLocale() == "" ? Play.application().configuration().getString("default.language") : c.getLocale();
-					LocationMinimalBean loc = new LocationMinimalBean(c.getCountry(), c.getRegion(), c.getCityName(),locale);
+					String locale = c.getLocale() == null
+							|| c.getLocale() == "" ? Play.application()
+							.configuration().getString("default.language") : c
+							.getLocale();
+
+// 					TODO manage localization of locations
+//					String localizedCountry = Country.readByName(c.getCountry()).getNameByLocale(locale);
+//					String localizedCity = Country
+							
+					LocationMinimalBean loc = new LocationMinimalBean(
+							c.getCountry(), c.getRegion(), c.getCityName(),
+							locale);
 					List<LocationMinimalBean> locList = map.get(decade);
 					if (locList == null) {
 						locList = new ArrayList<LocationMinimalBean>();
@@ -249,25 +327,5 @@ public class ContextDelegate {
 			}
 		}
 		return map;
-	}
-
-	public static ContextDelegate getInstance() {
-		return new ContextDelegate();
-	}
-
-	public ContextBean initContextForPersonAndDecadeAndCity(Long personId,
-			Long decade, Long cityId) throws EntityDoesNotExist,
-			NotEnoughInformation {
-		return initContext(personId, decade, cityId);
-	}
-
-	public ContextBean initContextForPersonAndDecade(Long personId, Long decade)
-			throws EntityDoesNotExist, NotEnoughInformation {
-		return initContext(personId, decade, null);
-	}
-
-	public ContextBean initContextForPerson(Long personId)
-			throws EntityDoesNotExist, NotEnoughInformation {
-		return initContext(personId, null, null);
 	}
 }

@@ -24,6 +24,8 @@ public class ContextContributed extends Model {
 	@Column
 	private String level; // 'WORLD, COUNTRY, REGION' 
 	@Column
+	private Long decade; 
+	@Column
 	private String type; // 'VIDEO,IMAGE,AUDIO,TEXT'
 	@Column
 	private String category; // 'PICTURES,SONG,PEOPLE,STORY,FILM,TV,ARTWORK,BOOK,OBJECT' ,
@@ -39,7 +41,7 @@ public class ContextContributed extends Model {
 
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "contributed_id", updatable = false, insertable = false)
+	@JoinColumn(name = "contributed_memento_id", updatable = true, insertable = true)
 	private ContributedMemento contributedMemento;
 
 	public ContextContributed(ContributedMemento contributedMemento, Context context) {
@@ -57,6 +59,7 @@ public class ContextContributed extends Model {
 
 	public static void create(ContextContributed contextContributed) {
 		contextContributed.save();
+		contextContributed.refresh();
 	}
 
 	public static ContextContributed createObject(ContextContributed contextContributed) {
@@ -168,6 +171,14 @@ public class ContextContributed extends Model {
 
 	public void setDetailViews(Long detailViews) {
 		this.detailViews = detailViews;
+	}
+
+	public Long getDecade() {
+		return decade;
+	}
+
+	public void setDecade(Long decade) {
+		this.decade = decade;
 	}
 
 }

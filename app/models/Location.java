@@ -547,6 +547,4 @@ public class Location extends Model {
 	public void setCity(City city) {
 		this.city = city;
 	}
-
-	
 }

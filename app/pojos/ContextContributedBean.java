@@ -12,6 +12,7 @@ public class ContextContributedBean implements Serializable {
 
 	private Long contextItemId;
 	private String level; // 'WORLD, COUNTRY, REGION' 
+	private Long decade; 
 	private String type; // 'VIDEO,IMAGE,AUDIO,TEXT'
 	private String category; // 'PICTURES,SONG,PEOPLE,STORY,FILM,TV,ARTWORK,BOOK,OBJECT' ,
 	private Long views;
@@ -84,5 +85,13 @@ public class ContextContributedBean implements Serializable {
 
 	public void setContributedMemento(ContributedMementoBean contributedMemento) {
 		this.contributedMemento = contributedMemento;
+	}
+
+	public Long getDecade() {
+		return decade;
+	}
+
+	public void setDecade(Long decade) {
+		this.decade = decade;
 	}
 }

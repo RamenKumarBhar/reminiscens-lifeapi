@@ -123,67 +123,8 @@ public class PlayAuthenticateLocal extends PlayAuthenticate {
 			response.setStatusMessage("playauthenticate.core.exception.provider_not_found="
 					+ provider);
 			return Controller.notFound(toJson(response));
-			// return Controller.badRequest(
-			// Messages.get(
-			// "playauthenticate.core.exception.provider_not_found",
-			// provider));
 		}
 		try {
-			// authenticate is implemented by
-			// com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider.java
-			// Source code for reference
-			// @Override
-			// public Object authenticate(final Context context, final Object
-			// payload)
-			// throws AuthException {
-			//
-			// if (payload == Case.SIGNUP) {
-			// final S signup = getSignup(context);
-			// final US authUser = buildSignupAuthUser(signup, context);
-			// final SignupResult r = signupUser(authUser);
-			//
-			// switch (r) {
-			// case USER_EXISTS:
-			// // The user exists already
-			// return userExists(authUser).url();
-			// case USER_EXISTS_UNVERIFIED:
-			// case USER_CREATED_UNVERIFIED:
-			// // User got created as unverified
-			// // Send validation email
-			// sendVerifyEmailMailing(context, authUser);
-			// return userUnverified(authUser).url();
-			// case USER_CREATED:
-			// // continue to login...
-			// return transformAuthUser(authUser, context);
-			// default:
-			// throw new AuthException("Something in signup went wrong");
-			// }
-			// } else if (payload == Case.LOGIN) {
-			// final L login = getLogin(context);
-			// final UL authUser = buildLoginAuthUser(login, context);
-			// final LoginResult r = loginUser(authUser);
-			// switch (r) {
-			// case USER_UNVERIFIED:
-			// // The email of the user is not verified, yet - we won't allow
-			// // him to log in
-			// return userUnverified(authUser).url();
-			// case USER_LOGGED_IN:
-			// // The user exists and the given password was correct
-			// return authUser;
-			// case WRONG_PASSWORD:
-			// // don't expose this - it might harm users privacy if anyone
-			// // knows they signed up for our service
-			// case NOT_FOUND:
-			// // forward to login page
-			// return onLoginUserNotFound(context);
-			// default:
-			// throw new AuthException("Something in login went wrong");
-			// }
-			// } else {
-			// return PlayAuthenticate.getResolver().login().url();
-			// }
-			// }
-
 			final Object o = ap.authenticate(context, payload);
 			if (o instanceof String) {
 				if ("NOT_FOUND".equals(o)) {

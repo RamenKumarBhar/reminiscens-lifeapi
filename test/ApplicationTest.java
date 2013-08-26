@@ -1,8 +1,11 @@
+import models.User;
+
 import org.junit.*;
 import org.mindrot.jbcrypt.BCrypt;
 
 import play.mvc.*;
 import providers.MyLoginUsernamePasswordAuthUser;
+import providers.MyUsernamePasswordAuthProvider;
 
 
 import static play.test.Helpers.*;
@@ -15,7 +18,7 @@ import static org.fest.assertions.Assertions.*;
 * If you are interested in mocking a whole application, see the wiki for more details.
 *
 */
-public class ApplicationTest {
+public class ApplicationTest extends BaseApplicationTest {
 
     @Test 
     public void simpleCheck() {
@@ -44,16 +47,14 @@ public class ApplicationTest {
     	
     	// gensalt's log_rounds parameter determines the complexity
     	// the work factor is 2**log_rounds, and the default is 10
-    	String hashed3 = BCrypt.hashpw(authUser.getHashedPassword(), BCrypt.gensalt(12));
+    //	String hashed3 = BCrypt.hashpw(authUser.getHashedPassword(), BCrypt.gensalt(12));
     	System.out.println("Bcrypt complex hash is: " + hashed);
     	
     	// Check that an unencrypted password matches one that has
     	// previously been hashed
     	assertThat(BCrypt.checkpw("testing-password", hashed));    	
     	
-//    	User u = User.findByUsernamePasswordIdentity(authUser);
-    	
-    	
-    	
+    	User u = User.findByUsernamePasswordIdentity(authUser);
+    	assertThat(u).isNotNull();
     }
 }

@@ -11,7 +11,6 @@ import static play.test.Helpers.*;
 
 import models.User;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -31,10 +30,11 @@ import static play.libs.Json.toJson;
 import play.libs.F.*;
 import play.mvc.Result;
 import pojos.FileBean;
+import pojos.UserBean;
 
 import static org.fest.assertions.Assertions.*;
 
-public class IntegrationTest {
+public class IntegrationTest extends BaseApplicationTest {
 
 	/**
 	 * add your integration test here in this example we just check if the
@@ -47,7 +47,7 @@ public class IntegrationTest {
 					public void invoke(TestBrowser browser) {
 						browser.goTo("http://localhost:3333");
 						assertThat(browser.pageSource()).contains(
-								"Your new application is ready.");
+								"Reminiscens RESTful API");
 					}
 				});
 	}
@@ -58,7 +58,6 @@ public class IntegrationTest {
 	 * @throws UnsupportedEncodingException
 	 * 
 	 */
-
 	@Test
 	public void testFileUpload() {
 
@@ -103,7 +102,7 @@ public class IntegrationTest {
 						.withHeader("Content-Type", "multipart/form-data")
 						.withHeader(
 								"PLAY_SESSION",
-								"5d6a4e463758c76f6d43a6ea048e916175cee85d-pa.u.exp%3A1376901080736%00pa.p.id%3Apassword%00pa.u.id%3Acdparra%40gmail.com")
+								"618b4ad9aa13ff7bd4b785e71eb8d9bbd937d561-pa.u.exp%3A1377189637632%00pa.p.id%3Apassword%00pa.u.id%3Acdparra%40gmail.com")
 						.withJsonBody(jn)
 				// .withFormUrlEncodedBody(files)
 				);
@@ -134,7 +133,7 @@ public class IntegrationTest {
 				HttpResponse response;
 				try {
 					response = httpclient.execute(httppost);
-					HttpEntity resEntity = response.getEntity();
+//					HttpEntity resEntity = response.getEntity();
 
 					assertThat(response.getStatusLine().getStatusCode())
 							.isEqualTo(200);
@@ -147,6 +146,40 @@ public class IntegrationTest {
 				assertThat(result).isNotNull();
 
 				f.delete();
+			}
+		});
+	}
+	
+	
+	@Test
+	public void testLogin() {
+
+		running(app, new Runnable() {
+			public void run() {
+				UserBean userBean = new UserBean();
+				userBean.setEmail("cdparra@gmail.com");
+				userBean.setEmail("testing-password");
+				Result result = route(fakeRequest(POST, "/user/login")
+						.withHeader("Content-Type", "application/json")
+						.withJsonBody(toJson(userBean))
+				);
+
+				Logger.debug("result is " + contentAsString(result));
+				System.out.println("result is " + contentAsString(result));
+				assertThat(status(result)).isEqualTo(OK);
+				
+
+				userBean = new UserBean();
+				userBean.setEmail("cdparra@gmail.com");
+				userBean.setEmail("testing-password-lalala");
+				result = route(fakeRequest(POST, "/user/login")
+						.withHeader("Content-Type", "application/json")
+						.withJsonBody(toJson(userBean))
+				);
+
+				Logger.debug("result is " + contentAsString(result));
+				System.out.println("result is " + contentAsString(result));
+				assertThat(status(result)).isEqualTo(UNAUTHORIZED);
 			}
 		});
 	}

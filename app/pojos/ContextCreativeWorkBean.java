@@ -11,7 +11,8 @@ public class ContextCreativeWorkBean implements Serializable {
 	private static final long serialVersionUID = 6003319629318118220L;
 
 	private Long contextItemId;
-	private String level; // 'WORLD, COUNTRY, REGION' 
+	private String level; // 'WORLD, COUNTRY, REGION'
+	private Long decade;  
 	private String type; // 'VIDEO,IMAGE,AUDIO,TEXT'
 	private String category; // 'PICTURES,SONG,PEOPLE,STORY,FILM,TV,ARTWORK,BOOK,OBJECT' ,
 	private Long views;
@@ -84,5 +85,13 @@ public class ContextCreativeWorkBean implements Serializable {
 
 	public void setCreativeWork(CreativeWorkBean creativeWork) {
 		this.creativeWork = creativeWork;
+	}
+
+	public Long getDecade() {
+		return decade;
+	}
+
+	public void setDecade(Long decade) {
+		this.decade = decade;
 	}
 }
