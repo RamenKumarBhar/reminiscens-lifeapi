@@ -48,6 +48,9 @@ public class Context extends Model {
 	@Column
 	private Long dateRatio;
 	
+	@Column
+	private Boolean enabled;
+	
 //
 //    @ManyToMany
 //    @JoinTable(name="Context_Content",
@@ -85,6 +88,7 @@ public class Context extends Model {
 	public static Model.Finder<Long,Context> find = new Model.Finder<Long, Context>(
             Long.class,Context.class
     );
+	
     
     public static List<Context> all(){
         return find.all();
@@ -128,7 +132,9 @@ public class Context extends Model {
     // TODO change model to keep the official context with a "flag"
     public static Context findByPerson(Long personId) {
     	List<Context> contextOfPerson = find.where()
-				.eq("personForId", personId).findList();
+				.eq("personForId", personId)
+				.eq("enabled",true)
+				.findList();
 		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
     }
     
@@ -136,6 +142,19 @@ public class Context extends Model {
     	List<Context> contextsForCity = find.where()
 				.eq("cityForId", cityId).findList();
 		return contextsForCity;
+    }
+    
+    public static void disableContextsForPerson(Long personId) {
+    	List<Context> contexts = find.where()
+				.eq("personForId", personId)
+				.eq("enabled", true)
+				.findList();
+    	
+    	for (Context context : contexts) {
+			context.setEnabled(false);
+			context.update();
+		}
+    	
     }
 
 	public Long getContextId() {
@@ -240,6 +259,14 @@ public class Context extends Model {
 
 	public void setFamousPeopleList(List<ContextPeople> famousPeopleList) {
 		this.famousPeopleList = famousPeopleList;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 //	public List<ContextContent> getPublicContextContent() {

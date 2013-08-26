@@ -1,6 +1,5 @@
 import static org.fest.assertions.Assertions.assertThat;
 
-import java.io.InputStream;
 import java.util.List;
 
 import models.Context;

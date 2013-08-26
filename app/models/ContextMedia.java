@@ -59,6 +59,7 @@ public class ContextMedia extends Model {
 
 	public static void create(ContextMedia contextContributed) {
 		contextContributed.save();
+		contextContributed.refresh();
 	}
 
 	public static ContextMedia createObject(ContextMedia contextContributed) {

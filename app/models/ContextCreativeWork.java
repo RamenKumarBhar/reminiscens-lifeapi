@@ -59,6 +59,7 @@ public class ContextCreativeWork extends Model {
 
 	public static void create(ContextCreativeWork contextContributed) {
 		contextContributed.save();
+		contextContributed.refresh();
 	}
 
 	public static ContextCreativeWork createObject(ContextCreativeWork contextContributed) {

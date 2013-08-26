@@ -59,6 +59,7 @@ public class ContextEvent extends Model {
 
 	public static void create(ContextEvent contextContributed) {
 		contextContributed.save();
+		contextContributed.refresh();
 	}
 
 	public static ContextEvent createObject(ContextEvent contextContributed) {
