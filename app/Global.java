@@ -58,7 +58,41 @@ public class Global extends GlobalSettings {
 				// Configuration.root().getString("application.context");
 				// ctx.response().discardCookie("PLAY_SESSION");
 				// ctx.response().discardCookie("PLAY_SESSION", context);
-				Logger.debug("-----> setting CORS response headers");
+				Logger.debug("--> Request Headers: ");
+				
+				String contentType = "Content-Type";
+				String origin = "Origin";
+				String host = "Host";
+				String cookie = "Cookie";
+				String xForwardedHost = "X-Forwarded-Host";
+				String xForwardedServer = "X-Forwarded-Server";
+				String xForwardedFor = "X-Forwarded-For";
+				String connection = "Connection";
+				String contentLenght = "Content-Length";
+				String accept = "Accept";
+				String cacheControl = "Cache-Control";
+				String acceptLanguage = "Accept-Language";
+				String acceptEncoding="Accept-Encoding";
+				String userAgent = "User-Agent"; 
+							
+				Logger.debug(contentType+"="+ctx.request().getHeader(contentType));
+				Logger.debug(origin+"="+ctx.request().getHeader(origin));
+				Logger.debug(host+"="+ctx.request().getHeader(host));
+				Logger.debug(cookie+"="+ctx.request().getHeader(cookie));
+				Logger.debug(xForwardedHost+"="+ctx.request().getHeader(xForwardedHost));
+				Logger.debug(xForwardedFor+"="+ctx.request().getHeader(xForwardedFor));
+				Logger.debug(xForwardedServer+"="+ctx.request().getHeader(xForwardedServer));
+				Logger.debug(connection+"="+ctx.request().getHeader(connection));
+				Logger.debug(contentLenght+"="+ctx.request().getHeader(contentLenght));
+				Logger.debug(accept+"="+ctx.request().getHeader(accept));
+				Logger.debug(acceptLanguage+"="+ctx.request().getHeader(acceptLanguage));
+				Logger.debug(cacheControl+"="+ctx.request().getHeader(cacheControl));
+				Logger.debug(acceptEncoding+"="+ctx.request().getHeader(acceptEncoding));
+				Logger.debug(userAgent+"="+ctx.request().getHeader(userAgent));
+
+				Logger.debug("Body ="+ctx.request().body().toString());
+				
+				Logger.debug("--> Setting CORS response headers");
 				ctx.response().setHeader("Access-Control-Allow-Origin", "*");
 				ctx.response().setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS");
 				ctx.response()
