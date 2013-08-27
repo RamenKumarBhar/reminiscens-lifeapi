@@ -21,6 +21,7 @@ import play.mvc.Call;
 import play.mvc.Http.Context;
 import play.mvc.Http.Request;
 import play.mvc.Result;
+import play.mvc.Results;
 import pojos.CityBean;
 import pojos.PersonBean;
 import providers.MyUsernamePasswordAuthUser;
@@ -68,6 +69,13 @@ public class Global extends GlobalSettings {
 			}
 		};
 	}
+	
+	@Override
+	public Result onBadRequest(play.mvc.Http.RequestHeader arg0, String arg1) {
+		Logger.debug("-----> Bad request error "+ arg1);
+		Logger.debug("-----> Bad request error "+ arg0.toString());
+		return Results.badRequest("Don't try to hack the URI!");
+	};
 
 	static class InitialData {
 
