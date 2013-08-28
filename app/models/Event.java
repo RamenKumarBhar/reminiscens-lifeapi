@@ -53,7 +53,7 @@ public class Event extends Model {
 	@ManyToOne
 	@MapsId
     @JoinColumn(name="location_id")
-	private Location location;
+	private Location startLocation;
 
 	@ManyToOne
 	@MapsId
@@ -164,12 +164,12 @@ public class Event extends Model {
 		this.locale = locale;
 	}
 
-	public Location getLocation() {
-		return location;
+	public Location getStartLocation() {
+		return startLocation;
 	}
 
-	public void setLocation(Location location) {
-		this.location = location;
+	public void setStartLocation(Location location) {
+		this.startLocation = location;
 	}
 
 	public FuzzyDate getStartDate() {
@@ -243,7 +243,7 @@ public class Event extends Model {
 			el.eq("locale", locale)
 			.eq("category", category.toString())
 			.eq("startDate.decade",decade)
-			.in("location.country", countries)
+			.in("startLocation.country", countries)
 			.orderBy("rand()")
 			.setMaxRows(itemsPerLevel);	
 			result.addAll(el.findList());
@@ -255,10 +255,10 @@ public class Event extends Model {
 				
 				String country = loc.getCountry();
 				if (country != null && !country.isEmpty()) {
-					el.eq("location.country", country);
+					el.eq("startLocation.country", country);
 					String region = loc.getRegion();
 					if (region != null && !region.isEmpty()) {
-						el.eq("location.region", region);
+						el.eq("startLocation.region", region);
 						el.orderBy("rand()")
 						.setMaxRows(itemsPerLevel);		
 						result.addAll(el.findList());

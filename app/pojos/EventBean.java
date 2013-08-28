@@ -35,7 +35,7 @@ public class EventBean  implements Serializable {
 
 	// Knowledge Base Event Resources specific attributes
 	private FuzzyDateBean endDate;
-	private LocationBean location;
+	private LocationBean startlocation;
 	
 	public Long getEventId() {
 		return eventId;
@@ -118,11 +118,11 @@ public class EventBean  implements Serializable {
 	public void setEndDate(FuzzyDateBean endDate) {
 		this.endDate = endDate;
 	}
-	public LocationBean getLocation() {
-		return location;
+	public LocationBean getStartLocation() {
+		return startlocation;
 	}
-	public void setLocation(LocationBean location) {
-		this.location = location;
+	public void setStartLocation(LocationBean location) {
+		this.startlocation = location;
 	}
 	public String getResourceType() {
 		return resourceType;

@@ -32,10 +32,10 @@ public class FamousPersonBean implements Serializable {
 	private String firstname;
 	private String lastname;
 	private String famousFor;
-	private FuzzyDateBean birthDate;
-    private FuzzyDateBean deathDate;
-    private LocationBean birthplace;
-    private LocationBean deathplace;
+	private FuzzyDateBean startDate;
+    private FuzzyDateBean endDate;
+    private LocationBean startLocation;
+    private LocationBean endLocation;
     private CountryBean country;
 	private String status;
 	private String creatorType;
@@ -116,30 +116,6 @@ public class FamousPersonBean implements Serializable {
 	public void setFamousFor(String famousFor) {
 		this.famousFor = famousFor;
 	}
-	public FuzzyDateBean getBirthDate() {
-		return birthDate;
-	}
-	public void setBirthDate(FuzzyDateBean birthDate) {
-		this.birthDate = birthDate;
-	}
-	public FuzzyDateBean getDeathDate() {
-		return deathDate;
-	}
-	public void setDeathDate(FuzzyDateBean deathDate) {
-		this.deathDate = deathDate;
-	}
-	public LocationBean getBirthplace() {
-		return birthplace;
-	}
-	public void setBirthplace(LocationBean birhplace) {
-		this.birthplace = birhplace;
-	}
-	public LocationBean getDeathplace() {
-		return deathplace;
-	}
-	public void setDeathplace(LocationBean deathplace) {
-		this.deathplace = deathplace;
-	}
 	public CountryBean getCountry() {
 		return country;
 	}
@@ -178,6 +154,30 @@ public class FamousPersonBean implements Serializable {
 	}
 	public void setCategory(String category) {
 		this.category = category;
+	}
+	public FuzzyDateBean getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(FuzzyDateBean startDate) {
+		this.startDate = startDate;
+	}
+	public FuzzyDateBean getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(FuzzyDateBean endDate) {
+		this.endDate = endDate;
+	}
+	public LocationBean getStartLocation() {
+		return startLocation;
+	}
+	public void setStartLocation(LocationBean startLocation) {
+		this.startLocation = startLocation;
+	}
+	public LocationBean getEndLocation() {
+		return endLocation;
+	}
+	public void setEndLocation(LocationBean endLocation) {
+		this.endLocation = endLocation;
 	}
 	
 	
