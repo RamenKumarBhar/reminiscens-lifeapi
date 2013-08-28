@@ -332,7 +332,7 @@ public class FamousPerson extends Model {
 			el.eq("locale", locale)
 			.eq("category", category.toString())
 			.eq("startDate.decade",decade)
-			.in("startLocatoin.country", countries)
+			.in("startLocation.country", countries)
 			.orderBy("rand()")
 			.setMaxRows(itemsPerLevel);	
 			result.addAll(el.findList());
