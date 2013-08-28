@@ -163,7 +163,7 @@ public class Global extends GlobalSettings {
 				s.setText("È stata la prima volta che sono mai uscito dall'Italia, e anche il viaggio più bello della mia vita");
 				
 				Location loc = new Location();
-				loc.setCityName("Parigi");
+				loc.setCity("Parigi");
 				loc.setCountry("Francia");
 				loc.setRegion("");
 				s.setLocation(loc);
