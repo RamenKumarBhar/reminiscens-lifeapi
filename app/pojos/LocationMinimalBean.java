@@ -26,10 +26,28 @@ public class LocationMinimalBean {
 	public boolean equals(Object obj) {
 		if (obj instanceof LocationMinimalBean) {
 			LocationMinimalBean o = (LocationMinimalBean) obj;
-			return this.country.equals(o.getCountry()) 
-					&& this.region.equals(o.getRegion()) 
-					&& this.city.equals(o.getCity())
-					&& this.locale.equals(o.getLocale());
+			boolean result = true;
+			if (this.country!=null) {
+				result = result && this.country.equals(o.getCountry());
+			} else {
+				result = result && o.getCountry()==null;
+			}
+			if(this.region!=null) {
+				result = result && this.region.equals(o.getRegion());
+			} else {
+				result = result && o.getRegion()==null;
+			}
+			if (this.city != null) {
+				result = result && this.city.equals(o.getCity());
+			} else {
+				result = result && o.getCity()==null;
+			}
+			if (this.locale != null) {
+					result = result && this.locale.equals(o.getLocale());
+			} else {
+				result = result && o.getLocale()==null;
+			}
+			return result;
 		} else {
 			return obj.equals(this);
 		}
