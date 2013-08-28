@@ -259,11 +259,11 @@ public class Event extends Model {
 					String region = loc.getRegion();
 					if (region != null && !region.isEmpty()) {
 						el.eq("location.region", region);
+						el.orderBy("rand()")
+						.setMaxRows(itemsPerLevel);		
+						result.addAll(el.findList());
 					}
 				}
-				el.orderBy("rand()")
-				.setMaxRows(itemsPerLevel);		
-				result.addAll(el.findList());
 			}
 		}
 		return result;

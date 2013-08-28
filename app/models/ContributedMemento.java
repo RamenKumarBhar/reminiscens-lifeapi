@@ -321,6 +321,7 @@ public class ContributedMemento extends Model {
 			.orderBy("rand()")
 			.setMaxRows(itemsPerLevel);	
 			result.addAll(el.findList());
+			//TODO check why level region does not get trigger
 		} else if (level.equals("REGION")) {
 			for (LocationMinimalBean loc : locations) {
 				el.eq("locale", locale)
@@ -333,11 +334,11 @@ public class ContributedMemento extends Model {
 					String region = loc.getRegion();
 					if (region != null && !region.isEmpty()) {
 						el.eq("startLocation.region", region);
+						el.orderBy("rand()")
+						.setMaxRows(itemsPerLevel);		
+						result.addAll(el.findList());
 					}
 				}
-				el.orderBy("rand()")
-				.setMaxRows(itemsPerLevel);		
-				result.addAll(el.findList());
 			}
 		}
 		return result;
