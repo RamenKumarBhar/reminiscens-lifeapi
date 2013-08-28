@@ -100,19 +100,19 @@ public class Location extends Model {
 	private List<ContributedMemento> contributedMementoEndLocation;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "startLocation", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Media> mediaLocation;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "startLocation", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Event> eventLocation;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "birthplace", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "startLocation", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<FamousPerson> famousBirthPlace;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "deathplace", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "endLocation", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<FamousPerson> famousDeathPlace;
 	
 	public static Model.Finder<Long,Location> find = new Model.Finder<Long, Location>(
