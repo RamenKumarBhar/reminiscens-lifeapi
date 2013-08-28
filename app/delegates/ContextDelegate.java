@@ -10,6 +10,7 @@ import enums.MementoCategory;
 import exceptions.EntityDoesNotExist;
 import exceptions.NotEnoughInformation;
 import pojos.ContextBean;
+import pojos.ContributedMementoBean;
 import pojos.LocationMinimalBean;
 import utils.PlayDozerMapper;
 import models.City;
@@ -95,13 +96,18 @@ public class ContextDelegate {
 				decade, cityId, personId);
 
 		if (decadesLocationsMap.isEmpty()) {
-			City c = City.read(cityId);
-			LocationMinimalBean loc = new LocationMinimalBean(c.getCountry()
-					.getNameByLocale(locale), c.getRegion(), c.getName(),
-					locale);
-			List<LocationMinimalBean> locList = new ArrayList<LocationMinimalBean>();
-			locList.add(loc);
-			decadesLocationsMap.put(decade, locList);
+			if(cityId!=null) {
+				City c = City.read(cityId);
+				LocationMinimalBean loc = new LocationMinimalBean(c.getCountry()
+						.getNameByLocale(locale), c.getRegion(), c.getName(),
+						locale);
+				List<LocationMinimalBean> locList = new ArrayList<LocationMinimalBean>();
+				locList.add(loc);
+				decadesLocationsMap.put(decade, locList);
+			} else {
+				throw new NotEnoughInformation("The person " + personId
+						+ "has no story in this decade");
+			}
 		}
 
 		/*
@@ -445,7 +451,7 @@ public class ContextDelegate {
 			for (LifeStory lifeStory : stories) {
 				FuzzyDate d = lifeStory.getStartDate();
 				Long localDecade = d != null ? d.getDecade() : null;
-				if (localDecade == decade) {
+				if (localDecade.equals(decade)) {
 					Location c = lifeStory.getLocation();
 					String locale = c.getLocale() == null
 							|| c.getLocale() == "" ? Play.application()
@@ -502,5 +508,64 @@ public class ContextDelegate {
 			}
 		}
 		return map;
+	}
+
+	public void deleteContext(Long cid) {
+		models.Context.delete(cid);
+	}
+
+	public ContextBean refreshContextForDecadeAndCity(Long cid, Long decade,
+			Long cityId) throws EntityDoesNotExist, NotEnoughInformation {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ContextBean refreshContextForDecade(Long cid, Long decade) throws EntityDoesNotExist, NotEnoughInformation {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ContextBean refreshContext(Long cid) throws EntityDoesNotExist, NotEnoughInformation {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ContextBean getContextForDecade(Long cid, Long decade) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ContextBean getContextForDecadeAndCity(Long cid, Long decade,
+			Long cityId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ContextBean getContextByCategory(Long cid, String cat) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ContextBean addMementoToContext(Long cid,
+			ContributedMementoBean contributed) throws EntityDoesNotExist, NotEnoughInformation {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ContextBean updatedContextMemento(Long cid, Long mid,
+			ContributedMementoBean contributed) throws EntityDoesNotExist, NotEnoughInformation {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void deleteContextMemento(Long cid, Long mid) throws EntityDoesNotExist, NotEnoughInformation {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public ContextBean createContributedMemento(
+			ContributedMementoBean contributed) throws EntityDoesNotExist, NotEnoughInformation {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

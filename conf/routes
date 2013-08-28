@@ -71,6 +71,7 @@ POST    /context/person/:id/:decade/:cityId     controllers.ContextControl.initC
 PUT     /context/:cid                           controllers.ContextControl.refreshContext(cid: Long)
 PUT     /context/:cid/:decade                   controllers.ContextControl.refreshContextForDecade(cid: Long, decade: Long)
 PUT     /context/:cid/:decade/:cityId           controllers.ContextControl.refreshContextForDecadeAndCity(cid: Long, decade: Long, cityId: Long)
+DELETE  /context/:cid                           controllers.ContextControl.deleteContext(cid: java.lang.Long)
 GET     /context/:cid                           controllers.ContextControl.getContext(cid: Long)
 GET     /context/:cid/:decade                   controllers.ContextControl.getContextForDecade(cid: Long, decade: Long)
 GET     /context/:cid/:decade/:cityId           controllers.ContextControl.getContextForDecadeAndCity(cid: Long, decade: Long, cityId: Long)
