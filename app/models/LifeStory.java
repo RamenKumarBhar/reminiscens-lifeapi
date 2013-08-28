@@ -449,7 +449,7 @@ public class LifeStory extends Model {
 
 		City birthPlace = user.getPerson().getBirthplace();
 		Location loc = new Location();
-		loc.setCity(birthPlace);
+		loc.setCityBean(birthPlace);
 		Location.createOrUpdateIfNotExist(loc);
 		loc.refresh();
 		birth.setLocation(loc);
@@ -550,7 +550,7 @@ public class LifeStory extends Model {
 		ArrayList<Long> cities = new ArrayList<Long>();
 		if (stories != null) {
 			for (LifeStory lifeStory : stories) {
-				City city = lifeStory.getLocation().getCity();
+				City city = lifeStory.getLocation().getCityBean();
 				Long cityId = null;
 
 				if (city != null) {
