@@ -32,7 +32,7 @@ public class MediaBean  implements Serializable {
 	
 	// Knowledge Base Media Resources specific attributes
     private FuzzyDateBean endDate;
-    private LocationBean location;
+    private LocationBean startLocation;
 	public Long getMediaId() {
 		return mediaId;
 	}
@@ -114,10 +114,10 @@ public class MediaBean  implements Serializable {
 	public void setEndDate(FuzzyDateBean endDate) {
 		this.endDate = endDate;
 	}
-	public LocationBean getLocation() {
-		return location;
+	public LocationBean getStartLocation() {
+		return startLocation;
 	}
-	public void setLocation(LocationBean location) {
-		this.location = location;
+	public void setStartLocation(LocationBean location) {
+		this.startLocation= location;
 	}
 }

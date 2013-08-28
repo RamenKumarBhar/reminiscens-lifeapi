@@ -84,22 +84,22 @@ public class FamousPerson extends Model {
 	@ManyToOne
 	@MapsId
     @JoinColumn(name="birthdate_fuzzy_id")
-	private FuzzyDate birthDate;
+	private FuzzyDate startDate;
 
 	@ManyToOne
 	@MapsId
     @JoinColumn(name="deathdate_fuzzy_id")
-	private FuzzyDate deathDate;
+	private FuzzyDate endDate;
 	
 	@ManyToOne
 	@MapsId
     @JoinColumn(name="birthplace_id")
-	private Location birthplace;
+	private Location startLocation;
 	
 	@ManyToOne
 	@MapsId
     @JoinColumn(name="deathplace_id")
-	private Location deathplace;
+	private Location endLocation;
 	
 	@ManyToOne
 	@MapsId
@@ -244,36 +244,36 @@ public class FamousPerson extends Model {
 		this.indexed = indexed;
 	}
 
-	public FuzzyDate getBirthDate() {
-		return birthDate;
+	public FuzzyDate getStartBirthDate() {
+		return startDate;
 	}
 
-	public void setBirthDate(FuzzyDate birthDate) {
-		this.birthDate = birthDate;
+	public void setStartBirthDate(FuzzyDate birthDate) {
+		this.startDate = birthDate;
 	}
 
-	public FuzzyDate getDeathDate() {
-		return deathDate;
+	public FuzzyDate getEndDeathDate() {
+		return endDate;
 	}
 
-	public void setDeathDate(FuzzyDate deathDate) {
-		this.deathDate = deathDate;
+	public void setEndDeathDate(FuzzyDate deathDate) {
+		this.endDate = deathDate;
 	}
 
-	public Location getBirthplace() {
-		return birthplace;
+	public Location getStartLocation() {
+		return startLocation;
 	}
 
-	public void setBirthplace(Location birhplace) {
-		this.birthplace = birhplace;
+	public void setStartLocation(Location birhplace) {
+		this.startLocation = birhplace;
 	}
 
-	public Location getDeathplace() {
-		return deathplace;
+	public Location getEndLocation() {
+		return endLocation;
 	}
 
-	public void setDeathplace(Location deathplace) {
-		this.deathplace = deathplace;
+	public void setEndLocation(Location deathplace) {
+		this.endLocation = deathplace;
 	}
 
 	public Country getCountry() {
@@ -331,8 +331,8 @@ public class FamousPerson extends Model {
 			}
 			el.eq("locale", locale)
 			.eq("category", category.toString())
-			.eq("birthDate.decade",decade)
-			.in("birthplace.country", countries)
+			.eq("startDate.decade",decade)
+			.in("startLocatoin.country", countries)
 			.orderBy("rand()")
 			.setMaxRows(itemsPerLevel);	
 			result.addAll(el.findList());
@@ -340,14 +340,14 @@ public class FamousPerson extends Model {
 			for (LocationMinimalBean loc : locations) {
 				el.eq("locale", locale)
 				.eq("category", category.toString())
-				.eq("birthDate.decade",decade);
+				.eq("startDate.decade",decade);
 				
 				String country = loc.getCountry();
 				if (country != null && !country.isEmpty()) {
-					el.eq("birthplace.country", country);
+					el.eq("startLocation.country", country);
 					String region = loc.getRegion();
 					if (region != null && !region.isEmpty()) {
-						el.eq("birthplace.region", region);
+						el.eq("startLocation.region", region);
 						el.orderBy("rand()")
 						.setMaxRows(itemsPerLevel);		
 						result.addAll(el.findList());
