@@ -319,7 +319,7 @@ public class FamousPerson extends Model {
 		if (level.equals("WORLD")) {
 			el.eq("locale", locale)
 				.eq("category", category.toString())
-				.eq("birthDate.decade",decade)
+				.eq("startDate.decade",decade)
 				.orderBy("rand()")
 				.setMaxRows(itemsPerLevel);
 				result.addAll(el.findList());
