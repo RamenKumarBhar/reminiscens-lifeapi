@@ -37,11 +37,7 @@ public class MyDynamicResourceHandler implements DynamicResourceHandler {
 	static {
 		HANDLERS.put("FriendOf", new FriendsDynamicResourceHandler());
 		HANDLERS.put("OnlyMe", new OnlyMeDynamicResourceHandler());
-		//HANDLERS.put("ClubOwnerOrTrainerOf", new OwnerOrTrainerOfDynamicResourceHandler());
-		//HANDLERS.put("isMemberOf", new MemberOfDynamicResourceHandler());
-		
-		
-		
+		HANDLERS.put("CuratorOf", new CuratorsDynamicResourceHandler());
 	}
 
 	public boolean isAllowed(String name, String meta,

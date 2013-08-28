@@ -137,7 +137,74 @@ public class Context extends Model {
 				.findList();
 		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
     }
-    
+ 
+    // TODO fix
+	public static Context findByPersonAndDecade(Long id, Long decade) {
+		List<Context> contextOfPerson = find.where()
+				.eq("personForId", id)
+				.eq("enabled",true)
+				.eq("contributedMementoList.decade",decade)
+				.eq("mediaList.decade",decade)
+				.eq("eventList.decade",decade)
+				.eq("creativeWorkList.decade",decade)
+				.eq("famousPeopleList.decade",decade)
+				.findList();
+		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
+	}
+	// TODO fix
+	public static Context findByPersonAndDecadeAndCategory(Long id, Long decade, String category) {
+    	List<Context> contextOfPerson = find.where()
+				.eq("personForId", id)
+				.eq("enabled",true)
+				.eq("contributedMementoList.decade",decade)
+				
+				
+				.eq("mediaList.decade",decade)
+				.eq("eventList.decade",decade)
+				.eq("creativeWorkList.decade",decade)
+				.eq("famousPeopleList.decade",decade)
+				.eq("contributedMementoList.category",category)
+				.eq("mediaList.category",category)
+				.eq("eventList.category",category)
+				.eq("creativeWorkList.category",category)
+				.eq("famousPeopleList.category",category)
+				.findList();
+		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
+	}	
+	
+	// TODO 
+	public static Context findByIdAndDecade(Long id, Long decade) {
+    	List<Context> contextOfPerson = find.where()
+				.eq("contextId", id)
+				.eq("enabled",true)
+				.eq("contributedMementoList.decade",decade)
+				.eq("mediaList.decade",decade)
+				.eq("eventList.decade",decade)
+				.eq("creativeWorkList.decade",decade)
+				.eq("famousPeopleList.decade",decade)
+				.findList();
+		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
+	}
+	
+	// TODO 
+	public static Context findByIdAndDecadeAndCategory(Long id, Long decade, String category) {
+    	List<Context> contextOfPerson = find.where()
+				.eq("contextId", id)
+				.eq("enabled",true)
+				.eq("contributedMementoList.decade",decade)
+				.eq("mediaList.decade",decade)
+				.eq("eventList.decade",decade)
+				.eq("creativeWorkList.decade",decade)
+				.eq("famousPeopleList.decade",decade)
+				.eq("contributedMementoList.category",category)
+				.eq("mediaList.category",category)
+				.eq("eventList.category",category)
+				.eq("creativeWorkList.category",category)
+				.eq("famousPeopleList.category",category)
+				.findList();
+		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
+	}
+	
     public static List<Context> findByCity(Long cityId) {
     	List<Context> contextsForCity = find.where()
 				.eq("cityForId", cityId).findList();
@@ -268,12 +335,4 @@ public class Context extends Model {
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
-
-//	public List<ContextContent> getPublicContextContent() {
-//		return publicContextContent;
-//	}
-//
-//	public void setPublicContextContent(List<ContextContent> publicContextContent) {
-//		this.publicContextContent = publicContextContent;
-//	}
 }

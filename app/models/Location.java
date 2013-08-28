@@ -23,14 +23,14 @@ public class Location extends Model {
     @Column(name="location_id")
     private Long locationId;
 	
-	@Column
-	private String location_textual;
+	@Column(name="location_textual")
+	private String textual;
 	
 	@Column 
 	private Long accuracy;
 	
-	@Column
-	private String name;
+	@Column(name="name")
+	private String placeName;
 	
 	@Column
 	private String description;
@@ -48,7 +48,7 @@ public class Location extends Model {
 	private String region;
 
 	@Column(name="city")
-	private String cityName;
+	private String city;
 
 	@Column
 	private String neighborhood;
@@ -80,7 +80,7 @@ public class Location extends Model {
 	@OneToOne
 	@MapsId
     @JoinColumn(name="city_id")
-	private City city;
+	private City cityBean;
 	
 	// foreign keys
 	@JsonIgnore
@@ -141,15 +141,16 @@ public class Location extends Model {
 			} 
 			
 			location.setLocationId(null);
-			String textual = location.getLocation_textual();
+			String textual = location.getTextual();
 			
-			String name = location.getName();
+			String name = location.getPlaceName();
 			String country = location.getCountry();
 			String region = location.getRegion();
-			String cityName = location.getCityName();
-			City city = location.getCity();
+			String city = location.getCity();
+			City cityBean = location.getCityBean();
 			Double lat = location.getLat();
 			Double lon = location.getLon();
+			String locale = location.getLocale();
 
 			Long acc = new Long(0); 
 //			TODO review the whole accuracy model
@@ -170,15 +171,20 @@ public class Location extends Model {
 
 //			7, if we have 6 + environment
 //			11, flickr city-level, if we have country + city 
-			if (cityName != null && !cityName.isEmpty()) {
-				if (city==null) {
-					City c = City.getCityByName(cityName);
-					location.setCity(c);
-					location.setCountry(c.getCountry().getShort_name());
+			if (city != null && !city.isEmpty()) {
+				if (cityBean==null) {
+					City c = City.getCityByName(city);
+					location.setCityBean(c);
+					
+					if (locale!=null && !locale.isEmpty()){
+						location.setCountry(c.getCountry().getNameByLocale(locale));						
+					} else {
+						location.setCountry(c.getCountry().getShort_name());
+					}
 					location.setRegion(c.getRegion());
 					if (lat == null && lon == null) {
-						location.setLat(location.getCity().getLat());
-						location.setLon(location.getCity().getLon());
+						location.setLat(location.getCityBean().getLat());
+						location.setLon(location.getCityBean().getLon());
 						location.setCoordinates_trust(new Integer(0));
 						acc = new Long(11);
 					}
@@ -210,26 +216,26 @@ public class Location extends Model {
 	}
     
     private void copyNotNullsFrom(Location existing) {
-    	String textual = existing.getLocation_textual();
-		String name = existing.getName();
+    	String textual = existing.getTextual();
+		String name = existing.getPlaceName();
 		String country = existing.getCountry();
 		String region = existing.getRegion();
-		String cityName = existing.getCityName();
-		City city = existing.getCity();
+		String cityName = existing.getCity();
+		City city = existing.getCityBean();
 		Double lat = existing.getLat();
 		Double lon = existing.getLon();
-		if (this.location_textual == null) 
-			this.location_textual = textual;
-		if (this.name == null) 
-			this.name = name;
+		if (this.textual == null) 
+			this.textual = textual;
+		if (this.placeName == null) 
+			this.placeName = name;
 		if (this.country== null) 
 			this.country = country;
 		if (this.region == null)
 			this.region = region;
-		if (this.cityName == null)
-			this.cityName = cityName;
 		if (this.city == null)
-			this.city = city; 
+			this.city = cityName;
+		if (this.city == null)
+			this.cityBean = city; 
 		if (this.lat == null)
 			this.lat = lat; 
 		if (this.lon == null)
@@ -237,21 +243,21 @@ public class Location extends Model {
 	}
 
 	private boolean isEqualTo(Location location) {
-		String textual = location.getLocation_textual();
-		String name = location.getName();
+		String textual = location.getTextual();
+		String name = location.getPlaceName();
 		String country = location.getCountry();
 		String region = location.getRegion();
-		String cityName = location.getCityName();
-		City city = location.getCity();
+		String cityName = location.getCity();
+		City city = location.getCityBean();
 		Double lat = location.getLat();
 		Double lon = location.getLon();
 
-		return this.location_textual == textual 
-				&& this.name == name 
+		return this.textual == textual 
+				&& this.placeName == name 
 				&& this.country == country
 				&& this.region == region
-				&& this.cityName == cityName
-				&& this.city == city
+				&& this.city == cityName
+				&& this.cityBean == city
 				&& this.lat == lat
 				&& this.lon == lon;
 	}
@@ -283,46 +289,28 @@ public class Location extends Model {
 		this.locationId = locationId;
 	}
 
-	/**
-	 * @return the location_textual
-	 */
-	public String getLocation_textual() {
-		return location_textual;
+	public String getTextual() {
+		return textual;
 	}
 
-	/**
-	 * @param location_textual the location_textual to set
-	 */
-	public void setLocation_textual(String location_textual) {
-		this.location_textual = location_textual;
+	public void setTextual(String location_textual) {
+		this.textual = location_textual;
 	}
 
-	/**
-	 * @return the accuracy
-	 */
 	public Long getAccuracy() {
 		return accuracy;
 	}
 
-	/**
-	 * @param accuracy the accuracy to set
-	 */
 	public void setAccuracy(Long  accuracy) {
 		this.accuracy = accuracy;
 	}
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
+	public String getPlaceName() {
+		return placeName;
 	}
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setPlaceName(String name) {
+		this.placeName = name;
 	}
 
 	/**
@@ -398,19 +386,15 @@ public class Location extends Model {
 	/**
 	 * @return the cityName
 	 */
-	public String getCityName() {
-		if (getCity() == null) {
-			return cityName;
-		} else {
-			return getCity().getName();
-		}
+	public String getCity() {
+		return city;
 	}
 
 	/**
 	 * @param city the city to set
 	 */
-	public void setCityName(String city) {
-		this.cityName = city;
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	/**
@@ -540,11 +524,11 @@ public class Location extends Model {
 		this.radius = radius;
 	}
 
-	public City getCity() {
-		return city;
+	public City getCityBean() {
+		return cityBean;
 	}
 
-	public void setCity(City city) {
-		this.city = city;
+	public void setCityBean(City city) {
+		this.cityBean = city;
 	}
 }

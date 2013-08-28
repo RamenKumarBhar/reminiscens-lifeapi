@@ -18,7 +18,7 @@ public class LocationMinimalBean {
 	public LocationMinimalBean(Location loc) {
 		this.country = loc.getCountry();
 		this.region = loc.getRegion();
-		this.city = loc.getCityName();
+		this.city = loc.getCity();
 		this.locale = loc.getLocale();
 	}
 	
