@@ -5,7 +5,10 @@ import java.util.List;
 import javax.persistence.*;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+
+import enums.MementoCategory;
 import play.db.ebean.Model;
+import pojos.LocationMinimalBean;
 
 @Entity
 @Table(name = "Context_Famous")
@@ -179,5 +182,4 @@ public class ContextPeople extends Model {
 	public void setDecade(Long decade) {
 		this.decade = decade;
 	}
-
 }

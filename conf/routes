@@ -64,18 +64,23 @@ DELETE  /lifestory/:lsid/memento/:id/mention/:pid controllers.MementoControl.del
 
 #####################################################################################
 # Contextual Reminiscence
+GET     /context                                controllers.ContextControl.getContext()
 POST    /context                                controllers.ContextControl.initContext()
+GET     /context/person/:id                     controllers.ContextControl.getContextForPerson(id: Long)
 POST    /context/person/:id                     controllers.ContextControl.initContextForPerson(id: Long)
+GET     /context/person/:id/:decade             controllers.ContextControl.getContextForPersonAndDecade(id: Long, decade: Long)
+GET     /context/person/:id/:decade/:category   controllers.ContextControl.getContextForPersonAndDecadeAndCategory(id: Long, decade: Long, category: String)
 POST    /context/person/:id/:decade             controllers.ContextControl.initContextForPersonAndDecade(id: Long, decade: Long)
+POST    /context/person/:id/:decade/location    controllers.ContextControl.initContextForPersonAndDecadeAndLocation(id: Long, decade: Long)
 POST    /context/person/:id/:decade/:cityId     controllers.ContextControl.initContextForPersonAndDecadeAndCity(id: Long, decade: Long, cityId: Long)
-PUT     /context/:cid                           controllers.ContextControl.refreshContext(cid: Long)
-PUT     /context/:cid/:decade                   controllers.ContextControl.refreshContextForDecade(cid: Long, decade: Long)
+GET     /context/:cid                           controllers.ContextControl.getContextById(cid: Long)
+GET     /context/:cid/:decade                   controllers.ContextControl.getContextByIdAndDecade(cid: Long, decade: Long)
+GET     /context/:cid/:decade/:category         controllers.ContextControl.getContextByIdAndDecadeAndCategory(cid: Long, decade: Long, category: String)
+PUT     /context/:cid/:decade/location          controllers.ContextControl.refreshContextForDecadeAndLocation(cid: Long, decade: Long)
 PUT     /context/:cid/:decade/:cityId           controllers.ContextControl.refreshContextForDecadeAndCity(cid: Long, decade: Long, cityId: Long)
 DELETE  /context/:cid                           controllers.ContextControl.deleteContext(cid: java.lang.Long)
-GET     /context/:cid                           controllers.ContextControl.getContext(cid: Long)
-GET     /context/:cid/:decade                   controllers.ContextControl.getContextForDecade(cid: Long, decade: Long)
-GET     /context/:cid/:decade/:cityId           controllers.ContextControl.getContextForDecadeAndCity(cid: Long, decade: Long, cityId: Long)
-GET     /context/:cid/category/:cat             controllers.ContextControl.getContextFilterCategory(cid: Long, cat: String)
+
+POST    /context/memento                        controllers.ContextControl.createContributedMemento()
 POST    /context/:cid/memento                   controllers.ContextControl.createContextMemento(cid: Long)
 PUT     /context/:cid/memento/:mid              controllers.ContextControl.updateContextMemento(cid: Long, mid: Long)
 DELETE  /context/:cid/memento/:mid              controllers.ContextControl.deleteContextMemento(cid: Long, mid: Long)
@@ -87,9 +92,9 @@ GET     /question/:byear/:fyear/        controllers.QuestionsControl.getGeneralQ
 GET     /question/:chapter              controllers.QuestionsControl.getGeneralQuestionsForLifeChapter(chapter: String) 
 
 # General Public Mementos API (lifecontext proxy)
-GET     /memento/random/:lang           controllers.PublicMementoControl.getRandomMemento(lang: String)
-GET     /memento/:mid                   controllers.PublicMementoControl.getMemento(mid: Long)
-GET     /memento/:decade/:place         controllers.PublicMementoControl.getMementoList(decade: Long, place: String, lat ?= null, lon ?= null, rad ?= null, lang: String ?= "it_IT")
+#GET     /memento/random/:lang           controllers.PublicMementoControl.getRandomMemento(lang: String)
+#GET     /memento/:mid                   controllers.PublicMementoControl.getMemento(mid: Long)
+#GET     /memento/:decade/:place         controllers.PublicMementoControl.getMementoList(decade: Long, place: String, lat ?= null, lon ?= null, rad ?= null, lang: String ?= "it_IT")
 
 #####################################################################################
 # Utilities (cities, countries, other stuff)

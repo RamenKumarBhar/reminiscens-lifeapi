@@ -103,6 +103,7 @@ public class ContributedMemento extends Model {
 			contributedMemento.setEndLocation(Location.createOrUpdateIfNotExist(endPlace));
 		
 		contributedMemento.save();
+		contributedMemento.refresh();
 	}
 
 	public static ContributedMemento createObject(ContributedMemento contributedMemento) {
@@ -321,7 +322,6 @@ public class ContributedMemento extends Model {
 			.orderBy("rand()")
 			.setMaxRows(itemsPerLevel);	
 			result.addAll(el.findList());
-			//TODO check why level region does not get trigger
 		} else if (level.equals("REGION")) {
 			for (LocationMinimalBean loc : locations) {
 				el.eq("locale", locale)

@@ -83,6 +83,9 @@ public class Memento extends Model {
 	
 	@Column(name="file_hashcode")
 	private String fileHashcode;
+	
+	@Column(name="file_name")
+	private String fileName;
 
 	@Column
 	private String locale;
@@ -358,6 +361,22 @@ public class Memento extends Model {
 
 	public void setFileHashcode(String fileHashcode) {
 		this.fileHashcode = fileHashcode;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getLocale() {
+		return locale;
+	}
+
+	public void setLocale(String locale) {
+		this.locale = locale;
 	}
 
 }

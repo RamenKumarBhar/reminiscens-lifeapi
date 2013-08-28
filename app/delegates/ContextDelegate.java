@@ -10,7 +10,9 @@ import enums.MementoCategory;
 import exceptions.EntityDoesNotExist;
 import exceptions.NotEnoughInformation;
 import pojos.ContextBean;
+import pojos.ContextContributedBean;
 import pojos.ContributedMementoBean;
+import pojos.LifeStoryBean;
 import pojos.LocationMinimalBean;
 import utils.PlayDozerMapper;
 import models.City;
@@ -23,6 +25,7 @@ import models.ContextPeople;
 import models.ContributedMemento;
 import models.CreativeWork;
 import models.Event;
+import models.FamousPerson;
 import models.FuzzyDate;
 import models.LifeStory;
 import models.Location;
@@ -37,17 +40,6 @@ public class ContextDelegate {
 		return new ContextDelegate();
 	}
 
-	public ContextBean getContext(Long contextId) {
-		models.Context context = models.Context.read(contextId);
-		if (context != null) {
-			ContextBean contextBean = PlayDozerMapper.getInstance().map(
-					context, ContextBean.class);
-			return contextBean;
-		} else {
-			return null;
-		}
-	}
-
 	public ContextBean getContextForPerson(Long personId) {
 		models.Context context = models.Context.findByPerson(personId);
 		if (context != null) {
@@ -59,24 +51,162 @@ public class ContextDelegate {
 		}
 	}
 
+	public ContextBean initContextForPerson(Long personId)
+			throws EntityDoesNotExist, NotEnoughInformation {
+		return initContext(personId, null, null, null);
+	}
+
+	public ContextBean getContextForPersonAndDecade(Long id, Long decade) {
+		models.Context context = models.Context.findByPersonAndDecade(id,decade);
+		if (context != null) {
+			ContextBean contextBean = PlayDozerMapper.getInstance().map(
+					context, ContextBean.class);
+			return contextBean;
+		} else {
+			return null;
+		}
+	}
+	
+	public ContextBean getContextForPersonAndDecadeAndCategory(Long id, Long decade, String category) {
+		models.Context context = models.Context.findByPersonAndDecadeAndCategory(id,decade,category);
+		if (context != null) {
+			ContextBean contextBean = PlayDozerMapper.getInstance().map(
+					context, ContextBean.class);
+			return contextBean;
+		} else {
+			return null;
+		}
+	}
+		
+	public ContextBean initContextForPersonAndDecade(Long personId, Long decade)
+			throws EntityDoesNotExist, NotEnoughInformation {
+		return initContext(personId, decade, null, null);
+	}
+
+	public ContextBean initContextForPersonAndDecadeAndLocation(Long personId,
+			Long decade, LocationMinimalBean location)
+			throws EntityDoesNotExist, NotEnoughInformation {
+		return initContext(personId, decade, null, location);
+	}
+
 	public ContextBean initContextForPersonAndDecadeAndCity(Long personId,
 			Long decade, Long cityId) throws EntityDoesNotExist,
 			NotEnoughInformation {
-		return initContext(personId, decade, cityId);
+		return initContext(personId, decade, cityId, null);
+	}
+	
+	public ContextBean getContext(Long contextId) {
+		models.Context context = models.Context.read(contextId);
+		if (context != null) {
+			ContextBean contextBean = PlayDozerMapper.getInstance().map(
+					context, ContextBean.class);
+			return contextBean;
+		} else {
+			return null;
+		}
+	}
+	
+	public ContextBean getContextByIdAndDecade(Long contextId, Long decade) {
+		models.Context context = models.Context.findByIdAndDecade(contextId,decade);
+		if (context != null) {
+			ContextBean contextBean = PlayDozerMapper.getInstance().map(
+					context, ContextBean.class);
+			return contextBean;
+		} else {
+			return null;
+		}
+	}
+	
+	public ContextBean getContextByIdAndDecadeAndCategory(Long contextId, Long decade, String category) {
+		models.Context context = models.Context.findByIdAndDecadeAndCategory(contextId, decade, category);
+		if (context != null) {
+			ContextBean contextBean = PlayDozerMapper.getInstance().map(
+					context, ContextBean.class);
+			return contextBean;
+		} else {
+			return null;
+		}
+	}
+	
+	public ContextBean refreshContextAndDecadeAndLocation(Long id,
+			Long decade, LocationMinimalBean location)
+			throws EntityDoesNotExist, NotEnoughInformation {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public ContextBean initContextForPersonAndDecade(Long personId, Long decade)
-			throws EntityDoesNotExist, NotEnoughInformation {
-		return initContext(personId, decade, null);
+
+	public ContextBean refreshContextForDecadeAndCity(Long cid, Long decade,
+			Long cityId) throws EntityDoesNotExist, NotEnoughInformation {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public ContextBean initContextForPerson(Long personId)
-			throws EntityDoesNotExist, NotEnoughInformation {
-		return initContext(personId, null, null);
+	public void deleteContext(Long cid) {
+		models.Context.delete(cid);
 	}
 
-	private ContextBean initContext(Long personId, Long decade, Long cityId)
+	public ContextContributedBean addMementoToContext(Long cid,
+			ContributedMementoBean contributed) throws EntityDoesNotExist,
+			NotEnoughInformation {
+		models.ContributedMemento contributedMemento = PlayDozerMapper.getInstance().map(
+				contributed, models.ContributedMemento.class);
+		models.ContributedMemento.create(contributedMemento);		
+		models.Context c = models.Context.read(cid);
+		models.ContextContributed cc = new ContextContributed(contributedMemento, c);
+		//models.ContextContributed.create(cc);
+		c.getContributedMementoList().add(cc);
+		models.Context.update(cid);
+		cc.refresh();
+		return PlayDozerMapper.getInstance().map(cc, pojos.ContextContributedBean.class);
+	}
+
+	public ContributedMementoBean updatedContextMemento(Long cid, Long mid,
+			ContributedMementoBean contributed) throws EntityDoesNotExist,
+			NotEnoughInformation {
+		models.ContributedMemento contributedMemento = PlayDozerMapper.getInstance().map(contributed, models.ContributedMemento.class);
+		contributedMemento.update();
+		return PlayDozerMapper.getInstance().map(contributedMemento, pojos.ContributedMementoBean.class);
+	}
+
+	public void deleteContextMemento(Long cid, Long mid)
 			throws EntityDoesNotExist, NotEnoughInformation {
+		models.ContextContributed.delete(cid, mid);
+	}
+
+	public ContributedMemento createContributedMemento(
+			ContributedMementoBean contributed) {
+		models.ContributedMemento contributedMemento = PlayDozerMapper.getInstance().map(
+				contributed, models.ContributedMemento.class);
+		models.ContributedMemento.create(contributedMemento);		
+		return contributedMemento;
+	}
+
+	/*
+	 * 
+	 * The algorithm methods
+	 * 
+	 * TODO unify into one single model
+	 */
+	
+	/**
+	 * The initContext method creates a whole new collection of contextual reminiscence items for 
+	 * the person identified by personId. 
+	 * 
+	 * The initialization process will focus on the provided decade, city and location (or combination of them)
+	 * If none is provided, it will use the list of stories of the person that are present in the system. 
+	 * 
+	 * @param personId
+	 * @param decade
+	 * @param cityId
+	 * @param location
+	 * @return
+	 * @throws EntityDoesNotExist
+	 * @throws NotEnoughInformation
+	 */
+	private ContextBean initContext(Long personId, Long decade, Long cityId,
+			LocationMinimalBean location) throws EntityDoesNotExist,
+			NotEnoughInformation {
 		/*
 		 * 1.read person record and language information
 		 */
@@ -93,21 +223,11 @@ public class ContextDelegate {
 		 * 2. Prepare decades
 		 */
 		Map<Long, List<LocationMinimalBean>> decadesLocationsMap = prepareDecadesLocationsMap(
-				decade, cityId, personId);
+				decade, cityId, personId, location, locale);
 
 		if (decadesLocationsMap.isEmpty()) {
-			if(cityId!=null) {
-				City c = City.read(cityId);
-				LocationMinimalBean loc = new LocationMinimalBean(c.getCountry()
-						.getNameByLocale(locale), c.getRegion(), c.getName(),
-						locale);
-				List<LocationMinimalBean> locList = new ArrayList<LocationMinimalBean>();
-				locList.add(loc);
-				decadesLocationsMap.put(decade, locList);
-			} else {
-				throw new NotEnoughInformation("The person " + personId
-						+ "has no story in this decade");
-			}
+			throw new NotEnoughInformation("The person " + personId
+					+ "has no story in this decade");
 		}
 
 		/*
@@ -169,14 +289,71 @@ public class ContextDelegate {
 				newContext, ContextBean.class);
 		return newContextBean;
 	}
-
+	
 	private List<ContextPeople> getPeopleContextList(
 			Map<Long, List<LocationMinimalBean>> decadesLocationsMap,
 			String locale, Context newContext) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Long> decades = decadesLocationsMap.keySet();
+		List<ContextPeople> content = new ArrayList<ContextPeople>();
+		int itemsPerLevel = Play.application().configuration()
+				.getInt("context.algorithm.item.count");
+		if (itemsPerLevel <= 0) {
+			itemsPerLevel = 1;
+		}
+
+		for (Long decade : decades) {
+			for (MementoCategory category : MementoCategory.values()) {
+				// 1. read 1 random element related only to the decade
+				List<LocationMinimalBean> locations = decadesLocationsMap
+						.get(decade);
+				List<FamousPerson> worldLevelList = FamousPerson
+						.readForContext(locale, category, decade, locations,
+								"WORLD", itemsPerLevel);
+				List<FamousPerson> countryLevelList = FamousPerson
+						.readForContext(locale, category, decade, locations,
+								"COUNTRY", itemsPerLevel);
+				List<FamousPerson> regionLevelList = FamousPerson
+						.readForContext(locale, category, decade, locations,
+								"REGION", itemsPerLevel);
+
+				for (FamousPerson contributed : worldLevelList) {
+					ContextPeople contextItem = new ContextPeople(
+							contributed, newContext);
+					contextItem.setLevel("WORLD");
+					contextItem.setDecade(decade);
+					contextItem.setCategory(contributed.getCategory());
+					contextItem.setType(contributed.getResourceType());
+					ContextPeople.create(contextItem);
+					content.add(contextItem);
+
+				}
+				for (FamousPerson contributed : countryLevelList) {
+					ContextPeople contextItem = new ContextPeople(
+							contributed, newContext);
+					contextItem.setLevel("COUNTRY");
+					contextItem.setDecade(decade);
+					contextItem.setCategory(contributed.getCategory());
+					contextItem.setType(contributed.getResourceType());
+					ContextPeople.create(contextItem);
+					content.add(contextItem);
+				}
+				for (FamousPerson contributed : regionLevelList) {
+					ContextPeople contextItem = new ContextPeople(
+							contributed, newContext);
+					contextItem.setLevel("REGION");
+					contextItem.setDecade(decade);
+					contextItem.setCategory(contributed.getCategory());
+					contextItem.setType(contributed.getResourceType());
+					ContextPeople.create(contextItem);
+					content.add(contextItem);
+				}
+			}
+		}
+		return content;
 	}
 
+	
+	
 	private List<ContextCreativeWork> getCreativeWorkContextList(
 			Map<Long, List<LocationMinimalBean>> decadesLocationsMap,
 			String locale, Context newContext) {
@@ -315,19 +492,16 @@ public class ContextDelegate {
 				// 1. read 1 random element related only to the decade
 				List<LocationMinimalBean> locations = decadesLocationsMap
 						.get(decade);
-				List<Media> worldLevelList = Media
-						.readForContext(locale, category, decade, locations,
-								"WORLD", itemsPerLevel);
-				List<Media> countryLevelList = Media
-						.readForContext(locale, category, decade, locations,
-								"COUNTRY", itemsPerLevel);
-				List<Media> regionLevelList = Media
-						.readForContext(locale, category, decade, locations,
-								"REGION", itemsPerLevel);
+				List<Media> worldLevelList = Media.readForContext(locale,
+						category, decade, locations, "WORLD", itemsPerLevel);
+				List<Media> countryLevelList = Media.readForContext(locale,
+						category, decade, locations, "COUNTRY", itemsPerLevel);
+				List<Media> regionLevelList = Media.readForContext(locale,
+						category, decade, locations, "REGION", itemsPerLevel);
 
 				for (Media contributed : worldLevelList) {
-					ContextMedia contextItem = new ContextMedia(
-							contributed, newContext);
+					ContextMedia contextItem = new ContextMedia(contributed,
+							newContext);
 					contextItem.setLevel("WORLD");
 					contextItem.setDecade(decade);
 					contextItem.setCategory(contributed.getCategory());
@@ -337,8 +511,8 @@ public class ContextDelegate {
 
 				}
 				for (Media contributed : countryLevelList) {
-					ContextMedia contextItem = new ContextMedia(
-							contributed, newContext);
+					ContextMedia contextItem = new ContextMedia(contributed,
+							newContext);
 					contextItem.setLevel("COUNTRY");
 					contextItem.setDecade(decade);
 					contextItem.setCategory(contributed.getCategory());
@@ -347,8 +521,8 @@ public class ContextDelegate {
 					content.add(contextItem);
 				}
 				for (Media contributed : regionLevelList) {
-					ContextMedia contextItem = new ContextMedia(
-							contributed, newContext);
+					ContextMedia contextItem = new ContextMedia(contributed,
+							newContext);
 					contextItem.setLevel("REGION");
 					contextItem.setDecade(decade);
 					contextItem.setCategory(contributed.getCategory());
@@ -425,6 +599,7 @@ public class ContextDelegate {
 		return content;
 	}
 
+
 	/**
 	 * Prepare a HastTable of the form decade => list of locations which will be
 	 * used to iterate and generate the context
@@ -432,16 +607,37 @@ public class ContextDelegate {
 	 * @param decade
 	 * @param cityId
 	 * @param personId
+	 * @param location
 	 * @return
-	 */
+	 */	
 	private Map<Long, List<LocationMinimalBean>> prepareDecadesLocationsMap(
-			Long decade, Long cityId, Long personId) {
+			Long decade, Long cityId, Long personId,
+			LocationMinimalBean location, String locale) {
 		// TODO replace with reading directly the distinct decades and locations
-		List<LifeStory> stories = decade == null || cityId == null ? LifeStory
-				.readByPerson(personId) : null;
-		return decade == null ? storiesToDecadeLocationsMap(stories)
-				: cityId == null ? storiesToDecadeLocationsMap(stories, decade)
-						: new HashMap<Long, List<LocationMinimalBean>>();
+		List<LifeStory> stories = cityId == null ? location == null ? LifeStory
+				.readByPerson(personId) : null : null;
+
+		Map<Long, List<LocationMinimalBean>> map = new HashMap<Long, List<LocationMinimalBean>>();
+		if (stories != null && !stories.isEmpty() && decade != null) {
+			map = storiesToDecadeLocationsMap(stories, decade);
+		} else if (stories != null && !stories.isEmpty() && decade == null) {
+			map = storiesToDecadeLocationsMap(stories);
+		} else if (decade != null) {
+			List<LocationMinimalBean> locList = new ArrayList<LocationMinimalBean>();
+
+			if (cityId != null) {
+				City c = City.read(cityId);
+				LocationMinimalBean loc = new LocationMinimalBean(c
+						.getCountry().getNameByLocale(locale), c.getRegion(),
+						c.getName(), locale);
+				locList.add(loc);
+				map.put(decade, locList);
+			} else if (location != null) {
+				locList.add(location);
+				map.put(decade, locList);
+			}
+		}
+		return map;
 	}
 
 	private Map<Long, List<LocationMinimalBean>> storiesToDecadeLocationsMap(
@@ -458,7 +654,7 @@ public class ContextDelegate {
 							.configuration().getString("default.language") : c
 							.getLocale();
 					LocationMinimalBean loc = new LocationMinimalBean(
-							c.getCountry(), c.getRegion(), c.getCityName(),
+							c.getCountry(), c.getRegion(), c.getCity(),
 							locale);
 					List<LocationMinimalBean> locList = map.get(decade);
 					if (locList == null) {
@@ -494,7 +690,7 @@ public class ContextDelegate {
 					// String localizedCity = Country
 
 					LocationMinimalBean loc = new LocationMinimalBean(
-							c.getCountry(), c.getRegion(), c.getCityName(),
+							c.getCountry(), c.getRegion(), c.getCity(),
 							locale);
 					List<LocationMinimalBean> locList = map.get(decade);
 					if (locList == null) {
@@ -508,64 +704,5 @@ public class ContextDelegate {
 			}
 		}
 		return map;
-	}
-
-	public void deleteContext(Long cid) {
-		models.Context.delete(cid);
-	}
-
-	public ContextBean refreshContextForDecadeAndCity(Long cid, Long decade,
-			Long cityId) throws EntityDoesNotExist, NotEnoughInformation {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ContextBean refreshContextForDecade(Long cid, Long decade) throws EntityDoesNotExist, NotEnoughInformation {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ContextBean refreshContext(Long cid) throws EntityDoesNotExist, NotEnoughInformation {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ContextBean getContextForDecade(Long cid, Long decade) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ContextBean getContextForDecadeAndCity(Long cid, Long decade,
-			Long cityId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ContextBean getContextByCategory(Long cid, String cat) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ContextBean addMementoToContext(Long cid,
-			ContributedMementoBean contributed) throws EntityDoesNotExist, NotEnoughInformation {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ContextBean updatedContextMemento(Long cid, Long mid,
-			ContributedMementoBean contributed) throws EntityDoesNotExist, NotEnoughInformation {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void deleteContextMemento(Long cid, Long mid) throws EntityDoesNotExist, NotEnoughInformation {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public ContextBean createContributedMemento(
-			ContributedMementoBean contributed) throws EntityDoesNotExist, NotEnoughInformation {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
