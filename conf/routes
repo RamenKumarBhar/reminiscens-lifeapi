@@ -27,7 +27,6 @@ GET     /user                                        controllers.UserControl.get
 GET     /user/:uid                                   controllers.UserControl.getUser(uid: Long)
 POST    /user/email                                  controllers.UserControl.getUserByEmail() 
 
-
 #####################################################################################
 # People, Relationships, Timeline, Life Stories and Mementos
 GET     /person                                 controllers.PersonControl.getPersonAll() 
