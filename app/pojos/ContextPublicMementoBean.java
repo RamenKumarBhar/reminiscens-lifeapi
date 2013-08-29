@@ -17,6 +17,7 @@ public class ContextPublicMementoBean implements Serializable {
 	private String category; // 'PICTURES,SONG,PEOPLE,STORY,FILM,TV,ARTWORK,BOOK,OBJECT' ,
 	private Long views;
 	private Long detailViews;
+	private Long ranking;
 	
 	@JsonIgnore
 	private ContextBean context;
@@ -93,5 +94,13 @@ public class ContextPublicMementoBean implements Serializable {
 
 	public void setPublicMemento(PublicMementoBean publicMemento) {
 		this.publicMemento = publicMemento;
+	}
+
+	public Long getRanking() {
+		return ranking;
+	}
+
+	public void setRanking(Long ranking) {
+		this.ranking = ranking;
 	}
 }

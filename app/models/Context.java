@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -137,6 +138,7 @@ public class Context extends Model {
     	List<Context> contextOfPerson = find.where()
 				.eq("personForId", personId)
 				.eq("enabled",true)
+				.orderBy("publicMementoList.ranking desc")
 				.findList();
 		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
     }
@@ -152,6 +154,7 @@ public class Context extends Model {
 //				.eq("eventList.decade",decade)
 //				.eq("creativeWorkList.decade",decade)
 //				.eq("famousPeopleList.decade",decade)
+				.orderBy("publicMementoList.ranking desc")
 				.findList();
 		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
 	}
@@ -172,6 +175,7 @@ public class Context extends Model {
 //				.eq("eventList.category",category)
 //				.eq("creativeWorkList.category",category)
 //				.eq("famousPeopleList.category",category)
+				.orderBy("publicMementoList.ranking desc")
 				.findList();
 		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
 	}	
@@ -187,6 +191,7 @@ public class Context extends Model {
 //				.eq("eventList.decade",decade)
 //				.eq("creativeWorkList.decade",decade)
 //				.eq("famousPeopleList.decade",decade)
+				.orderBy("publicMementoList.ranking desc")
 				.findList();
 		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
 	}
@@ -208,6 +213,7 @@ public class Context extends Model {
 //				.eq("eventList.category",category)
 //				.eq("creativeWorkList.category",category)
 //				.eq("famousPeopleList.category",category)
+				.orderBy("publicMementoList.ranking desc")
 				.findList();
 		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
 	}
