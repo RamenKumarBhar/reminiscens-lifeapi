@@ -8,20 +8,6 @@ public class LocationMinimalBean {
 	private String region;
 	private String locale;
 	
-	public LocationMinimalBean(String country, String city, String region, String locale) {
-		this.country = country;
-		this.region = region;
-		this.city = city;
-		this.locale = locale;
-	}
-	
-	public LocationMinimalBean(Location loc) {
-		this.country = loc.getCountry();
-		this.region = loc.getRegion();
-		this.city = loc.getCity();
-		this.locale = loc.getLocale();
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof LocationMinimalBean) {

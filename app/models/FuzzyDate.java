@@ -80,11 +80,22 @@ public class FuzzyDate extends Model {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "startDate", cascade = CascadeType.ALL)
-	private List<LifeStory> mementosStart;
+	private List<Memento> mementosStart;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "endDate", cascade = CascadeType.ALL)
-	private List<LifeStory> mementosEnd;
+	private List<Memento> mementosEnd;
+	
+	
+	// Foreign Keys
+	@JsonIgnore
+	@OneToMany(mappedBy = "startDate", cascade = CascadeType.ALL)
+	private List<PublicMemento> publicMementoStart;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "endDate", cascade = CascadeType.ALL)
+	private List<PublicMemento> publicMementoEnd;
+
 
 	public static Model.Finder<Long, FuzzyDate> find = new Model.Finder<Long, FuzzyDate>(
 			Long.class, FuzzyDate.class);
@@ -471,6 +482,54 @@ public class FuzzyDate extends Model {
 	 */
 	public void setLocale(String locale) {
 		this.locale = locale;
+	}
+
+	public List<LifeStory> getLifeStoriesStart() {
+		return lifeStoriesStart;
+	}
+
+	public void setLifeStoriesStart(List<LifeStory> lifeStoriesStart) {
+		this.lifeStoriesStart = lifeStoriesStart;
+	}
+
+	public List<LifeStory> getLifeStoriesEnd() {
+		return lifeStoriesEnd;
+	}
+
+	public void setLifeStoriesEnd(List<LifeStory> lifeStoriesEnd) {
+		this.lifeStoriesEnd = lifeStoriesEnd;
+	}
+
+	public List<Memento> getMementosStart() {
+		return mementosStart;
+	}
+
+	public void setMementosStart(List<Memento> mementosStart) {
+		this.mementosStart = mementosStart;
+	}
+
+	public List<Memento> getMementosEnd() {
+		return mementosEnd;
+	}
+
+	public void setMementosEnd(List<Memento> mementosEnd) {
+		this.mementosEnd = mementosEnd;
+	}
+
+	public List<PublicMemento> getPublicMementoStart() {
+		return publicMementoStart;
+	}
+
+	public void setPublicMementoStart(List<PublicMemento> publicMementoStart) {
+		this.publicMementoStart = publicMementoStart;
+	}
+
+	public List<PublicMemento> getPublicMementoEnd() {
+		return publicMementoEnd;
+	}
+
+	public void setPublicMementoEnd(List<PublicMemento> publicMementoEnd) {
+		this.publicMementoEnd = publicMementoEnd;
 	}
 
 }

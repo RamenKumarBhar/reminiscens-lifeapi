@@ -38,9 +38,9 @@ public class ContextContent extends Model {
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "context_index_id", updatable = false, insertable = false)
-	private PublicMemento publicMemento;
+	private ContextIndex publicMemento;
 
-	public ContextContent(PublicMemento pm) {
+	public ContextContent(ContextIndex pm) {
 		super();
 		this.setPublicMemento(pm);
 	}
@@ -122,11 +122,11 @@ public class ContextContent extends Model {
 		this.context = context;
 	}
 
-	public PublicMemento getPublicMemento() {
+	public ContextIndex getPublicMemento() {
 		return publicMemento;
 	}
 
-	public void setPublicMemento(PublicMemento publicMemento) {
+	public void setPublicMemento(ContextIndex publicMemento) {
 		this.publicMemento = publicMemento;
 	}
 

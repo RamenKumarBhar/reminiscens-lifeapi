@@ -1,94 +1,192 @@
 package pojos;
 
-
 import java.io.Serializable;
-import java.util.List;
 
-public class PublicMementoBean  implements Serializable {
-
-    /**
+public class PublicMementoBean implements Serializable {
+	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3980159110846013300L;
-   
+	private static final long serialVersionUID = 8656034251575759425L;
 	private Long publicMementoId;
-	private Long decade;
-	private Long year;
-	private Double distance; 
-	private Double category;
-	private CityBean closestCity;
-	private Integer coordinatesTrust;
-	private static EventBean event;
-	private static CreativeWorkBean creativeWork;
-	private static MediaBean media;
-	private List<PublicParticipationBean> publicParticipants;
-	
+	private String headline;
+	private String text;
+	private String type;
+	private String resourceType;
+	private String category;
+	private String source;
+	private String sourceUrl;
+	private String resourceUrl;
+	private String resourceThumbnailUrl;
+	private String author;
+	private String collection;
+	private String collectionType;
+	private Boolean isCollection;
+	private String nationality;
+	private String locale;
+	private String haschcode;
+	private String fileHashcode;
+	private String fileName;
+	private String contributorType;
+	private Long contributor;
+	private FuzzyDateBean startDate;
+	private LocationBean startLocation;
+	private FuzzyDateBean endDate;
+	private LocationBean endLocation;
+	private String tags;
 	public Long getPublicMementoId() {
 		return publicMementoId;
 	}
 	public void setPublicMementoId(Long publicMementoId) {
 		this.publicMementoId = publicMementoId;
 	}
-	public Long getDecade() {
-		return decade;
+	public String getHeadline() {
+		return headline;
 	}
-	public void setDecade(Long decade) {
-		this.decade = decade;
+	public void setHeadline(String headline) {
+		this.headline = headline;
 	}
-	public Long getYear() {
-		return year;
+	public String getText() {
+		return text;
 	}
-	public void setYear(Long year) {
-		this.year = year;
+	public void setText(String text) {
+		this.text = text;
 	}
-	public Double getDistance() {
-		return distance;
+	public String getType() {
+		return type;
 	}
-	public void setDistance(Double distance) {
-		this.distance = distance;
+	public void setType(String type) {
+		this.type = type;
 	}
-	public Double getCategory() {
+	public String getResourceType() {
+		return resourceType;
+	}
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+	public String getCategory() {
 		return category;
 	}
-	public void setCategory(Double category) {
+	public void setCategory(String category) {
 		this.category = category;
 	}
-	public CityBean getClosestCity() {
-		return closestCity;
+	public String getSource() {
+		return source;
 	}
-	public void setClosestCity(CityBean closestCity) {
-		this.closestCity = closestCity;
+	public void setSource(String source) {
+		this.source = source;
 	}
-	public Integer getCoordinatesTrust() {
-		return coordinatesTrust;
+	public String getSourceUrl() {
+		return sourceUrl;
 	}
-	public void setCoordinatesTrust(Integer coordinatesTrust) {
-		this.coordinatesTrust = coordinatesTrust;
+	public void setSourceUrl(String sourceUrl) {
+		this.sourceUrl = sourceUrl;
 	}
-	public static EventBean getEvent() {
-		return event;
+	public String getResourceUrl() {
+		return resourceUrl;
 	}
-	public static void setEvent(EventBean event) {
-		PublicMementoBean.event = event;
+	public void setResourceUrl(String resourceUrl) {
+		this.resourceUrl = resourceUrl;
 	}
-	public static CreativeWorkBean getCreativeWork() {
-		return creativeWork;
+	public String getResourceThumbnailUrl() {
+		return resourceThumbnailUrl;
 	}
-	public static void setCreativeWork(CreativeWorkBean creativeWork) {
-		PublicMementoBean.creativeWork = creativeWork;
+	public void setResourceThumbnailUrl(String resourceThumbnailUrl) {
+		this.resourceThumbnailUrl = resourceThumbnailUrl;
 	}
-	public static MediaBean getMedia() {
-		return media;
+	public String getAuthor() {
+		return author;
 	}
-	public static void setMedia(MediaBean media) {
-		PublicMementoBean.media = media;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
-	public List<PublicParticipationBean> getPublicParticipants() {
-		return publicParticipants;
+	public String getCollection() {
+		return collection;
 	}
-	public void setPublicParticipants(List<PublicParticipationBean> publicParticipants) {
-		this.publicParticipants = publicParticipants;
+	public void setCollection(String collection) {
+		this.collection = collection;
 	}
-	
-		
+	public String getCollectionType() {
+		return collectionType;
+	}
+	public void setCollectionType(String collectionType) {
+		this.collectionType = collectionType;
+	}
+	public Boolean getIsCollection() {
+		return isCollection;
+	}
+	public void setIsCollection(Boolean isCollection) {
+		this.isCollection = isCollection;
+	}
+	public String getNationality() {
+		return nationality;
+	}
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
+	}
+	public String getLocale() {
+		return locale;
+	}
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
+	public String getHaschcode() {
+		return haschcode;
+	}
+	public void setHaschcode(String haschcode) {
+		this.haschcode = haschcode;
+	}
+	public String getFileHashcode() {
+		return fileHashcode;
+	}
+	public void setFileHashcode(String fileHashcode) {
+		this.fileHashcode = fileHashcode;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public String getContributorType() {
+		return contributorType;
+	}
+	public void setContributorType(String contributorType) {
+		this.contributorType = contributorType;
+	}
+	public Long getContributor() {
+		return contributor;
+	}
+	public void setContributor(Long contributor) {
+		this.contributor = contributor;
+	}
+	public FuzzyDateBean getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(FuzzyDateBean startDate) {
+		this.startDate = startDate;
+	}
+	public LocationBean getStartLocation() {
+		return startLocation;
+	}
+	public void setStartLocation(LocationBean startLocation) {
+		this.startLocation = startLocation;
+	}
+	public FuzzyDateBean getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(FuzzyDateBean endDate) {
+		this.endDate = endDate;
+	}
+	public LocationBean getEndLocation() {
+		return endLocation;
+	}
+	public void setEndLocation(LocationBean endLocation) {
+		this.endLocation = endLocation;
+	}
+	public String getTags() {
+		return tags;
+	}
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
 }

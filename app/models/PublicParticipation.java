@@ -36,7 +36,7 @@ public class PublicParticipation extends Model {
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "context_index_id", updatable = false, insertable = false)
-	private PublicMemento publicMemento;	
+	private ContextIndex publicMemento;	
 	
 
 	public static Model.Finder<Long,PublicParticipation> find = new Finder<Long, PublicParticipation>(
@@ -102,11 +102,11 @@ public class PublicParticipation extends Model {
 		this.famousPerson = famousPerson;
 	}
 
-	public PublicMemento getPublicMemento() {
+	public ContextIndex getPublicMemento() {
 		return publicMemento;
 	}
 
-	public void setPublicMemento(PublicMemento publicMemento) {
+	public void setPublicMemento(ContextIndex publicMemento) {
 		this.publicMemento = publicMemento;
 	}
 }

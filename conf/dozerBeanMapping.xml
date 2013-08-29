@@ -8,8 +8,8 @@
 		<date-format>yyyy-MM-dd HH:mm:ss</date-format>
 		<copy-by-references>
 			<copy-by-reference>
-       org.joda.time.DateTime
-     </copy-by-reference>
+                org.joda.time.DateTime
+            </copy-by-reference>
 		</copy-by-references>
 	</configuration>
 
@@ -21,7 +21,6 @@
 			<a>active</a>
 			<b>active</b>
 		</field>
-
 	</mapping>
 
 	<!-- <mapping> <class-a>net.comdynamics.myapp.Product</class-a> <class-b>net.comdynamics.myapp.ProductOffering</class-b> 
