@@ -228,31 +228,47 @@ public class ContextDelegate {
 	}
 
 	public ContextPublicMementoBean addMementoToContext(Long cid,
-			PublicMementoBean contributed) throws EntityDoesNotExist,
+			ContextPublicMementoBean contributed) throws EntityDoesNotExist,
 			NotEnoughInformation {
-		models.PublicMemento contributedMemento = PlayDozerMapper.getInstance().map(
-				contributed, models.PublicMemento.class);
-		models.PublicMemento.create(contributedMemento);		
+		models.ContextPublicMemento cc = PlayDozerMapper.getInstance().map(
+				contributed, models.ContextPublicMemento.class);
 		models.Context c = models.Context.read(cid);
-		models.ContextPublicMemento cc = new ContextPublicMemento(contributedMemento, c);
-		//models.ContextContributed.create(cc);
-		c.getPublicMementoList().add(cc);
-		models.Context.update(cid);
-		cc.refresh();
+		cc.setContext(c);
+		models.ContextPublicMemento.create(cc);
 		return PlayDozerMapper.getInstance().map(cc, pojos.ContextPublicMementoBean.class);
 	}
 
-	public PublicMementoBean updatedContextMemento(Long cid, Long mid,
+	public PublicMementoBean getPublicMemento(Long mid) {
+		PublicMemento p = models.PublicMemento.read(mid);
+		return PlayDozerMapper.getInstance().map(p, PublicMementoBean.class);
+	}
+	
+	public ContextPublicMementoBean getContextMemento(Long cid, Long mid) {
+		ContextPublicMemento p = models.ContextPublicMemento.read(cid,mid);
+		return PlayDozerMapper.getInstance().map(p, ContextPublicMementoBean.class);
+	}
+	
+	public ContextPublicMementoBean updateContextMemento(Long cid, Long mid,
+			ContextPublicMementoBean contributed) throws EntityDoesNotExist,
+			NotEnoughInformation {
+		models.ContextPublicMemento contributedMemento = PlayDozerMapper.getInstance().map(contributed, models.ContextPublicMemento.class);
+		models.ContextPublicMemento.update(cid, mid, contributedMemento);
+		return PlayDozerMapper.getInstance().map(contributedMemento, pojos.ContextPublicMementoBean.class);
+	}
+	
+	public PublicMementoBean updatePublicMemento(Long mid,
 			PublicMementoBean contributed) throws EntityDoesNotExist,
 			NotEnoughInformation {
 		models.PublicMemento contributedMemento = PlayDozerMapper.getInstance().map(contributed, models.PublicMemento.class);
 		contributedMemento.update();
+		contributedMemento.refresh();
 		return PlayDozerMapper.getInstance().map(contributedMemento, pojos.PublicMementoBean.class);
 	}
+	
 
 	public void deleteContextMemento(Long cid, Long mid)
 			throws EntityDoesNotExist, NotEnoughInformation {
-		models.ContextContributed.delete(cid, mid);
+		models.ContextPublicMemento.delete(cid, mid);
 	}
 
 	public PublicMemento createContributedMemento(
@@ -265,7 +281,7 @@ public class ContextDelegate {
 	}
 	
 	public void deleteContributedMemento(Long mid) {
-		models.ContributedMemento.delete(mid);		
+		models.PublicMemento.delete(mid);		
 	}
 
 	/*

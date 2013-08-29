@@ -23,6 +23,8 @@ import static play.libs.Json.toJson;
 
 public class ContextControl extends Controller {
 
+	static Form<ContextPublicMementoBean> contextMementoForm = Form
+			.form(ContextPublicMementoBean.class);
 	static Form<PublicMementoBean> contributedForm = Form
 			.form(PublicMementoBean.class);
 	static Form<LocationMinimalBean> locationForm = Form
@@ -113,28 +115,33 @@ public class ContextControl extends Controller {
 
 	@Dynamic(value = "CuratorOf", meta = SecurityModelConstants.ID_FROM_PERSON)
 	public static Result getContextForPersonAndDecade(Long id, Long decade) {
-		ContextBean result = ContextDelegate.getInstance().getContextForPersonAndDecade(id, decade);
+		ContextBean result = ContextDelegate.getInstance()
+				.getContextForPersonAndDecade(id, decade);
 		if (result != null) {
 			return ok(toJson(result));
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
-					ResponseStatus.NODATA, "Context for /person/" + id +" has not yet been created");
+					ResponseStatus.NODATA, "Context for /person/" + id
+							+ " has not yet been created");
 			return notFound(toJson(res));
 		}
 	}
 
 	@Dynamic(value = "CuratorOf", meta = SecurityModelConstants.ID_FROM_PERSON)
-	public static Result getContextForPersonAndDecadeAndCategory(Long id, Long decade, String category) {
-		ContextBean result = ContextDelegate.getInstance().getContextForPersonAndDecadeAndCategory(id, decade, category);
+	public static Result getContextForPersonAndDecadeAndCategory(Long id,
+			Long decade, String category) {
+		ContextBean result = ContextDelegate.getInstance()
+				.getContextForPersonAndDecadeAndCategory(id, decade, category);
 		if (result != null) {
 			return ok(toJson(result));
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
-					ResponseStatus.NODATA, "Context for /person/" + id +" has not yet been created");
+					ResponseStatus.NODATA, "Context for /person/" + id
+							+ " has not yet been created");
 			return notFound(toJson(res));
 		}
 	}
-	
+
 	@Dynamic(value = "CuratorOf", meta = SecurityModelConstants.ID_FROM_PERSON)
 	public static Result initContextForPersonAndDecade(Long id, Long decade) {
 		try {
@@ -156,14 +163,14 @@ public class ContextControl extends Controller {
 	public static Result initContextForPersonAndDecadeAndLocation(Long id,
 			Long decade) {
 		Form<LocationMinimalBean> filledForm = locationForm.bindFromRequest();
-		
+
 		if (filledForm.hasErrors()) {
 			ResponseStatusBean res = new ResponseStatusBean(
 					ResponseStatus.BADREQUEST,
 					"Body of request misses some information or it is malformed");
 			return badRequest(toJson(res));
 		} else {
-			
+
 			LocationMinimalBean location = filledForm.get();
 			try {
 				ContextBean result = ContextDelegate.getInstance()
@@ -181,7 +188,7 @@ public class ContextControl extends Controller {
 			}
 		}
 	}
-	
+
 	@Dynamic(value = "CuratorOf", meta = SecurityModelConstants.ID_FROM_PERSON)
 	public static Result initContextForPersonAndDecadeAndCity(Long id,
 			Long decade, Long cityId) {
@@ -207,7 +214,8 @@ public class ContextControl extends Controller {
 			return ok(toJson(result));
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
-					ResponseStatus.NODATA, "Context with " + cid +" does not exist");
+					ResponseStatus.NODATA, "Context with " + cid
+							+ " does not exist");
 			return notFound(toJson(res));
 		}
 	}
@@ -221,27 +229,29 @@ public class ContextControl extends Controller {
 			return ok(toJson(result));
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
-					ResponseStatus.NODATA, "Context with " + cid +" does not exist");
+					ResponseStatus.NODATA, "Context with " + cid
+							+ " does not exist");
 			return notFound(toJson(res));
 		}
 	}
-	
+
 	@Dynamic(value = "CuratorOf", meta = SecurityModelConstants.ID_FROM_CONTEXT)
-	public static Result getContextByIdAndDecadeAndCategory(Long cid, Long decade, String cat) {
+	public static Result getContextByIdAndDecadeAndCategory(Long cid,
+			Long decade, String cat) {
 		ContextBean result = ContextDelegate.getInstance()
 				.getContextByIdAndDecadeAndCategory(cid, decade, cat);
 		if (result != null) {
 			return ok(toJson(result));
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
-					ResponseStatus.NODATA, "Context with " + cid +" does not exist");
+					ResponseStatus.NODATA, "Context with " + cid
+							+ " does not exist");
 			return notFound(toJson(res));
 		}
 	}
-		
+
 	@Dynamic(value = "CuratorOf", meta = SecurityModelConstants.ID_FROM_CONTEXT)
-	public static Result refreshContextForDecadeAndLocation(Long id,
-			Long decade) {
+	public static Result refreshContextForDecadeAndLocation(Long id, Long decade) {
 		Form<LocationMinimalBean> filledForm = locationForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -252,8 +262,7 @@ public class ContextControl extends Controller {
 			LocationMinimalBean location = filledForm.get();
 			try {
 				ContextBean result = ContextDelegate.getInstance()
-						.refreshContextDecadeAndLocation(id,
-								decade, location);
+						.refreshContextDecadeAndLocation(id, decade, location);
 				return ok(toJson(result));
 			} catch (EntityDoesNotExist e) {
 				ResponseStatusBean res = new ResponseStatusBean(
@@ -266,7 +275,7 @@ public class ContextControl extends Controller {
 			}
 		}
 	}
-	
+
 	@Dynamic(value = "CuratorOf", meta = SecurityModelConstants.ID_FROM_CONTEXT)
 	public static Result refreshContextForDecadeAndCity(Long cid, Long decade,
 			Long cityId) {
@@ -284,8 +293,8 @@ public class ContextControl extends Controller {
 			return badRequest(toJson(res));
 		}
 	}
-	
-	// TODO	
+
+	// TODO
 	@Dynamic(value = "CuratorOf", meta = SecurityModelConstants.ID_FROM_CONTEXT)
 	public static Result deleteContext(Long cid) {
 		try {
@@ -300,11 +309,12 @@ public class ContextControl extends Controller {
 			return badRequest(toJson(res));
 		}
 	}
+
 	// TODO
 
 	@SubjectPresent
 	public static Result createContextMemento(Long cid) {
-		Form<PublicMementoBean> filledForm = contributedForm
+		Form<ContextPublicMementoBean> filledForm = contextMementoForm
 				.bindFromRequest();
 		String userEmail = session().get("pa.u.id");
 		User user = User.getByEmail(userEmail);
@@ -312,15 +322,93 @@ public class ContextControl extends Controller {
 		if (filledForm.hasErrors()) {
 			ResponseStatusBean res = new ResponseStatusBean(
 					ResponseStatus.BADREQUEST,
-					"Body of request misses some information or it is malformed" + filledForm.errors().toString());
+					"Body of request misses some information or it is malformed"
+							+ filledForm.errors().toString());
+			return badRequest(toJson(res));
+		} else {
+			try {
+				ContextPublicMementoBean contributed = filledForm.get();
+				PublicMementoBean p = contributed.getPublicMemento();
+				if (p != null) {
+					p.setContributor(id);
+					p.setContributorType("MEMBER");
+					ContextPublicMementoBean result = ContextDelegate
+							.getInstance()
+							.addMementoToContext(cid, contributed);
+					return ok(toJson(result));
+				} else {
+					ResponseStatusBean res = new ResponseStatusBean(
+							ResponseStatus.BADREQUEST,
+							"No memento in data sent");
+					return badRequest(toJson(res));
+				}
+			} catch (EntityDoesNotExist e) {
+				ResponseStatusBean res = new ResponseStatusBean(
+						ResponseStatus.NODATA, e.getLocalizedMessage());
+				return internalServerError(toJson(res));
+			} catch (NotEnoughInformation e) {
+				ResponseStatusBean res = new ResponseStatusBean(
+						ResponseStatus.BADREQUEST, e.getLocalizedMessage());
+				return badRequest(toJson(res));
+			}
+		}
+	}
+
+	// TODO
+	@SubjectPresent
+	public static Result updateContextMemento(Long cid, Long mid) {
+		Form<ContextPublicMementoBean> filledForm = contextMementoForm
+				.bindFromRequest();
+		if (filledForm.hasErrors()) {
+			ResponseStatusBean res = new ResponseStatusBean(
+					ResponseStatus.BADREQUEST,
+					"Body of request misses some information or it is malformed ==> "
+							+ filledForm.errors().toString());
+			return badRequest(toJson(res));
+		} else {
+			try {
+				ContextPublicMementoBean contributed = filledForm.get();
+				PublicMementoBean p = contributed.getPublicMemento();
+				if (p != null) {
+					p.setPublicMementoId(mid);
+					ContextPublicMementoBean result = ContextDelegate
+							.getInstance().updateContextMemento(cid, mid,
+									contributed);
+					return ok(toJson(result));
+				} else {
+					ResponseStatusBean res = new ResponseStatusBean(
+							ResponseStatus.BADREQUEST,
+							"No memento in data sent");
+					return badRequest(toJson(res));
+				}
+			} catch (EntityDoesNotExist e) {
+				ResponseStatusBean res = new ResponseStatusBean(
+						ResponseStatus.NODATA, e.getLocalizedMessage());
+				return internalServerError(toJson(res));
+			} catch (NotEnoughInformation e) {
+				ResponseStatusBean res = new ResponseStatusBean(
+						ResponseStatus.BADREQUEST, e.getLocalizedMessage());
+				return badRequest(toJson(res));
+			}
+		}
+	}
+
+	// TODO
+	@SubjectPresent
+	public static Result updatePublicMemento(Long mid) {
+		Form<PublicMementoBean> filledForm = contributedForm.bindFromRequest();
+		if (filledForm.hasErrors()) {
+			ResponseStatusBean res = new ResponseStatusBean(
+					ResponseStatus.BADREQUEST,
+					"Body of request misses some information or it is malformed"
+							+ filledForm.errors().toString());
 			return badRequest(toJson(res));
 		} else {
 			try {
 				PublicMementoBean contributed = filledForm.get();
-				contributed.setContributor(id);
-				contributed.setContributorType("MEMBER");
-				ContextPublicMementoBean result = ContextDelegate.getInstance()
-						.addMementoToContext(cid, contributed);
+				contributed.setPublicMementoId(mid);
+				PublicMementoBean result = ContextDelegate.getInstance()
+						.updatePublicMemento(mid, contributed);
 				return ok(toJson(result));
 			} catch (EntityDoesNotExist e) {
 				ResponseStatusBean res = new ResponseStatusBean(
@@ -333,32 +421,30 @@ public class ContextControl extends Controller {
 			}
 		}
 	}
-	
-	// TODO
+
 	@SubjectPresent
-	public static Result updateContextMemento(Long cid, Long mid) {
-		Form<PublicMementoBean> filledForm = contributedForm
-				.bindFromRequest();
-		if (filledForm.hasErrors()) {
+	public static Result getPublicMemento(Long mid) {
+		try {
+			PublicMementoBean result = ContextDelegate.getInstance()
+					.getPublicMemento(mid);
+			return ok(toJson(result));
+		} catch (Exception e) {
 			ResponseStatusBean res = new ResponseStatusBean(
-					ResponseStatus.BADREQUEST,
-					"Body of request misses some information or it is malformed");
-			return badRequest(toJson(res));
-		} else {
-			try {
-				PublicMementoBean contributed = filledForm.get();
-				PublicMementoBean result = ContextDelegate.getInstance()
-						.updatedContextMemento(cid, mid, contributed);
-				return ok(toJson(result));
-			} catch (EntityDoesNotExist e) {
-				ResponseStatusBean res = new ResponseStatusBean(
-						ResponseStatus.NODATA, e.getLocalizedMessage());
-				return internalServerError(toJson(res));
-			} catch (NotEnoughInformation e) {
-				ResponseStatusBean res = new ResponseStatusBean(
-						ResponseStatus.BADREQUEST, e.getLocalizedMessage());
-				return badRequest(toJson(res));
-			}
+					ResponseStatus.NODATA, e.getLocalizedMessage());
+			return internalServerError(toJson(res));
+		}
+	}
+
+	@SubjectPresent
+	public static Result getContextMemento(Long cid, Long mid) {
+		try {
+			ContextPublicMementoBean result = ContextDelegate.getInstance()
+					.getContextMemento(cid, mid);
+			return ok(toJson(result));
+		} catch (Exception e) {
+			ResponseStatusBean res = new ResponseStatusBean(
+					ResponseStatus.NODATA, e.getLocalizedMessage());
+			return internalServerError(toJson(res));
 		}
 	}
 
@@ -376,19 +462,19 @@ public class ContextControl extends Controller {
 			return badRequest(toJson(res));
 		}
 	}
-	
+
 	@SubjectPresent
 	public static Result createContributedMemento() {
-		Form<PublicMementoBean> filledForm = contributedForm
-				.bindFromRequest();
+		Form<PublicMementoBean> filledForm = contributedForm.bindFromRequest();
 		String userEmail = session().get("pa.u.id");
 		User user = User.getByEmail(userEmail);
 		Long id = user.getUserId();
-		
+
 		if (filledForm.hasErrors()) {
 			ResponseStatusBean res = new ResponseStatusBean(
 					ResponseStatus.BADREQUEST,
-					"Body of request misses some information or it is malformed" + filledForm.errors().toString());
+					"Body of request misses some information or it is malformed"
+							+ filledForm.errors().toString());
 			return badRequest(toJson(res));
 		} else {
 			try {
@@ -397,25 +483,26 @@ public class ContextControl extends Controller {
 				contributed.setContributorType("MEMBER");
 				PublicMemento result = ContextDelegate.getInstance()
 						.createContributedMemento(contributed);
-				ResponseStatusBean res = new ResponseStatusBean(ResponseStatus.OK, "Entity created with success");
+				ResponseStatusBean res = new ResponseStatusBean(
+						ResponseStatus.OK, "Entity created with success");
 				res.setNewResourceId(result.getPublicMementoId());
 				return ok(toJson(result));
 			} catch (Exception e) {
 				ResponseStatusBean res = new ResponseStatusBean(
 						ResponseStatus.SERVERERROR, e.getLocalizedMessage());
 				return internalServerError(toJson(res));
-			} 
+			}
 		}
 	}
-	
-	// TODO how to verify that this is used wisely? 
+
+	// TODO how to verify that this is used wisely?
 	public static Result createAnonymousContributedMemento() {
-		Form<PublicMementoBean> filledForm = contributedForm
-				.bindFromRequest();
+		Form<PublicMementoBean> filledForm = contributedForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			ResponseStatusBean res = new ResponseStatusBean(
 					ResponseStatus.BADREQUEST,
-					"Body of request misses some information or it is malformed" + filledForm.errors().toString());
+					"Body of request misses some information or it is malformed"
+							+ filledForm.errors().toString());
 			return badRequest(toJson(res));
 		} else {
 			try {
@@ -423,40 +510,36 @@ public class ContextControl extends Controller {
 				contributed.setContributorType("EXTERNAL");
 				PublicMemento result = ContextDelegate.getInstance()
 						.createContributedMemento(contributed);
-				ResponseStatusBean res = new ResponseStatusBean(ResponseStatus.OK, "Entity created with success");
+				ResponseStatusBean res = new ResponseStatusBean(
+						ResponseStatus.OK, "Entity created with success");
 				res.setNewResourceId(result.getPublicMementoId());
 				return ok(toJson(result));
 			} catch (Exception e) {
 				ResponseStatusBean res = new ResponseStatusBean(
 						ResponseStatus.SERVERERROR, e.getLocalizedMessage());
 				return internalServerError(toJson(res));
-			} 
-		}
-	}
-	
-
-	@CustomRestrict(value = {MyRoles.ADMIN}, config = @Restrict({}))
-		public static Result deleteContributedMemento(Long mid) {
-			try {
-				ContextDelegate.getInstance().deleteContributedMemento(mid);
-				ResponseStatusBean res = new ResponseStatusBean(ResponseStatus.OK,
-						"Entity deleted with success");
-				return ok(toJson(res));
-			} catch (Exception e) {
-				ResponseStatusBean res = new ResponseStatusBean(
-						ResponseStatus.NODATA, "Entity does not exist",
-						e.getMessage());
-				return badRequest(toJson(res));
 			}
 		}
-	
+	}
+
+	@CustomRestrict(value = { MyRoles.ADMIN }, config = @Restrict({}))
+	public static Result deleteContributedMemento(Long mid) {
+		try {
+			ContextDelegate.getInstance().deleteContributedMemento(mid);
+			ResponseStatusBean res = new ResponseStatusBean(ResponseStatus.OK,
+					"Entity deleted with success");
+			return ok(toJson(res));
+		} catch (Exception e) {
+			ResponseStatusBean res = new ResponseStatusBean(
+					ResponseStatus.SERVERERROR,
+					"Entity does not exist or a constraint failed",
+					e.getMessage());
+			return badRequest(toJson(res));
+		}
+	}
+
 	// TODO
 	public static Result getContextCurators(Long cid) {
-		/** @TODO */
-		return TODO;
-	}
-	// TODO
-	public static Result getContextMemento(Long cid, Long mid) {
 		/** @TODO */
 		return TODO;
 	}
