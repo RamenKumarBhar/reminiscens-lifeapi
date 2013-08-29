@@ -76,8 +76,8 @@ POST    /context/person/:id/:decade/:cityId     controllers.ContextControl.initC
 GET     /context/:cid                           controllers.ContextControl.getContextById(cid: Long)
 GET     /context/:cid/:decade                   controllers.ContextControl.getContextByIdAndDecade(cid: Long, decade: Long)
 GET     /context/:cid/:decade/:category         controllers.ContextControl.getContextByIdAndDecadeAndCategory(cid: Long, decade: Long, category: String)
-PUT     /context/:cid/:decade/location          controllers.ContextControl.refreshContextForDecadeAndLocation(cid: Long, decade: Long)
-PUT     /context/:cid/:decade/:cityId           controllers.ContextControl.refreshContextForDecadeAndCity(cid: Long, decade: Long, cityId: Long)
+PUT    /context/:cid/:decade/location          controllers.ContextControl.refreshContextForDecadeAndLocation(cid: Long, decade: Long)
+PUT    /context/:cid/:decade/:cityId           controllers.ContextControl.refreshContextForDecadeAndCity(cid: Long, decade: Long, cityId: Long)
 DELETE  /context/:cid                           controllers.ContextControl.deleteContext(cid: java.lang.Long)
 
 POST    /context/memento                        controllers.ContextControl.createContributedMemento()

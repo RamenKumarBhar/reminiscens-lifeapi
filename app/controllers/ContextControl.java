@@ -1,6 +1,5 @@
 package controllers;
 
-import models.ContributedMemento;
 import models.PublicMemento;
 import models.User;
 import annotations.CustomRestrict;
@@ -15,9 +14,7 @@ import exceptions.NotEnoughInformation;
 import play.data.Form;
 import play.mvc.*;
 import pojos.ContextBean;
-import pojos.ContextContributedBean;
 import pojos.ContextPublicMementoBean;
-import pojos.ContributedMementoBean;
 import pojos.LocationMinimalBean;
 import pojos.PublicMementoBean;
 import pojos.ResponseStatusBean;
@@ -167,7 +164,7 @@ public class ContextControl extends Controller {
 			return badRequest(toJson(res));
 		} else {
 			
-			LocationMinimalBean location = locationForm.get();
+			LocationMinimalBean location = filledForm.get();
 			try {
 				ContextBean result = ContextDelegate.getInstance()
 						.initContextForPersonAndDecadeAndLocation(id, decade,
@@ -252,7 +249,7 @@ public class ContextControl extends Controller {
 					"Body of request misses some information or it is malformed");
 			return badRequest(toJson(res));
 		} else {
-			LocationMinimalBean location = locationForm.get();
+			LocationMinimalBean location = filledForm.get();
 			try {
 				ContextBean result = ContextDelegate.getInstance()
 						.refreshContextDecadeAndLocation(id,

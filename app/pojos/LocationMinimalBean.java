@@ -1,8 +1,13 @@
 package pojos;
 
-import models.Location;
+import java.io.Serializable;
 
-public class LocationMinimalBean {
+public class LocationMinimalBean  implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7578753903042863195L;
+	
 	private String country;
 	private String city;
 	private String region;
