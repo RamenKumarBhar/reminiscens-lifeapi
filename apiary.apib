@@ -158,10 +158,15 @@ Timeline Curators, who can access and edit thes stories in his/her timeline</p>
 <p><pre><code>
     "Memento" : {
         "mementoId" : 999,
-        "storyId" : 999,                 
+        "storyId" : 999,  
+        "headline": "Fotos de Ygnacio y Aurora",
+        "text": null,
+        "type": "photo",                 
         "url": "https://dl.dropbox.com/u/2797542/timeline/fantozzi/Fantozzi_il_ritorno.png",
-        "thumbnail": "",
-        "decade": 1930,
+        "thumbnailUrl": null,
+        "category": "PICTURE",
+        "isCover": false,
+         "decade": 1930,
         "startDate": "",
         "endDate": "",
         "participants" : [ <person ids of people visible in the memento> ],
@@ -212,25 +217,70 @@ Timeline Curators, who can access and edit thes stories in his/her timeline</p>
 
 <h3><b><a id="contextmemento">Public Memento Resource (TO UPDATE)</a></b></h3>
 <p><pre><code>
-    "ContextMemento" : {
-        "contextMementoId" : 999,
-        "contextId" : 999,                 
-        "url": "https://dl.dropbox.com/u/2797542/timeline/fantozzi/Fantozzi_il_ritorno.png",
-        "thumbnail": "",
-        "decade": 1930,
-        "startDate": "",
-        "endDate": "",
-        "participants" : [ <person ids of people visible in the memento> ],
-        "headline": "Foto di Ugo circa la sua nascita in 1934",
-        "type": "photo",
-        "category" : "photo", 
-        "index": 1,
-        "credit" : "Wikipedia",
-        "creditURL : "<url to the source> ",
-        "text": "MG M del 1930 ovvero la prima MG Midget",
-        "tags": [ "photo", "automobile", "ogetto" ], 
-        "questionList": [ <list of question resources that can trigger discussion and reminiscence around this memento> ]      
-    }
+    "PublicMemento" : {
+     {
+    "publicMementoId": 4655,
+    "headline": "Lorenzo Jovanotti",
+    "text": "Jovanotti, nome d'arte di Lorenzo Costantino Cherubini, è un cantautore, rapper e disc jockey italiano. Diventa famoso alla fine degli anni ottanta, lanciato da Claudio Cecchetto",
+    "type": "Artist",
+    "resourceType": "IMAGE",
+    "category": "PEOPLE",
+    "source": "wikipedia",
+    "sourceUrl": "http://it.wikipedia.org/wiki/Jovanotti",
+    "resourceUrl": "http://upload.wikimedia.org/wikipedia/commons/9/9d/Jovanotti_cropped.jpg",
+    "resourceThumbnailUrl": "http://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Jovanotti_cropped.jpg/220px-Jovanotti_cropped.jpg",
+    "author": null,
+    "collection": null,
+    "collectionType": null,
+    "isCollection": null,
+    "nationality": null,
+    "locale": "it_IT",
+    "haschcode": null,
+    "fileHashcode": null,
+    "fileName": null,
+    "contributorType": "MEMBER",
+    "contributor": 2,
+    "startDate": {
+        "fuzzyDateId": 15026,
+        "textual_date": null,
+        "exactDate": -102992400000,
+        "decade": 1960,
+        "year": 1966,
+        "month": "9",
+        "day": "27",
+        "accuracy": 7,
+        "locale": "it_IT",
+        "exactDateAsString": "1966-09-27 00:00:00"
+    },
+    "startLocation": {
+        "locationId": 2372,
+        "textual": "Roma, Lazio,Italia",
+        "placeName": null,
+        "country": "Italia",
+        "region": "Lazio",
+        "city": "roma",
+        "coordinates_trust": 0,
+        "lat": 41.892916,
+        "lon": 12.48252,
+        "locale": "it_IT",
+        "cityBean": {
+            "cityId": 5906,
+            "name": "Roma",
+            "country": {
+                "countryId": 109,
+                "short_name": "Italy",
+                "spanish_name": "Italia",
+                "italian_name": "Italia"
+            },
+            "lat": 41.892916,
+            "lon": 12.48252
+        },
+        "accuracy": 11
+    },
+    "endDate": null,
+    "endLocation": null,
+    "tags": null
+}
 </pre></code></p>
 
 <h3><b><a id="question">Question Resource (TO UPDATE)</a></b></h3>
@@ -263,12 +313,26 @@ Timeline Curators, who can access and edit thes stories in his/her timeline</p>
 <h3><b><a id="context">Context Resource (TO UPDATE)</a></b></h3>
 <p><pre><code>
     "Context" : {
-        "contextId" : 999,
-        "forPersonId" : 999,
-        "title" : "The contextual reminiscence multimedia for Ugo Fantozzi",
-        "subtitle" : "A set of old public collective memory items that can help Ugo Fantozzi remember his life",
-        "curators" : [ <person ids of the people with full access to this timeline> ],
-        "mementoList" : [ <list of life stories that belong to this timeline> ]
+    "contextId": 55,
+    "title": "Collezione contestuale per i riccordi di Bruno Kessler",
+    "subtitle": "Collezione di contenuto storico per la stimulazione dei riccordi di Bruno Kessler",
+    "personForId": 4,
+    "cityFor": null,
+    "cityRatio": null,
+    "date": null,
+    "dateRatio": null,
+    "publicMementoList": [ <list of public mementos that belong to this timeline> 
+          "contextItemId": 157,
+            "level": "WORLD",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "STORY",
+            "views": null,
+            "detailViews": null,
+            "ranking": 0,
+            "publicMemento": { <the actual memento resource> } 
+    ],
+    "curators" : [ <person ids of the people with full access to this timeline> ]
     }
 }
 </pre></code></p>
@@ -278,7 +342,8 @@ Timeline Curators, who can access and edit thes stories in his/her timeline</p>
 {
     "status_code": "BADREQUEST", 
     "status_message":"User was created",
-    "errorTrace" : "[error complete trace for sending to developers]" 
+    "errorTrace" : "[error complete trace for sending to developers]", 
+    "newResourceId" : [id of the created resource for creation operations]
 }    
 </pre></code></code>
 
@@ -3324,75 +3389,236 @@ DELETE	/lifestory/{lsid}
 
 POST	/lifestory/{lsid}/person/{id}/{type}
 > PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{"url":"/person/3/memento/protagonist"}
+> Content-Type: application/json
+{"url":"/lifestory/137/person/2/protagonist"}
 < 200
 < Content-Type: application/json
-{}
+{
+    "responseStatus": "OK",
+    "statusMessage": "New participant added with success",
+    "errorTrace": null,
+    "newResourceId": 140
+}
 
 DELETE	/lifestory/{lsid}/person/{id}
 > PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{"url":"/person/3/memento/protagonist"}
+> Content-Type: application/json
+{"url":"/lifestory/137/person/2"}
 < 200
 < Content-Type: application/json
-{}
+{
+    "responseStatus": "NODATA",
+    "statusMessage": "Entity does not exist",
+    "errorTrace": "Participant is a protagonist. Protagonist can only be deleted by themselves.",
+    "newResourceId": null
+}
 
 DELETE	/lifestory/{lsid}/person/{id}/protagonist
 > PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{"url":"/person/3/memento/protagonist"}
+> Content-Type: application/json
+{"url":"/lifestory/137/person/2/protagonist"}
 < 200
 < Content-Type: application/json
-{}
+{
+    "responseStatus": "OK",
+    "statusMessage": "Entity deleted with success",
+    "errorTrace": null,
+    "newResourceId": null
+}
 
 POST	/lifestory/{lsid}/memento
 > PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{"url":"/person/3/memento/protagonist"}
+> Content-Type: application/json
+{
+    "url":"/lifestory/137/memento",
+    "lifeStoryId": 27,
+    "url": "https://dl.dropbox.com/u/2797542/timeline/fliaparra/ygnacio/Papa%20y%20companheros.JPG",
+    "type": "photo",
+    "category": "PICTURE",
+    "isCover": false,
+    "index": 2,
+    "headline": "Fotos de Ygnacio y Aurora",
+    "participants": [ 
+      	{
+            "mentionPersonId":2,
+            "fullname": "Cristhian",
+            "relationship": "esposa"
+        }
+    ],
+    "public_memento": false
+}
 < 200
 < Content-Type: application/json
-{}
+{
+    "mementoId": 76,
+    "headline": "Fotos de Ygnacio y Aurora",
+    "text": null,
+    "type": "photo",
+    "url": "https://dl.dropbox.com/u/2797542/timeline/fliaparra/ygnacio/Papa%20y%20companheros.JPG",
+    "thumbnailUrl": null,
+    "category": "PICTURE",
+    "isCover": false,
+    "position": null,
+    "publicMemento": null,
+    "location": null,
+    "startDate": null,
+    "participants": [
+        {
+            "mentionPersonId": 2,
+            "fullname": "Cristhian",
+            "person": null
+        },
+        {
+            "mentionPersonId": 2,
+            "fullname": "Cristhian",
+            "person": null
+        }
+    ],
+    "fileHashcode": null,
+    "lifeStoryId": 27
+}
 
 PUT	/lifestory/{lsid}/memento/{id}
+> Content-Type: application/json
 > PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{"url":"/person/3/memento/protagonist"}
+{
+"url":"/lifestory/157/memento/41"
+    "mementoId": 41,
+    "headline": "Fotos de Ygnacio y Aurora hace algunos años",
+    "text": null,
+    "type": "photo",
+    "url": "https://dl.dropbox.com/u/2797542/timeline/fliaparra/ygnacio/Papa%20y%20companheros.JPG",
+    "thumbnailUrl": null,
+    "category": "PICTURE",
+    "isCover": false,
+  "location": null,
+    "startDate": null,
+    "lifeStoryId": 27
+}
 < 200
 < Content-Type: application/json
-{}
+{
+    "mementoId": 41,
+    "headline": "Fotos de Ygnacio y Aurora hace algunos años",
+    "text": null,
+    "type": "photo",
+    "url": "https://dl.dropbox.com/u/2797542/timeline/fliaparra/ygnacio/Papa%20y%20companheros.JPG",
+    "thumbnailUrl": null,
+    "category": "PICTURE",
+    "isCover": false,
+    "position": null,
+    "publicMemento": null,
+    "location": null,
+    "startDate": null,
+    "participants": [],
+    "fileHashcode": null,
+    "lifeStoryId": 157
+}
 
 DELETE	/lifestory/{lsid}/memento/{id}
+> Content-Type: application/json
 > PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{"url":"/person/3/memento/protagonist"}
+{"url":"}/lifestory/157/memento/41"}
 < 200
 < Content-Type: application/json
-{}
+{
+    "responseStatus": "OK",
+    "statusMessage": "Entity deleted with success",
+    "errorTrace": null,
+    "newResourceId": null
+}
 
 GET	/lifestory/{lsid}/memento/{id}
 > PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{"url":"/person/3/memento/protagonist"}
+{"url":"/lifestory/10/memento/10"}
 < 200
 < Content-Type: application/json
-{}
+{
+    "mementoId": 10,
+    "headline": null,
+    "text": null,
+    "type": "PHOTO",
+    "url": "http://dl.dropbox.com/u/2797542/timeline/bkessler/FBK_polo_scientifico.png",
+    "thumbnailUrl": null,
+    "category": "PICTURE",
+    "isCover": true,
+    "position": 1,
+    "publicMemento": true,
+    "location": null,
+    "startDate": null,
+    "participants": [],
+    "fileHashcode": null,
+    "lifeStoryId": 10
+}
 
 POST	/lifestory/{lsid}/memento/{id}/mention
+> Content-Type: application/json
 > PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{"url":"/person/3/memento/protagonist"}
+{   
+    "url":"/lifestory/27/memento/32/mention",
+    "fullname": "Aurora",
+    "relationship": "Esposa"
+}
 < 200
 < Content-Type: application/json
-{}
+{
+    "mentionPersonId": 3,
+    "fullname": "Aurora",
+    "person": null
+}
 
 POST	/lifestory/{lsid}/memento/{id}/mention/{pid}
+> Content-Type: application/json
 > PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
-{"url":"/person/3/memento/protagonist"}
+{"url":"/lifestory/27/memento/32/mention/4"}
 < 200
 < Content-Type: application/json
-{}
+{
+    "mentionPerson": {
+        "mentionPersonId": 4,
+        "fullname": "Ygnacio Parra",
+        "person": {
+            "personId": 3,
+            "firstname": "Ygnacio",
+            "lastname": "Parra",
+            "birthdate": -881866800000,
+            "deathdate": null,
+            "gender": "male",
+            "contactEmail": null,
+            "birthplace": {
+                "cityId": 9092,
+                "name": "Luque",
+                "country": {
+                    "countryId": 172,
+                    "short_name": "Paraguay",
+                    "spanish_name": "Paraguay",
+                    "italian_name": "Paraguay"
+                },
+                "lat": -25.27,
+                "lon": -57.487222
+            },
+            "famous": null,
+            "famousId": null,
+            "birthdateAsString": "1942-01-21 00:00:00",
+            "deathdateAsString": null
+        }
+    },
+    "mementoId": 41,
+    "mentionPersonId": 4
+}
 
 DELETE	/lifestory/{lsid}/memento/{id}/mention/{pid}
+> Content-Type: application/json
 > PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
 {"url":"/person/3/memento/protagonist"}
 < 200
 < Content-Type: application/json
-{}
-
-
+{
+    "responseStatus": "OK",
+    "statusMessage": "Entity deleted with success",
+    "errorTrace": null,
+    "newResourceId": null
+}
 
 --
 Contextual Reminiscence  (TO UPDATE)
@@ -3416,463 +3642,980 @@ for storytelling</p>
 --
 
 Get the context for a person
-GET /person/{id}/context
+GET /context/person/{id}
 > Content-Type: application/json
-{"url":"/person/999/context"}
-{  
-    "Session" : {
-        "auth_token" : "054b13b875efac0604bfa8f21ab92dc26e1e34f5" 
-    }
-}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/context/person/4"}
 < 200
 < Content-Type: application/json
-{  
-    "Response_Status" : {
-        "status_code": 1, 
-        "status_message":"Resource was created"
-    },
-    "Context": {
-        "contextId": 999,
-        "forPersonId": 999,
-        "curators": [
-            777,
-            778,
-            779
-        ],
-        "mementoList": [
-            {
-                "contextMementoId": 999,
-                "contextId": 999,
-                "url": "http://farm8.staticflickr.com/7230/7262518946_81794f46d0_o.jpg",
-                "thumbnail": "",
-                "headline": "MG M - 1930",
-                "decade": 1930,
-                "startDate": "",
-                "endDate": "",
-                "participants": [],
-                "type": "photo",
-                "category": "photo",
-                "index": 2,
-                "credit": "Some rights reserved by ciric",
-                "creditURL": "",
-                "text": "MG M del 1930 ovvero la prima MG Midget",
-                "tags": [
-                    "photo",
-                    "automobile",
-                    "ogetto"
-                ],
-                "questionList": [
-                    {
-                        "questionId": 999,
-                        "question": "Riconosci questa macchina?",
-                        "tags": [
-                            "automobile",
-                            "ogetto"
-                        ]
-                    },
-                    {
-                        "questionId": 998,
-                        "question": "Hai mai guidato una macchina come questa?",
-                        "tags": [
-                            "automobile",
-                            "ogetto"
-                        ]
-                    }
-                ]
-            },
-            {
-                "contextMementoId": 997,
-                "contextId": 999,
-                "url": "http://farm3.staticflickr.com/2781/4437292021_3f6b977f8a.jpg",
-                "thumbnail": "",
-                "decade": 1960,
-                "startDate": "",
-                "endDate": "",
-                "participants": [],
-                "headline": "Monte Gazzo 21",
-                "type": "photo",
-                "category": "photo",
-                "index": 2,
-                "credit": "Some rights reserved by ciric",
-                "creditURL": "",
-                "text": "1960: veduta area del Santuario del Monte Gazzo.",
-                "tags": [
-                    "photo",
-                    "landscape"
-                ],
-                "questionList": [
-                    {
-                        "questionId": 997,
-                        "question": "Riconosci questo posto?",
-                        "tags": [
-                            "landscape",
-                            "castell"
-                        ]
-                    },
-                    {
-                        "questionId": 996,
-                        "question": "Lei è mai stat in questo castello?",
-                        "tags": [
-                            "landscape",
-                            "castell"
-                        ]
-                    }
-                ]
-            },
-            {
-                "contextMementoId": 996,
-                "contextId": 999,
-                "url": "https://www.youtube.com/watch?feature=player_detailpage&v=78LXfimeh8g",
-                "thumbnail": "",
-                "decade": 1960,
-                "startDate": "",
-                "endDate": "",
-                "participants": [],
-                "headline": "Claudio Villa in Rai Due",
-                "type": "music",
-                "category": "music",
-                "index": 3,
-                "credit": "Uploaded by Youtube user Kartastone",
-                "creditURL": "https://www.youtube.com/user/Kartastone?feature=watch",
-                "text": "",
-                "tags": [
-                    "musica",
-                    "youtube",
-                    "musicista",
-                    "video"
-                ],
-                "questionList": [
-                    {
-                        "questionId": 997,
-                        "question": "Ti piace questa musica?",
-                        "tags": [
-                            "musica"
-                        ]
-                    },
-                    {
-                        "questionId": 996,
-                        "question": "Lei è mai stat in questo castello?",
-                        "tags": [
-                            "landscape",
-                            "castell"
-                        ]
-                    }
-                ]
+{
+    "contextId": 9,
+    "title": "Collezione contestuale per i riccordi di Bruno Kessler",
+    "subtitle": "Collezione di contenuto storico per la stimulazione dei riccordi di Bruno Kessler",
+    "personForId": 4,
+    "cityFor": null,
+    "cityRatio": null,
+    "date": null,
+    "dateRatio": null,
+    "publicMementoList": [
+        {
+            "contextItemId": 76,
+            "level": "WORLD",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "STORY",
+            "views": null,
+            "detailViews": null,
+            "ranking": 0,
+            "publicMemento": {
+                "publicMementoId": 618,
+                "headline": "Supercoppa d'Olanda 2006",
+                "text": "La Supercoppa d'Olanda 2006 (ufficialmente Johan Cruijff Schaal XI) è stata la diciassettesima edizione della Supercoppa d'Olanda. Si è svolta il 13 agosto 2006 all'Amsterdam ArenA tra il PSV Eindhoven, vincitore della Eredivisie 2005-2006, e l'Ajax, vincitore della Coppa d'Olanda 2005-2006. A conquistare il titolo è stato l'Ajax che ha vinto per 3-1 con reti di Mauro Rosales, Kenneth Perez e Wesley Sneijder.",
+                "type": "SPORT_EVENT",
+                "resourceType": "IMAGE",
+                "category": "STORY",
+                "source": "dbpedia",
+                "sourceUrl": "http://dbpedia.org/resource/Johan_Cruijff-schaal_XI",
+                "resourceUrl": null,
+                "resourceThumbnailUrl": null,
+                "author": null,
+                "collection": null,
+                "collectionType": null,
+                "isCollection": false,
+                "nationality": null,
+                "locale": "it_IT",
+                "haschcode": null,
+                "fileHashcode": null,
+                "fileName": null,
+                "contributorType": "SYSTEM",
+                "contributor": null,
+                "startDate": {
+                    "fuzzyDateId": 12525,
+                    "textual_date": null,
+                    "exactDate": 1155441600000,
+                    "decade": 2000,
+                    "year": 2006,
+                    "month": "8",
+                    "day": "13",
+                    "accuracy": 9,
+                    "locale": "it_IT",
+                    "exactDateAsString": "2006-08-13 00:00:00"
+                },
+                "startLocation": {
+                    "locationId": 1363,
+                    "textual": "Amsterdam",
+                    "placeName": null,
+                    "country": "The Netherlands",
+                    "region": "North Holland",
+                    "city": null,
+                    "coordinates_trust": 0,
+                    "lat": 52.370216,
+                    "lon": 4.895168,
+                    "locale": "en_US",
+                    "cityBean": null,
+                    "accuracy": 19
+                },
+                "endDate": null,
+                "endLocation": null,
+                "tags": null
             }
-        ]
-    }
+        },
+        {
+            "contextItemId": 77,
+            "level": "WORLD",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "PICTURE",
+            "views": null,
+            "detailViews": null,
+            "ranking": 1,
+            "publicMemento": {
+                "publicMementoId": 1803,
+                "headline": "Pergidae - Perga sp. (affinis ssp. insularis?)",
+                "text": null,
+                "type": "photo",
+                "resourceType": "IMAGE",
+                "category": "PICTURE",
+                "source": "flickr",
+                "sourceUrl": "http://www.flickr.com/photos/32977858@N02/3295961043/",
+                "resourceUrl": "http://farm4.static.flickr.com/3423/3295961043_bde530f123_z.jpg",
+                "resourceThumbnailUrl": null,
+                "author": null,
+                "collection": null,
+                "collectionType": null,
+                "isCollection": false,
+                "nationality": null,
+                "locale": "it_IT",
+                "haschcode": null,
+                "fileHashcode": null,
+                "fileName": null,
+                "contributorType": "SYSTEM",
+                "contributor": null,
+                "startDate": {
+                    "fuzzyDateId": 10824,
+                    "textual_date": null,
+                    "exactDate": 1222315200000,
+                    "decade": 2000,
+                    "year": 2008,
+                    "month": "9",
+                    "day": "25",
+                    "accuracy": 11,
+                    "locale": "it_IT",
+                    "exactDateAsString": "2008-09-25 00:00:00"
+                },
+                "startLocation": {
+                    "locationId": 703,
+                    "textual": null,
+                    "placeName": "Buckland",
+                    "country": "Australia",
+                    "region": "Tasmania",
+                    "city": "Glamorgan-springbay",
+                    "coordinates_trust": 1,
+                    "lat": -42.573625,
+                    "lon": 147.701568,
+                    "locale": "it_IT",
+                    "cityBean": null,
+                    "accuracy": 20
+                },
+                "endDate": null,
+                "endLocation": null,
+                "tags": null
+            }
+        },
+        {
+            "contextItemId": 78,
+            "level": "COUNTRY",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "PICTURE",
+            "views": null,
+            "detailViews": null,
+            "ranking": 2,
+            "publicMemento": {
+                "publicMementoId": 1754,
+                "headline": "Monte Roen_4168",
+                "text": null,
+                "type": "photo",
+                "resourceType": "IMAGE",
+                "category": "PICTURE",
+                "source": "flickr",
+                "sourceUrl": "http://www.flickr.com/photos/16409072@N08/8273873190/",
+                "resourceUrl": "http://farm9.static.flickr.com/8337/8273873190_e7f3696c72_z.jpg",
+                "resourceThumbnailUrl": null,
+                "author": null,
+                "collection": null,
+                "collectionType": null,
+                "isCollection": false,
+                "nationality": null,
+                "locale": "it_IT",
+                "haschcode": null,
+                "fileHashcode": null,
+                "fileName": null,
+                "contributorType": "SYSTEM",
+                "contributor": null,
+                "startDate": {
+                    "fuzzyDateId": 10775,
+                    "textual_date": null,
+                    "exactDate": 1249704000000,
+                    "decade": 2000,
+                    "year": 2009,
+                    "month": "8",
+                    "day": "8",
+                    "accuracy": 11,
+                    "locale": "it_IT",
+                    "exactDateAsString": "2009-08-08 00:00:00"
+                },
+                "startLocation": {
+                    "locationId": 654,
+                    "textual": "Trentino",
+                    "placeName": null,
+                    "country": "Italia",
+                    "region": "Trentino-Alto Adige",
+                    "city": null,
+                    "coordinates_trust": 0,
+                    "lat": 46.433666,
+                    "lon": 11.16933,
+                    "locale": "it_IT",
+                    "cityBean": null,
+                    "accuracy": 19
+                },
+                "endDate": null,
+                "endLocation": null,
+                "tags": null
+            }
+        },
+        {
+            "contextItemId": 79,
+            "level": "REGION",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "PICTURE",
+            "views": null,
+            "detailViews": null,
+            "ranking": 3,
+            "publicMemento": {
+                "publicMementoId": 1636,
+                "headline": "Trento / ??? - Casa Balduini",
+                "text": null,
+                "type": "photo",
+                "resourceType": "IMAGE",
+                "category": "PICTURE",
+                "source": "flickr",
+                "sourceUrl": "http://www.flickr.com/photos/83128028@N00/7356529490/",
+                "resourceUrl": "http://farm8.static.flickr.com/7076/7356529490_dce2f5de9f_z.jpg",
+                "resourceThumbnailUrl": null,
+                "author": null,
+                "collection": null,
+                "collectionType": null,
+                "isCollection": false,
+                "nationality": null,
+                "locale": "it_IT",
+                "haschcode": null,
+                "fileHashcode": null,
+                "fileName": null,
+                "contributorType": "SYSTEM",
+                "contributor": null,
+                "startDate": {
+                    "fuzzyDateId": 10657,
+                    "textual_date": null,
+                    "exactDate": 1160107200000,
+                    "decade": 2000,
+                    "year": 2006,
+                    "month": "10",
+                    "day": "6",
+                    "accuracy": 11,
+                    "locale": "it_IT",
+                    "exactDateAsString": "2006-10-06 00:00:00"
+                },
+                "startLocation": {
+                    "locationId": 536,
+                    "textual": "Trento",
+                    "placeName": null,
+                    "country": "Italia",
+                    "region": "Trentino-Alto Adige",
+                    "city": "Trento",
+                    "coordinates_trust": 0,
+                    "lat": 46.069692,
+                    "lon": 11.121089,
+                    "locale": "it_IT",
+                    "cityBean": {
+                        "cityId": 4015,
+                        "name": "Trento",
+                        "country": {
+                            "countryId": 109,
+                            "short_name": "Italy",
+                            "spanish_name": "Italia",
+                            "italian_name": "Italia"
+                        },
+                        "lat": 46.069692,
+                        "lon": 11.121089
+                    },
+                    "accuracy": 19
+                },
+                "endDate": null,
+                "endLocation": null,
+                "tags": "italy trento trentino"
+            }
+        }
+    ]
 }
 
 Get a context by ID
 GET /context/{id}
 > Content-Type: application/json
-{"url":"/context/999"}
-{  
-    "Session" : {
-        "auth_token" : "054b13b875efac0604bfa8f21ab92dc26e1e34f5" 
-    }
-}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/context/4"}
 < 200
 < Content-Type: application/json
-{  
-    "Response_Status" : {
-        "status_code": 1, 
-        "status_message":"Resource was created"
-    },
-    "Context": {
-        "contextId": 999,
-        "forPersonId": 999,
-        "curators": [
-            777,
-            778,
-            779
-        ],
-        "mementoList": [
-            {
-                "contextMementoId": 999,
-                "contextId": 999,
-                "url": "http://farm8.staticflickr.com/7230/7262518946_81794f46d0_o.jpg",
-                "thumbnail": "",
-                "headline": "MG M - 1930",
-                "decade": 1930,
-                "startDate": "",
-                "endDate": "",
-                "participants": [],
-                "type": "photo",
-                "category": "photo",
-                "index": 2,
-                "credit": "Some rights reserved by ciric",
-                "creditURL": "",
-                "text": "MG M del 1930 ovvero la prima MG Midget",
-                "tags": [
-                    "photo",
-                    "automobile",
-                    "ogetto"
-                ],
-                "questionList": [
-                    {
-                        "questionId": 999,
-                        "question": "Riconosci questa macchina?",
-                        "tags": [
-                            "automobile",
-                            "ogetto"
-                        ]
-                    },
-                    {
-                        "questionId": 998,
-                        "question": "Hai mai guidato una macchina come questa?",
-                        "tags": [
-                            "automobile",
-                            "ogetto"
-                        ]
-                    }
-                ]
-            },
-            {
-                "contextMementoId": 997,
-                "contextId": 999,
-                "url": "http://farm3.staticflickr.com/2781/4437292021_3f6b977f8a.jpg",
-                "thumbnail": "",
-                "decade": 1960,
-                "startDate": "",
-                "endDate": "",
-                "participants": [],
-                "headline": "Monte Gazzo 21",
-                "type": "photo",
-                "category": "photo",
-                "index": 2,
-                "credit": "Some rights reserved by ciric",
-                "creditURL": "",
-                "text": "1960: veduta area del Santuario del Monte Gazzo.",
-                "tags": [
-                    "photo",
-                    "landscape"
-                ],
-                "questionList": [
-                    {
-                        "questionId": 997,
-                        "question": "Riconosci questo posto?",
-                        "tags": [
-                            "landscape",
-                            "castell"
-                        ]
-                    },
-                    {
-                        "questionId": 996,
-                        "question": "Lei è mai stat in questo castello?",
-                        "tags": [
-                            "landscape",
-                            "castell"
-                        ]
-                    }
-                ]
-            },
-            {
-                "contextMementoId": 996,
-                "contextId": 999,
-                "url": "https://www.youtube.com/watch?feature=player_detailpage&v=78LXfimeh8g",
-                "thumbnail": "",
-                "decade": 1960,
-                "startDate": "",
-                "endDate": "",
-                "participants": [],
-                "headline": "Claudio Villa in Rai Due",
-                "type": "music",
-                "category": "music",
-                "index": 3,
-                "credit": "Uploaded by Youtube user Kartastone",
-                "creditURL": "https://www.youtube.com/user/Kartastone?feature=watch",
-                "text": "",
-                "tags": [
-                    "musica",
-                    "youtube",
-                    "musicista",
-                    "video"
-                ],
-                "questionList": [
-                    {
-                        "questionId": 997,
-                        "question": "Ti piace questa musica?",
-                        "tags": [
-                            "musica"
-                        ]
-                    },
-                    {
-                        "questionId": 996,
-                        "question": "Lei è mai stat in questo castello?",
-                        "tags": [
-                            "landscape",
-                            "castell"
-                        ]
-                    }
-                ]
+{
+    "contextId": 9,
+    "title": "Collezione contestuale per i riccordi di Bruno Kessler",
+    "subtitle": "Collezione di contenuto storico per la stimulazione dei riccordi di Bruno Kessler",
+    "personForId": 4,
+    "cityFor": null,
+    "cityRatio": null,
+    "date": null,
+    "dateRatio": null,
+    "publicMementoList": [
+        {
+            "contextItemId": 76,
+            "level": "WORLD",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "STORY",
+            "views": null,
+            "detailViews": null,
+            "ranking": 0,
+            "publicMemento": {
+                "publicMementoId": 618,
+                "headline": "Supercoppa d'Olanda 2006",
+                "text": "La Supercoppa d'Olanda 2006 (ufficialmente Johan Cruijff Schaal XI) è stata la diciassettesima edizione della Supercoppa d'Olanda. Si è svolta il 13 agosto 2006 all'Amsterdam ArenA tra il PSV Eindhoven, vincitore della Eredivisie 2005-2006, e l'Ajax, vincitore della Coppa d'Olanda 2005-2006. A conquistare il titolo è stato l'Ajax che ha vinto per 3-1 con reti di Mauro Rosales, Kenneth Perez e Wesley Sneijder.",
+                "type": "SPORT_EVENT",
+                "resourceType": "IMAGE",
+                "category": "STORY",
+                "source": "dbpedia",
+                "sourceUrl": "http://dbpedia.org/resource/Johan_Cruijff-schaal_XI",
+                "resourceUrl": null,
+                "resourceThumbnailUrl": null,
+                "author": null,
+                "collection": null,
+                "collectionType": null,
+                "isCollection": false,
+                "nationality": null,
+                "locale": "it_IT",
+                "haschcode": null,
+                "fileHashcode": null,
+                "fileName": null,
+                "contributorType": "SYSTEM",
+                "contributor": null,
+                "startDate": {
+                    "fuzzyDateId": 12525,
+                    "textual_date": null,
+                    "exactDate": 1155441600000,
+                    "decade": 2000,
+                    "year": 2006,
+                    "month": "8",
+                    "day": "13",
+                    "accuracy": 9,
+                    "locale": "it_IT",
+                    "exactDateAsString": "2006-08-13 00:00:00"
+                },
+                "startLocation": {
+                    "locationId": 1363,
+                    "textual": "Amsterdam",
+                    "placeName": null,
+                    "country": "The Netherlands",
+                    "region": "North Holland",
+                    "city": null,
+                    "coordinates_trust": 0,
+                    "lat": 52.370216,
+                    "lon": 4.895168,
+                    "locale": "en_US",
+                    "cityBean": null,
+                    "accuracy": 19
+                },
+                "endDate": null,
+                "endLocation": null,
+                "tags": null
             }
-        ]
-    }
+        },
+        {
+            "contextItemId": 77,
+            "level": "WORLD",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "PICTURE",
+            "views": null,
+            "detailViews": null,
+            "ranking": 1,
+            "publicMemento": {
+                "publicMementoId": 1803,
+                "headline": "Pergidae - Perga sp. (affinis ssp. insularis?)",
+                "text": null,
+                "type": "photo",
+                "resourceType": "IMAGE",
+                "category": "PICTURE",
+                "source": "flickr",
+                "sourceUrl": "http://www.flickr.com/photos/32977858@N02/3295961043/",
+                "resourceUrl": "http://farm4.static.flickr.com/3423/3295961043_bde530f123_z.jpg",
+                "resourceThumbnailUrl": null,
+                "author": null,
+                "collection": null,
+                "collectionType": null,
+                "isCollection": false,
+                "nationality": null,
+                "locale": "it_IT",
+                "haschcode": null,
+                "fileHashcode": null,
+                "fileName": null,
+                "contributorType": "SYSTEM",
+                "contributor": null,
+                "startDate": {
+                    "fuzzyDateId": 10824,
+                    "textual_date": null,
+                    "exactDate": 1222315200000,
+                    "decade": 2000,
+                    "year": 2008,
+                    "month": "9",
+                    "day": "25",
+                    "accuracy": 11,
+                    "locale": "it_IT",
+                    "exactDateAsString": "2008-09-25 00:00:00"
+                },
+                "startLocation": {
+                    "locationId": 703,
+                    "textual": null,
+                    "placeName": "Buckland",
+                    "country": "Australia",
+                    "region": "Tasmania",
+                    "city": "Glamorgan-springbay",
+                    "coordinates_trust": 1,
+                    "lat": -42.573625,
+                    "lon": 147.701568,
+                    "locale": "it_IT",
+                    "cityBean": null,
+                    "accuracy": 20
+                },
+                "endDate": null,
+                "endLocation": null,
+                "tags": null
+            }
+        },
+        {
+            "contextItemId": 78,
+            "level": "COUNTRY",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "PICTURE",
+            "views": null,
+            "detailViews": null,
+            "ranking": 2,
+            "publicMemento": {
+                "publicMementoId": 1754,
+                "headline": "Monte Roen_4168",
+                "text": null,
+                "type": "photo",
+                "resourceType": "IMAGE",
+                "category": "PICTURE",
+                "source": "flickr",
+                "sourceUrl": "http://www.flickr.com/photos/16409072@N08/8273873190/",
+                "resourceUrl": "http://farm9.static.flickr.com/8337/8273873190_e7f3696c72_z.jpg",
+                "resourceThumbnailUrl": null,
+                "author": null,
+                "collection": null,
+                "collectionType": null,
+                "isCollection": false,
+                "nationality": null,
+                "locale": "it_IT",
+                "haschcode": null,
+                "fileHashcode": null,
+                "fileName": null,
+                "contributorType": "SYSTEM",
+                "contributor": null,
+                "startDate": {
+                    "fuzzyDateId": 10775,
+                    "textual_date": null,
+                    "exactDate": 1249704000000,
+                    "decade": 2000,
+                    "year": 2009,
+                    "month": "8",
+                    "day": "8",
+                    "accuracy": 11,
+                    "locale": "it_IT",
+                    "exactDateAsString": "2009-08-08 00:00:00"
+                },
+                "startLocation": {
+                    "locationId": 654,
+                    "textual": "Trentino",
+                    "placeName": null,
+                    "country": "Italia",
+                    "region": "Trentino-Alto Adige",
+                    "city": null,
+                    "coordinates_trust": 0,
+                    "lat": 46.433666,
+                    "lon": 11.16933,
+                    "locale": "it_IT",
+                    "cityBean": null,
+                    "accuracy": 19
+                },
+                "endDate": null,
+                "endLocation": null,
+                "tags": null
+            }
+        },
+        {
+            "contextItemId": 79,
+            "level": "REGION",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "PICTURE",
+            "views": null,
+            "detailViews": null,
+            "ranking": 3,
+            "publicMemento": {
+                "publicMementoId": 1636,
+                "headline": "Trento / ??? - Casa Balduini",
+                "text": null,
+                "type": "photo",
+                "resourceType": "IMAGE",
+                "category": "PICTURE",
+                "source": "flickr",
+                "sourceUrl": "http://www.flickr.com/photos/83128028@N00/7356529490/",
+                "resourceUrl": "http://farm8.static.flickr.com/7076/7356529490_dce2f5de9f_z.jpg",
+                "resourceThumbnailUrl": null,
+                "author": null,
+                "collection": null,
+                "collectionType": null,
+                "isCollection": false,
+                "nationality": null,
+                "locale": "it_IT",
+                "haschcode": null,
+                "fileHashcode": null,
+                "fileName": null,
+                "contributorType": "SYSTEM",
+                "contributor": null,
+                "startDate": {
+                    "fuzzyDateId": 10657,
+                    "textual_date": null,
+                    "exactDate": 1160107200000,
+                    "decade": 2000,
+                    "year": 2006,
+                    "month": "10",
+                    "day": "6",
+                    "accuracy": 11,
+                    "locale": "it_IT",
+                    "exactDateAsString": "2006-10-06 00:00:00"
+                },
+                "startLocation": {
+                    "locationId": 536,
+                    "textual": "Trento",
+                    "placeName": null,
+                    "country": "Italia",
+                    "region": "Trentino-Alto Adige",
+                    "city": "Trento",
+                    "coordinates_trust": 0,
+                    "lat": 46.069692,
+                    "lon": 11.121089,
+                    "locale": "it_IT",
+                    "cityBean": {
+                        "cityId": 4015,
+                        "name": "Trento",
+                        "country": {
+                            "countryId": 109,
+                            "short_name": "Italy",
+                            "spanish_name": "Italia",
+                            "italian_name": "Italia"
+                        },
+                        "lat": 46.069692,
+                        "lon": 11.121089
+                    },
+                    "accuracy": 19
+                },
+                "endDate": null,
+                "endLocation": null,
+                "tags": "italy trento trentino"
+            }
+        }
+    ]
+}
+
+Initialize the context for a person
+POST /context/person/{id}
+> Content-Type: application/json
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/context/person/4"}
+< 200
+< Content-Type: application/json
+{
+    "contextId": 9,
+    "title": "Collezione contestuale per i riccordi di Bruno Kessler",
+    "subtitle": "Collezione di contenuto storico per la stimulazione dei riccordi di Bruno Kessler",
+    "personForId": 4,
+    "cityFor": null,
+    "cityRatio": null,
+    "date": null,
+    "dateRatio": null,
+    "publicMementoList": [
+        {
+            "contextItemId": 76,
+            "level": "WORLD",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "STORY",
+            "views": null,
+            "detailViews": null,
+            "ranking": 0,
+            "publicMemento": {
+                "publicMementoId": 618,
+                "headline": "Supercoppa d'Olanda 2006",
+                "text": "La Supercoppa d'Olanda 2006 (ufficialmente Johan Cruijff Schaal XI) è stata la diciassettesima edizione della Supercoppa d'Olanda. Si è svolta il 13 agosto 2006 all'Amsterdam ArenA tra il PSV Eindhoven, vincitore della Eredivisie 2005-2006, e l'Ajax, vincitore della Coppa d'Olanda 2005-2006. A conquistare il titolo è stato l'Ajax che ha vinto per 3-1 con reti di Mauro Rosales, Kenneth Perez e Wesley Sneijder.",
+                "type": "SPORT_EVENT",
+                "resourceType": "IMAGE",
+                "category": "STORY",
+                "source": "dbpedia",
+                "sourceUrl": "http://dbpedia.org/resource/Johan_Cruijff-schaal_XI",
+                "resourceUrl": null,
+                "resourceThumbnailUrl": null,
+                "author": null,
+                "collection": null,
+                "collectionType": null,
+                "isCollection": false,
+                "nationality": null,
+                "locale": "it_IT",
+                "haschcode": null,
+                "fileHashcode": null,
+                "fileName": null,
+                "contributorType": "SYSTEM",
+                "contributor": null,
+                "startDate": {
+                    "fuzzyDateId": 12525,
+                    "textual_date": null,
+                    "exactDate": 1155441600000,
+                    "decade": 2000,
+                    "year": 2006,
+                    "month": "8",
+                    "day": "13",
+                    "accuracy": 9,
+                    "locale": "it_IT",
+                    "exactDateAsString": "2006-08-13 00:00:00"
+                },
+                "startLocation": {
+                    "locationId": 1363,
+                    "textual": "Amsterdam",
+                    "placeName": null,
+                    "country": "The Netherlands",
+                    "region": "North Holland",
+                    "city": null,
+                    "coordinates_trust": 0,
+                    "lat": 52.370216,
+                    "lon": 4.895168,
+                    "locale": "en_US",
+                    "cityBean": null,
+                    "accuracy": 19
+                },
+                "endDate": null,
+                "endLocation": null,
+                "tags": null
+            }
+        },
+        {
+            "contextItemId": 77,
+            "level": "WORLD",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "PICTURE",
+            "views": null,
+            "detailViews": null,
+            "ranking": 1,
+            "publicMemento": {
+                "publicMementoId": 1803,
+                "headline": "Pergidae - Perga sp. (affinis ssp. insularis?)",
+                "text": null,
+                "type": "photo",
+                "resourceType": "IMAGE",
+                "category": "PICTURE",
+                "source": "flickr",
+                "sourceUrl": "http://www.flickr.com/photos/32977858@N02/3295961043/",
+                "resourceUrl": "http://farm4.static.flickr.com/3423/3295961043_bde530f123_z.jpg",
+                "resourceThumbnailUrl": null,
+                "author": null,
+                "collection": null,
+                "collectionType": null,
+                "isCollection": false,
+                "nationality": null,
+                "locale": "it_IT",
+                "haschcode": null,
+                "fileHashcode": null,
+                "fileName": null,
+                "contributorType": "SYSTEM",
+                "contributor": null,
+                "startDate": {
+                    "fuzzyDateId": 10824,
+                    "textual_date": null,
+                    "exactDate": 1222315200000,
+                    "decade": 2000,
+                    "year": 2008,
+                    "month": "9",
+                    "day": "25",
+                    "accuracy": 11,
+                    "locale": "it_IT",
+                    "exactDateAsString": "2008-09-25 00:00:00"
+                },
+                "startLocation": {
+                    "locationId": 703,
+                    "textual": null,
+                    "placeName": "Buckland",
+                    "country": "Australia",
+                    "region": "Tasmania",
+                    "city": "Glamorgan-springbay",
+                    "coordinates_trust": 1,
+                    "lat": -42.573625,
+                    "lon": 147.701568,
+                    "locale": "it_IT",
+                    "cityBean": null,
+                    "accuracy": 20
+                },
+                "endDate": null,
+                "endLocation": null,
+                "tags": null
+            }
+        },
+        {
+            "contextItemId": 78,
+            "level": "COUNTRY",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "PICTURE",
+            "views": null,
+            "detailViews": null,
+            "ranking": 2,
+            "publicMemento": {
+                "publicMementoId": 1754,
+                "headline": "Monte Roen_4168",
+                "text": null,
+                "type": "photo",
+                "resourceType": "IMAGE",
+                "category": "PICTURE",
+                "source": "flickr",
+                "sourceUrl": "http://www.flickr.com/photos/16409072@N08/8273873190/",
+                "resourceUrl": "http://farm9.static.flickr.com/8337/8273873190_e7f3696c72_z.jpg",
+                "resourceThumbnailUrl": null,
+                "author": null,
+                "collection": null,
+                "collectionType": null,
+                "isCollection": false,
+                "nationality": null,
+                "locale": "it_IT",
+                "haschcode": null,
+                "fileHashcode": null,
+                "fileName": null,
+                "contributorType": "SYSTEM",
+                "contributor": null,
+                "startDate": {
+                    "fuzzyDateId": 10775,
+                    "textual_date": null,
+                    "exactDate": 1249704000000,
+                    "decade": 2000,
+                    "year": 2009,
+                    "month": "8",
+                    "day": "8",
+                    "accuracy": 11,
+                    "locale": "it_IT",
+                    "exactDateAsString": "2009-08-08 00:00:00"
+                },
+                "startLocation": {
+                    "locationId": 654,
+                    "textual": "Trentino",
+                    "placeName": null,
+                    "country": "Italia",
+                    "region": "Trentino-Alto Adige",
+                    "city": null,
+                    "coordinates_trust": 0,
+                    "lat": 46.433666,
+                    "lon": 11.16933,
+                    "locale": "it_IT",
+                    "cityBean": null,
+                    "accuracy": 19
+                },
+                "endDate": null,
+                "endLocation": null,
+                "tags": null
+            }
+        },
+        {
+            "contextItemId": 79,
+            "level": "REGION",
+            "decade": 2000,
+            "type": "IMAGE",
+            "category": "PICTURE",
+            "views": null,
+            "detailViews": null,
+            "ranking": 3,
+            "publicMemento": {
+                "publicMementoId": 1636,
+                "headline": "Trento / ??? - Casa Balduini",
+                "text": null,
+                "type": "photo",
+                "resourceType": "IMAGE",
+                "category": "PICTURE",
+                "source": "flickr",
+                "sourceUrl": "http://www.flickr.com/photos/83128028@N00/7356529490/",
+                "resourceUrl": "http://farm8.static.flickr.com/7076/7356529490_dce2f5de9f_z.jpg",
+                "resourceThumbnailUrl": null,
+                "author": null,
+                "collection": null,
+                "collectionType": null,
+                "isCollection": false,
+                "nationality": null,
+                "locale": "it_IT",
+                "haschcode": null,
+                "fileHashcode": null,
+                "fileName": null,
+                "contributorType": "SYSTEM",
+                "contributor": null,
+                "startDate": {
+                    "fuzzyDateId": 10657,
+                    "textual_date": null,
+                    "exactDate": 1160107200000,
+                    "decade": 2000,
+                    "year": 2006,
+                    "month": "10",
+                    "day": "6",
+                    "accuracy": 11,
+                    "locale": "it_IT",
+                    "exactDateAsString": "2006-10-06 00:00:00"
+                },
+                "startLocation": {
+                    "locationId": 536,
+                    "textual": "Trento",
+                    "placeName": null,
+                    "country": "Italia",
+                    "region": "Trentino-Alto Adige",
+                    "city": "Trento",
+                    "coordinates_trust": 0,
+                    "lat": 46.069692,
+                    "lon": 11.121089,
+                    "locale": "it_IT",
+                    "cityBean": {
+                        "cityId": 4015,
+                        "name": "Trento",
+                        "country": {
+                            "countryId": 109,
+                            "short_name": "Italy",
+                            "spanish_name": "Italia",
+                            "italian_name": "Italia"
+                        },
+                        "lat": 46.069692,
+                        "lon": 11.121089
+                    },
+                    "accuracy": 19
+                },
+                "endDate": null,
+                "endLocation": null,
+                "tags": "italy trento trentino"
+            }
+        }
+    ]
 }
 
 Get a contextual memento
-GET /context/{id}/memento/{id}
+GET /context/memento/{id}
 > Content-Type: application/json
-{"url":"/context/999"}
-{  
-    "Session" : {
-        "auth_token" : "054b13b875efac0604bfa8f21ab92dc26e1e34f5" 
-    }
-}
+> PLAY_SESSION: 6500442a574245339a98eb5a2c690af368058d6f-pa.u.exp%3A1376397116201%00pa.p.id%3Apassword%00pa.u.id%3Areminiscensapp%2B4%40gmail.com
+{"url":"/context/memento/4600"}
 < 200
 < Content-Type: application/json
-{  
-    "Response_Status" : {
-        "status_code": 1, 
-        "status_message":"Resource was created"
+{
+    "publicMementoId": 4100,
+    "headline": "Il Centro Del Mondo",
+    "text": null,
+    "type": "SONG",
+    "resourceType": "VIDEO",
+    "category": "SONG",
+    "source": "contributed",
+    "sourceUrl": null,
+    "resourceUrl": null,
+    "resourceThumbnailUrl": null,
+    "author": "Ligabue",
+    "collection": "Single - Secondo Tempo",
+    "collectionType": null,
+    "isCollection": false,
+    "nationality": "Italy",
+    "locale": "it_IT",
+    "haschcode": null,
+    "fileHashcode": null,
+    "fileName": null,
+    "contributorType": "SYSTEM",
+    "contributor": null,
+    "startDate": {
+        "fuzzyDateId": 13526,
+        "textual_date": null,
+        "exactDate": null,
+        "decade": 2000,
+        "year": 2008,
+        "month": null,
+        "day": null,
+        "accuracy": 2,
+        "locale": "it_IT",
+        "exactDateAsString": null
     },
-    "Memento": {
-        "contextMementoId": 999,
-        "contextId": 999,
-        "url": "http://farm8.staticflickr.com/7230/7262518946_81794f46d0_o.jpg",
-        "thumbnail": "",
-        "headline": "MG M - 1930",
-        "decade": 1930,
-        "startDate": "",
-        "endDate": "",
-        "participants": [],
-        "type": "photo",
-        "category": "photo",
-        "index": 2,
-        "credit": "Some rights reserved by ciric",
-        "creditURL": "",
-        "text": "MG M del 1930 ovvero la prima MG Midget",
-        "tags": [
-            "photo",
-            "automobile",
-            "ogetto"
-        ],
-        "questionList": [
-                    {
-                        "questionId": 999,
-                        "question": "Riconosci questa macchina?",
-                        "tags": [
-                            "automobile",
-                            "ogetto"
-                        ]
-                    },
-                    {
-                        "questionId": 998,
-                        "question": "Hai mai guidato una macchina come questa?",
-                        "tags": [
-                            "automobile",
-                            "ogetto"
-                        ]
-                    }
-                ]
-    }
-}
-
-
-Add a memento to the context of a person
-POST /context/{id}/memento
-> Content-Type: application/json
-{"url":"/context/999/memento"}
-{  
-    "Session" : {
-        "auth_token" : "054b13b875efac0604bfa8f21ab92dc26e1e34f5" 
-    },
-    "Memento": {
-        "contextMementoId": 999,
-        "contextId": 999,
-        "url": "http://farm8.staticflickr.com/7230/7262518946_81794f46d0_o.jpg",
-        "thumbnail": "",
-        "headline": "MG M - 1930",
-        "decade": 1930,
-        "startDate": "",
-        "endDate": "",
-        "participants": [],
-        "type": "photo",
-        "category": "photo",
-        "index": 2,
-        "credit": "Some rights reserved by ciric",
-        "creditURL": "",
-        "text": "MG M del 1930 ovvero la prima MG Midget",
-        "tags": [
-            "photo",
-            "automobile",
-            "ogetto"
-        ]
-    }
-}
-< 200
-< Content-Type: application/json
-{  
-    "Response_Status" : {
-        "status_code": 1, 
-        "status_message":"Resource was created"
-    }, 
-    "Memento" : {
-        "url":"/context/999/memento/999
-    }
+    "startLocation": null,
+    "endDate": null,
+    "endLocation": null,
+    "tags": "Blues"
 }
 
 Update a memento in the context of a person
 PUT /context/{id}/memento
 > Content-Type: application/json
-{"url":"/context/999/memento"}
-{  
-    "Session" : {
-        "auth_token" : "054b13b875efac0604bfa8f21ab92dc26e1e34f5" 
+{"url":"/context/memento/4100",
+    "publicMementoId": 4100,
+    "headline": "Il Centro Del Mondo",
+    "text": null,
+    "type": "SONG",
+    "resourceType": "VIDEO",
+    "category": "SONG",
+    "source": "contributed",
+    "sourceUrl": null,
+    "resourceUrl": null,
+    "resourceThumbnailUrl": null,
+    "author": "Ligabue",
+    "collection": "Single - Secondo Tempo",
+    "collectionType": null,
+    "isCollection": false,
+    "nationality": "Italy",
+    "locale": "it_IT",
+    "haschcode": null,
+    "fileHashcode": null,
+    "fileName": null,
+    "contributorType": "SYSTEM",
+    "contributor": null,
+    "startDate": {
+        "fuzzyDateId": 13526,
+        "textual_date": null,
+        "exactDate": null,
+        "decade": 2000,
+        "year": 2008,
+        "month": null,
+        "day": null,
+        "accuracy": 2,
+        "locale": "it_IT",
+        "exactDateAsString": null
     },
-    "Memento": {
-        "contextMementoId": 999,
-        "contextId": 999,
-        "url": "http://farm8.staticflickr.com/7230/7262518946_81794f46d0_o.jpg",
-        "thumbnail": "",
-        "headline": "MG M - 1930",
-        "decade": 1930,
-        "startDate": "",
-        "endDate": "",
-        "participants": [],
-        "type": "photo",
-        "category": "photo",
-        "index": 2,
-        "credit": "Some rights reserved by ciric",
-        "creditURL": "",
-        "text": "MG M del 1930 ovvero la prima MG Midget",
-        "tags": [
-            "photo",
-            "automobile",
-            "ogetto"
-        ]
-    }
+    "startLocation": null,
+    "endDate": null,
+    "endLocation": null,
+    "tags": "Blues"
 }
 < 200
 < Content-Type: application/json
-{  
-    "Response_Status" : {
-        "status_code": 1, 
-        "status_message":"Resource was created"
-    }, 
-    "Memento" : {
-        "url":"/context/999/memento/999
-    }
+{
+    "publicMementoId": 4100,
+    "headline": "Il Centro Del Mondo",
+    "text": null,
+    "type": "SONG",
+    "resourceType": "VIDEO",
+    "category": "SONG",
+    "source": "contributed",
+    "sourceUrl": null,
+    "resourceUrl": null,
+    "resourceThumbnailUrl": null,
+    "author": "Ligabue",
+    "collection": "Single - Secondo Tempo",
+    "collectionType": null,
+    "isCollection": false,
+    "nationality": "Italy",
+    "locale": "it_IT",
+    "haschcode": null,
+    "fileHashcode": null,
+    "fileName": null,
+    "contributorType": "SYSTEM",
+    "contributor": null,
+    "startDate": {
+        "fuzzyDateId": 13526,
+        "textual_date": null,
+        "exactDate": null,
+        "decade": 2000,
+        "year": 2008,
+        "month": null,
+        "day": null,
+        "accuracy": 2,
+        "locale": "it_IT",
+        "exactDateAsString": null
+    },
+    "startLocation": null,
+    "endDate": null,
+    "endLocation": null,
+    "tags": "Blues"
 }
 
 Delete a memento from the context of a person
 DELETE /context/{id}/memento/{id}
 > Content-Type: application/json
 {"url":"/context/999/memento/999"}
-{  
-    "Session" : {
-        "auth_token" : "054b13b875efac0604bfa8f21ab92dc26e1e34f5" 
-    }
-}
 < 200
 < Content-Type: application/json
-{  
-    "Response_Status" : {
-        "status_code": 1, 
-        "status_message":"Resource was deleted"
-    }
-}
+{}
 
 Get questions based on birthyear and a focus year
 GET /question/{birthyear}/{focusyear}

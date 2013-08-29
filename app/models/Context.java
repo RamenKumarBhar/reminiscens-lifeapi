@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.*;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
