@@ -408,6 +408,9 @@ public class ContextDelegate {
 
 		List<Long> exclusionList = PublicMemento.readPublicMementoIds(newContext.getContextId());
 		
+		// TODO add a more "thought" ranking function than just order by newer
+		Long ranking = exclusionList != null ? new Long(exclusionList.size()) : 1;
+		
 		for (Long decade : decades) {
 			for (MementoCategory category : MementoCategory.values()) {
 				// 1. read 1 random element related only to the decade
@@ -425,6 +428,8 @@ public class ContextDelegate {
 					contextItem.setDecade(decade);
 					contextItem.setCategory(contributed.getCategory());
 					contextItem.setType(contributed.getResourceType());
+					contextItem.setRanking(ranking);
+					ranking++;
 					ContextPublicMemento.create(contextItem);
 					content.add(contextItem);
 					exclusionList.add(contributed.getPublicMementoId());
@@ -440,6 +445,8 @@ public class ContextDelegate {
 					contextItem.setDecade(decade);
 					contextItem.setCategory(contributed.getCategory());
 					contextItem.setType(contributed.getResourceType());
+					contextItem.setRanking(ranking);
+					ranking++;
 					ContextPublicMemento.create(contextItem);
 					content.add(contextItem);
 					exclusionList.add(contributed.getPublicMementoId());
@@ -455,6 +462,8 @@ public class ContextDelegate {
 					contextItem.setDecade(decade);
 					contextItem.setCategory(contributed.getCategory());
 					contextItem.setType(contributed.getResourceType());
+					contextItem.setRanking(ranking);
+					ranking++;
 					ContextPublicMemento.create(contextItem);
 					content.add(contextItem);
 				}
