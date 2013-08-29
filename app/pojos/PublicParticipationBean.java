@@ -15,7 +15,7 @@ public class PublicParticipationBean  implements Serializable {
 	private Long publicMementoId;
 	private FamousPersonBean famousPerson;	
 	@JsonIgnore
-	private PublicMementoBean publicMemento;	
+	private ContextIndexBean publicMemento;	
 	
 	public Long getFamousPersonId() {
 		return famousPersonId;
@@ -35,10 +35,10 @@ public class PublicParticipationBean  implements Serializable {
 	public void setFamousPerson(FamousPersonBean famousPerson) {
 		this.famousPerson = famousPerson;
 	}
-	public PublicMementoBean getPublicMemento() {
+	public ContextIndexBean getPublicMemento() {
 		return publicMemento;
 	}
-	public void setPublicMemento(PublicMementoBean publicMemento) {
+	public void setPublicMemento(ContextIndexBean publicMemento) {
 		this.publicMemento = publicMemento;
 	}
 }

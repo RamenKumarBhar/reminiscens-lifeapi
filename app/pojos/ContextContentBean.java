@@ -13,7 +13,7 @@ public class ContextContentBean implements Serializable {
 	private Long publicMementoId;
 	@JsonIgnore
 	private ContextBean context;	
-	private PublicMementoBean publicMemento;
+	private ContextIndexBean publicMemento;
 	
 	public Long getContextId() {
 		return contextId;
@@ -33,10 +33,10 @@ public class ContextContentBean implements Serializable {
 	public void setContext(ContextBean context) {
 		this.context = context;
 	}
-	public PublicMementoBean getPublicMemento() {
+	public ContextIndexBean getPublicMemento() {
 		return publicMemento;
 	}
-	public void setPublicMemento(PublicMementoBean publicMemento) {
+	public void setPublicMemento(ContextIndexBean publicMemento) {
 		this.publicMemento = publicMemento;
 	}
 

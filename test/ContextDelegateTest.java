@@ -49,12 +49,12 @@ public class ContextDelegateTest extends BaseApplicationTest {
 				+ fullname + " (" + personId + ")");
 
 		ContextBean cb = ContextDelegate.getInstance().initContextForPerson(personId);
-		int contributedSize = cb.getContributedMementoList().size();
+		int contributedSize = cb.getPublicMementoList().size();
 		
 		Context c = Context.findByPerson(personId);
 		assertThat(c).isNotNull();
-		assertThat(c.getContributedMementoList()).isNotEmpty();
-		int contributedSizeStored = c.getContributedMementoList().size();
+		assertThat(c.getPublicMementoList()).isNotEmpty();
+		int contributedSizeStored = c.getPublicMementoList().size();
 		assertThat(contributedSize).isEqualTo(contributedSizeStored);
 	}
 

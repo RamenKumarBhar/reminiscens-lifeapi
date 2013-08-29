@@ -86,7 +86,8 @@ PUT     /context/:cid/memento/:mid              controllers.ContextControl.updat
 DELETE  /context/:cid/memento/:mid              controllers.ContextControl.deleteContextMemento(cid: Long, mid: Long)
 GET     /context/:cid/curators                  controllers.ContextControl.getContextCurators(cid: Long)
 GET     /context/:cid/memento/:mid              controllers.ContextControl.getContextMemento(cid: Long, mid: Long)
-
+DELETE  /context/memento/:mid                   controllers.ContextControl.deleteContributedMemento(mid: Long)
+POST    /context/memento/anonymous              controllers.ContextControl.createAnonymousContributedMemento()
 # General Questions
 GET     /question/:byear/:fyear/        controllers.QuestionsControl.getGeneralQuestionsForYear(byear: Integer, fyear: Integer) 
 GET     /question/:chapter              controllers.QuestionsControl.getGeneralQuestionsForLifeChapter(chapter: String) 

@@ -64,6 +64,9 @@ public class Context extends Model {
 //	@JsonIgnore
 //	@OneToMany(mappedBy="context")
 //	private List<ContextContent> publicContextContent;
+	@JsonIgnore
+	@OneToMany(mappedBy = "context", cascade = CascadeType.ALL)
+	private List<ContextPublicMemento> publicMementoList;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "context", cascade = CascadeType.ALL)
@@ -143,11 +146,12 @@ public class Context extends Model {
 		List<Context> contextOfPerson = find.where()
 				.eq("personForId", id)
 				.eq("enabled",true)
-				.eq("contributedMementoList.decade",decade)
-				.eq("mediaList.decade",decade)
-				.eq("eventList.decade",decade)
-				.eq("creativeWorkList.decade",decade)
-				.eq("famousPeopleList.decade",decade)
+				.eq("publicMementoList.decade",decade)
+//				.eq("contributedMementoList.decade",decade)
+//				.eq("mediaList.decade",decade)
+//				.eq("eventList.decade",decade)
+//				.eq("creativeWorkList.decade",decade)
+//				.eq("famousPeopleList.decade",decade)
 				.findList();
 		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
 	}
@@ -156,18 +160,18 @@ public class Context extends Model {
     	List<Context> contextOfPerson = find.where()
 				.eq("personForId", id)
 				.eq("enabled",true)
-				.eq("contributedMementoList.decade",decade)
-				
-				
-				.eq("mediaList.decade",decade)
-				.eq("eventList.decade",decade)
-				.eq("creativeWorkList.decade",decade)
-				.eq("famousPeopleList.decade",decade)
-				.eq("contributedMementoList.category",category)
-				.eq("mediaList.category",category)
-				.eq("eventList.category",category)
-				.eq("creativeWorkList.category",category)
-				.eq("famousPeopleList.category",category)
+				.eq("publicMementoList.decade",decade)
+//				.eq("contributedMementoList.decade",decade)
+//				.eq("mediaList.decade",decade)
+//				.eq("eventList.decade",decade)
+//				.eq("creativeWorkList.decade",decade)
+//				.eq("famousPeopleList.decade",decade)
+				.eq("publicMementoList.category",category)
+//				.eq("contributedMementoList.category",category)
+//				.eq("mediaList.category",category)
+//				.eq("eventList.category",category)
+//				.eq("creativeWorkList.category",category)
+//				.eq("famousPeopleList.category",category)
 				.findList();
 		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
 	}	
@@ -177,11 +181,12 @@ public class Context extends Model {
     	List<Context> contextOfPerson = find.where()
 				.eq("contextId", id)
 				.eq("enabled",true)
-				.eq("contributedMementoList.decade",decade)
-				.eq("mediaList.decade",decade)
-				.eq("eventList.decade",decade)
-				.eq("creativeWorkList.decade",decade)
-				.eq("famousPeopleList.decade",decade)
+				.eq("publicMementoList.decade",decade)
+//				.eq("contributedMementoList.decade",decade)
+//				.eq("mediaList.decade",decade)
+//				.eq("eventList.decade",decade)
+//				.eq("creativeWorkList.decade",decade)
+//				.eq("famousPeopleList.decade",decade)
 				.findList();
 		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
 	}
@@ -191,16 +196,18 @@ public class Context extends Model {
     	List<Context> contextOfPerson = find.where()
 				.eq("contextId", id)
 				.eq("enabled",true)
-				.eq("contributedMementoList.decade",decade)
-				.eq("mediaList.decade",decade)
-				.eq("eventList.decade",decade)
-				.eq("creativeWorkList.decade",decade)
-				.eq("famousPeopleList.decade",decade)
-				.eq("contributedMementoList.category",category)
-				.eq("mediaList.category",category)
-				.eq("eventList.category",category)
-				.eq("creativeWorkList.category",category)
-				.eq("famousPeopleList.category",category)
+				.eq("publicMementoList.decade",decade)
+//				.eq("contributedMementoList.decade",decade)
+//				.eq("mediaList.decade",decade)
+//				.eq("eventList.decade",decade)
+//				.eq("creativeWorkList.decade",decade)
+//				.eq("famousPeopleList.decade",decade)
+				.eq("publicMementoList.category",category)
+//				.eq("contributedMementoList.category",category)
+//				.eq("mediaList.category",category)
+//				.eq("eventList.category",category)
+//				.eq("creativeWorkList.category",category)
+//				.eq("famousPeopleList.category",category)
 				.findList();
 		return contextOfPerson != null && !contextOfPerson.isEmpty() ? contextOfPerson.get(contextOfPerson.size()-1) : null;
 	}
@@ -334,5 +341,13 @@ public class Context extends Model {
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public List<ContextPublicMemento> getPublicMementoList() {
+		return publicMementoList;
+	}
+
+	public void setPublicMementoList(List<ContextPublicMemento> publicMementoList) {
+		this.publicMementoList = publicMementoList;
 	}
 }

@@ -114,6 +114,14 @@ public class Location extends Model {
 	@JsonIgnore
 	@OneToMany(mappedBy = "endLocation", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<FamousPerson> famousDeathPlace;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "startLocation", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<PublicMemento> publicMementoStartPlace;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "endLocation", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<PublicMemento> publicMementoEndPlace;
 	
 	public static Model.Finder<Long,Location> find = new Model.Finder<Long, Location>(
             Long.class,Location.class
@@ -530,5 +538,88 @@ public class Location extends Model {
 
 	public void setCityBean(City city) {
 		this.cityBean = city;
+	}
+
+	public List<LifeStory> getLifeStoriesLocation() {
+		return lifeStoriesLocation;
+	}
+
+	public void setLifeStoriesLocation(List<LifeStory> lifeStoriesLocation) {
+		this.lifeStoriesLocation = lifeStoriesLocation;
+	}
+
+	public List<Memento> getMementosLocation() {
+		return mementosLocation;
+	}
+
+	public void setMementosLocation(List<Memento> mementosLocation) {
+		this.mementosLocation = mementosLocation;
+	}
+
+	public List<ContributedMemento> getContributedMementoStartLocation() {
+		return contributedMementoStartLocation;
+	}
+
+	public void setContributedMementoStartLocation(
+			List<ContributedMemento> contributedMementoStartLocation) {
+		this.contributedMementoStartLocation = contributedMementoStartLocation;
+	}
+
+	public List<ContributedMemento> getContributedMementoEndLocation() {
+		return contributedMementoEndLocation;
+	}
+
+	public void setContributedMementoEndLocation(
+			List<ContributedMemento> contributedMementoEndLocation) {
+		this.contributedMementoEndLocation = contributedMementoEndLocation;
+	}
+
+	public List<Media> getMediaLocation() {
+		return mediaLocation;
+	}
+
+	public void setMediaLocation(List<Media> mediaLocation) {
+		this.mediaLocation = mediaLocation;
+	}
+
+	public List<Event> getEventLocation() {
+		return eventLocation;
+	}
+
+	public void setEventLocation(List<Event> eventLocation) {
+		this.eventLocation = eventLocation;
+	}
+
+	public List<FamousPerson> getFamousBirthPlace() {
+		return famousBirthPlace;
+	}
+
+	public void setFamousBirthPlace(List<FamousPerson> famousBirthPlace) {
+		this.famousBirthPlace = famousBirthPlace;
+	}
+
+	public List<FamousPerson> getFamousDeathPlace() {
+		return famousDeathPlace;
+	}
+
+	public void setFamousDeathPlace(List<FamousPerson> famousDeathPlace) {
+		this.famousDeathPlace = famousDeathPlace;
+	}
+
+	public List<PublicMemento> getPublicMementoStartPlace() {
+		return publicMementoStartPlace;
+	}
+
+	public void setPublicMementoStartPlace(
+			List<PublicMemento> publicMementoStartPlace) {
+		this.publicMementoStartPlace = publicMementoStartPlace;
+	}
+
+	public List<PublicMemento> getPublicMementoEndPlace() {
+		return publicMementoEndPlace;
+	}
+
+	public void setPublicMementoEndPlace(List<PublicMemento> publicMementoEndPlace) {
+		this.publicMementoEndPlace = publicMementoEndPlace;
 	}
 }
