@@ -60,6 +60,13 @@ public class ContextPublicMemento extends Model {
 	}
 
 	public static void create(ContextPublicMemento contextContributed) {
+		PublicMemento p = contextContributed.getPublicMemento();
+		if (p != null) {
+			Long pid = p.getPublicMementoId();
+			if (pid==null) {
+				PublicMemento.create(p);
+			}
+		}
 		contextContributed.save();
 		contextContributed.refresh();
 	}
@@ -69,17 +76,27 @@ public class ContextPublicMemento extends Model {
 		return contextContributed;
 	}
 
-	public static void update(Long contextId, Long publicMementoId) {
-		find.where().eq("context.contextId", contextId)
+	public static ContextPublicMemento update(Long contextId, Long publicMementoId, ContextPublicMemento p) {
+		ContextPublicMemento cp = find.where().eq("context.contextId", contextId)
 				.eq("publicMemento.publicMementoId", publicMementoId)
-				.findUnique()
-				.update();
+				.findUnique();
+		p.setContextItemId(cp.getContextItemId());
+		p.update();
+		return p;
+	}
+	
+	public static ContextPublicMemento update(ContextPublicMemento p) {
+		Long id = p.getContextItemId();
+		p.update(id);
+		p.refresh();
+		return p;
 	}
 
 	public static void delete(Long contextId, Long publicMementoId) {
-		find.where().eq("context.contextId", contextId)
+		ContextPublicMemento pm = find.where().eq("context.contextId", contextId)
 			.eq("publicMemento.publicMementoId", publicMementoId)
-			.findUnique().delete();
+			.findUnique();
+		pm.delete();
 	}
 
 	public static ContextPublicMemento read(Long contextId, Long publicMementoId) {

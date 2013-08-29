@@ -108,7 +108,7 @@ public class Global extends GlobalSettings {
 	public Result onBadRequest(play.mvc.Http.RequestHeader arg0, String arg1) {
 		Logger.debug("-----> Bad request error "+ arg1);
 		Logger.debug("-----> Bad request error "+ arg0.toString());
-		return Results.badRequest("Don't try to hack the URI!");
+		return Results.badRequest("Bad Requests Errors: "+arg1);
 	};
 
 	static class InitialData {

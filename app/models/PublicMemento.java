@@ -108,7 +108,7 @@ public class PublicMemento extends Model {
 	private String migrationId;
     
 	@JsonIgnore
-	@OneToMany(mappedBy = "publicMemento", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "publicMemento", cascade = CascadeType.PERSIST)
 	private List<ContextPublicMemento> contextPublicMemento;
 	
     public static Model.Finder<Long, PublicMemento> find = new Model.Finder<Long, PublicMemento>(
@@ -118,6 +118,9 @@ public class PublicMemento extends Model {
 		return find.all();
 	}
 	
+	public static PublicMemento read(Long id) {
+		return find.ref(id);
+	}
 	
 	public static List<Long> readPublicMementoIds(Long contextId) {
 		List<Object> objs = find.where().eq("contextPublicMemento.context.contextId", contextId).findIds();	
@@ -126,6 +129,13 @@ public class PublicMemento extends Model {
 			result.add((Long)object);
 		}
 		return result;
+	}
+	
+	public static PublicMemento update(PublicMemento p) {
+		Long id = p.getPublicMementoId();
+		p.update(id);
+		p.refresh();
+		return p;
 	}
 
 
@@ -162,6 +172,11 @@ public class PublicMemento extends Model {
 		return null;
 	}
 	
+	
+
+    public static void delete(Long id){
+        find.ref(id).delete();
+    }
 	
 	/**
 	 * Context creation algorithm
