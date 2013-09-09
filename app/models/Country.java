@@ -114,7 +114,7 @@ public class Country extends Model {
 						: locale.equals("fr_FR") ? this.french_name 
 								: locale.equals("en_US") ? this.english_name
 										: locale.equals("pt_PT") ? this.portuguese_name
-												: locale.equals("de_DE") ? this.german_name : null;
+												: locale.equals("de_DE") ? this.german_name : this.short_name;
     }
     
 	public Long getCountryId() {
