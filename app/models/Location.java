@@ -185,7 +185,9 @@ public class Location extends Model {
 					location.setCityBean(c);
 					
 					if (locale!=null && !locale.isEmpty()){
-						location.setCountry(c.getCountry().getNameByLocale(locale));						
+						if (c.getCountry()!=null) {	
+							location.setCountry(c.getCountry().getNameByLocale(locale));
+						} 
 					} else {
 						location.setCountry(c.getCountry().getShort_name());
 					}
