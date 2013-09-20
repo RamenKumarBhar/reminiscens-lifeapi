@@ -63,11 +63,12 @@ public class LifeStory extends Model {
 	@JoinColumn(name = "location_id", updatable = true, insertable = true)
 	private Location location;
 
-	@ManyToOne
-	@MapsId
-	@JoinColumn(name = "question_id")
-	private Question question;
+	@Column(name="question_id")
+	private Long questionId;
 
+	@Column(name="public_memento_id")
+	private Long publicMementoId;
+	
 	@ManyToOne
 	@MapsId
 	@JoinColumn(name = "fuzzy_startdate", updatable = true, insertable = true)
@@ -382,14 +383,6 @@ public class LifeStory extends Model {
 		this.location = location;
 	}
 
-	public Question getQuestion() {
-		return question;
-	}
-
-	public void setQuestion(Question question) {
-		this.question = question;
-	}
-
 	public FuzzyDate getStartDate() {
 		return startDate;
 	}
@@ -596,5 +589,21 @@ public class LifeStory extends Model {
 			}
 		}
 		return locations;
+	}
+
+	public Long getQuestionId() {
+		return questionId;
+	}
+
+	public void setQuestionId(Long questionId) {
+		this.questionId = questionId;
+	}
+
+	public Long getPublicMementoId() {
+		return publicMementoId;
+	}
+
+	public void setPublicMementoId(Long publicMementoId) {
+		this.publicMementoId = publicMementoId;
 	}
 }

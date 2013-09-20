@@ -25,11 +25,12 @@ public class LifeStoryBean implements Serializable {
 	private DateTime creationDate = DateTime.now();
 	private String locale = "it_IT";
 	private LocationBean location;
-	private QuestionBean question;
 	private FuzzyDateBean startDate;
 	private boolean synced;
 	private List<ParticipationBean> participationList;
 	private List<MementoBean> mementoList;
+	private Long questionId;
+	private Long publicMementoId;
 	
 //	Fields in Database not exposed through API 
 //	private String type;
@@ -205,14 +206,6 @@ public class LifeStoryBean implements Serializable {
 		this.location = location;
 	}
 
-	public QuestionBean getQuestion() {
-		return question;
-	}
-
-	public void setQuestion(QuestionBean question) {
-		this.question = question;
-	}
-
 	public boolean isSynced() {
 		return synced;
 	}
@@ -244,5 +237,21 @@ public class LifeStoryBean implements Serializable {
 		} else {
 			this.participationList.add(part);
 		}
+	}
+
+	public Long getQuestionId() {
+		return questionId;
+	}
+
+	public void setQuestionId(Long questionId) {
+		this.questionId = questionId;
+	}
+
+	public Long getPublicMementoId() {
+		return publicMementoId;
+	}
+
+	public void setPublicMementoId(Long publicMementoId) {
+		this.publicMementoId = publicMementoId;
 	}
 }
