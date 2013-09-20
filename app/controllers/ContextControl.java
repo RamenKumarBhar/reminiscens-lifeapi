@@ -29,7 +29,6 @@ public class ContextControl extends Controller {
 			.form(PublicMementoBean.class);
 	static Form<LocationMinimalBean> locationForm = Form
 			.form(LocationMinimalBean.class);
-
 	/**
 	 * Serves the context for the logged user (if exist) or initialize one if it
 	 * does not exist
@@ -538,6 +537,21 @@ public class ContextControl extends Controller {
 		}
 	}
 
+	public static Result addContextMementoView(Long cid) {
+		/** @TODO */
+		return TODO;
+	}
+
+	public static Result addContextMementoDetailViews(Long cid) {
+		/** @TODO */
+		return TODO;
+	}
+
+	public static Result countContextMementoEmotion(Long cid) {
+		/** @TODO */
+		return TODO;
+	}
+	
 	// TODO
 	public static Result getContextCurators(Long cid) {
 		/** @TODO */

@@ -14,16 +14,16 @@ public class QuestionDelegate {
 	static final Map<Integer, String> questionChapterDecades  = new HashMap<Integer, String>();
 	
 	static {
-		questionChapterDecades.put(0, "Childhood");
-		questionChapterDecades.put(1, "Childhood");
-		questionChapterDecades.put(2, "Childhood"); // ALSO YOUTH
-		questionChapterDecades.put(3, "Youth");
-		questionChapterDecades.put(4, "Adulthood");
-		questionChapterDecades.put(5, "Adulthood");
-		questionChapterDecades.put(6, "Adulthood");
-		questionChapterDecades.put(7, "Oldage");
-		questionChapterDecades.put(8, "Oldage");
-		questionChapterDecades.put(9, "Oldage");
+		questionChapterDecades.put(0, "CHILDHOOD");
+		questionChapterDecades.put(1, "CHILDHOOD");
+		questionChapterDecades.put(2, "CHILDHOOD"); // ALSO YOUTH
+		questionChapterDecades.put(3, "YOUTH");
+		questionChapterDecades.put(4, "ADULTHOOD");
+		questionChapterDecades.put(5, "ADULTHOOD");
+		questionChapterDecades.put(6, "ADULTHOOD");
+		questionChapterDecades.put(7, "OLDAGE");
+		questionChapterDecades.put(8, "OLDAGE");
+		questionChapterDecades.put(9, "OLDAGE");
 	}
 	
 	public static QuestionDelegate getInstance() {
@@ -87,7 +87,7 @@ public class QuestionDelegate {
 	}
 	
 	public static void addAllTimesQuestions(List<QuestionBean> pojosQuestions) {
-		List<models.Question> modelQuestions = models.Question.readByChapter("All times");
+		List<models.Question> modelQuestions = models.Question.readByChapter("ALLTIMES");
 		List<QuestionBean> allTimeQuestions = new ArrayList<QuestionBean>();
 		for (models.Question question : modelQuestions) {
 			QuestionBean questionBean = PlayDozerMapper.getInstance().map(
