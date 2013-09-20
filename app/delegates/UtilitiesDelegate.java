@@ -139,7 +139,8 @@ public class UtilitiesDelegate {
 		File localFile = new File(fullPath);
 		uploadFile.renameTo(localFile);
 		Logger.root().debug("--> localFile=" + localFile);
-		if (play.mvc.Controller.request().getHeader("Origin").contains("localhost")) {
+		String origin = play.mvc.Controller.request().getHeader("Origin");
+		if (origin != null && origin.contains("localhost")) {
 			filesBaseURL = "http://localhost/files";
 		}
 		
