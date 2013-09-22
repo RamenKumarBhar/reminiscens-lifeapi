@@ -14,7 +14,6 @@ import pojos.ContextBean;
 import pojos.ContextPublicMementoBean;
 import pojos.LocationMinimalBean;
 import pojos.PublicMementoBean;
-import sun.security.util.SecurityConstants;
 import utils.PlayDozerMapper;
 import models.City;
 import models.Context;
@@ -606,18 +605,16 @@ public class ContextDelegate {
 		Long stories = pm.getStories();
 		
 		if (stat.equals(LogActions.VIEWS.toString())) {
-			views = views == null ? 1 : views++; 
+			views = views == null ? 1 : views+1; 
 			pm.setViews(views);
 		} else if (stat.equals(LogActions.DETAILVIEWS.toString())) {
-			detailViews = detailViews == null ? 1 : detailViews++; 
+			detailViews = detailViews == null ? 1 : detailViews+1; 
 			pm.setDetailViews(detailViews);
 		} else if  (stat.equals(LogActions.STORY_NEW.toString())) {
-			stories = stories == null ? 1 : stories++; 
+			stories = stories == null ? 1 : stories+1; 
 			pm.setStories(stories);
 		} 
 		
-		pm.update();
-		pm.refresh();
-		return pm;
+		return ContextPublicMemento.update(pm);
 	}
 }

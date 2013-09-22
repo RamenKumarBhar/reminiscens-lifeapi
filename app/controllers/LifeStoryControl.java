@@ -5,8 +5,8 @@ import static play.libs.Json.toJson;
 import java.util.List;
 
 import models.Context;
-import models.ContextPublicMemento;
 import models.User;
+import play.Logger;
 import play.Play;
 import play.data.Form;
 import play.mvc.Controller;
@@ -138,7 +138,19 @@ public class LifeStoryControl extends Controller {
 								publicMementoId, LogActions.STORY_NEW.toString());
 						} catch (Exception e) {
 							// Right now, i does not really care (and most likely, never will)... so, let's just ignore the exception
+							Logger.debug("Context Memento identified by ID = "+publicMementoId+" does not exist in context identified by ID = "+contextId);
 						}						
+					}
+				}
+				
+				// Add to the log that a question was answered if the question_id is not null
+				// 3.3. PublicMemento stats (if there is)
+				Long questionId = lifeStoryBean.getQuestionId();
+				if (questionId != null) {
+					// Log Action
+					if (logAction == 1) {
+						UtilitiesDelegate.getInstance().logActivity(user,
+								LogActions.QUESTION_ANSWER.toString(), request().path());
 					}
 				}
 				

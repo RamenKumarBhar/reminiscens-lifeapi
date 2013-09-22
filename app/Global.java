@@ -20,21 +20,16 @@ import play.mvc.Action;
 import play.mvc.Call;
 import play.mvc.Http.Context;
 import play.mvc.Http.Request;
-import play.mvc.Http.Session;
 import play.mvc.Result;
 import play.mvc.Results;
 import pojos.CityBean;
 import pojos.PersonBean;
 import providers.MyUsernamePasswordAuthUser;
-import utils.PlayDozerMapper;
-
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 import com.feth.play.module.pa.exceptions.AccessDeniedException;
 import com.feth.play.module.pa.exceptions.AuthException;
-
 import controllers.routes;
-import delegates.UtilitiesDelegate;
 
 public class Global extends GlobalSettings {
 	/**
