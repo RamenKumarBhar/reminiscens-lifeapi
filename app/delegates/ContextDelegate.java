@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import enums.LogActions;
 import enums.MementoCategory;
 import exceptions.EntityDoesNotExist;
 import exceptions.NotEnoughInformation;
@@ -13,6 +14,7 @@ import pojos.ContextBean;
 import pojos.ContextPublicMementoBean;
 import pojos.LocationMinimalBean;
 import pojos.PublicMementoBean;
+import sun.security.util.SecurityConstants;
 import utils.PlayDozerMapper;
 import models.City;
 import models.Context;
@@ -593,5 +595,29 @@ public class ContextDelegate {
 			}
 		}
 		return map;
+	}
+
+	public ContextPublicMemento increaseStatsOnContextMemento(Long contextId,
+			Long publicMementoId, String stat) {
+
+		ContextPublicMemento pm = ContextPublicMemento.read(contextId, publicMementoId);
+		Long views = pm.getViews();
+		Long detailViews = pm.getDetailViews();
+		Long stories = pm.getStories();
+		
+		if (stat.equals(LogActions.VIEWS.toString())) {
+			views = views == null ? 1 : views++; 
+			pm.setViews(views);
+		} else if (stat.equals(LogActions.DETAILVIEWS.toString())) {
+			detailViews = detailViews == null ? 1 : detailViews++; 
+			pm.setDetailViews(detailViews);
+		} else if  (stat.equals(LogActions.STORY_NEW.toString())) {
+			stories = stories == null ? 1 : stories++; 
+			pm.setStories(stories);
+		} 
+		
+		pm.update();
+		pm.refresh();
+		return pm;
 	}
 }

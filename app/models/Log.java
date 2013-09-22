@@ -39,8 +39,11 @@ public class Log extends Model{
     private DateTime time;
     
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", insertable=true, updatable=true)
     private User user;
+    
+    @Column
+    private String resourceURI;
     
     public static Model.Finder<Long,Log> find = new Model.Finder<Long, Log>(
             Long.class,Log.class
@@ -97,5 +100,21 @@ public class Log extends Model{
     public void setTime(DateTime time) {
         this.time = time;
     }
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getResourceURI() {
+		return resourceURI;
+	}
+
+	public void setResourceURI(String resourceURI) {
+		this.resourceURI = resourceURI;
+	}
     
 }

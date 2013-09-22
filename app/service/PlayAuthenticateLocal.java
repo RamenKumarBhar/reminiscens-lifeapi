@@ -5,6 +5,7 @@ import static play.libs.Json.toJson;
 import java.io.UnsupportedEncodingException;
 
 import play.Logger;
+import play.Play;
 import play.api.libs.Crypto;
 import play.i18n.Messages;
 import play.mvc.Call;
@@ -23,6 +24,7 @@ import com.feth.play.module.pa.providers.AuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
 
 import controllers.routes;
+import delegates.UtilitiesDelegate;
 import enums.ResponseStatus;
 
 public class PlayAuthenticateLocal extends PlayAuthenticate {
@@ -103,6 +105,13 @@ public class PlayAuthenticateLocal extends PlayAuthenticate {
 
 		}
 
+		// Log Action
+		int logAction = Play.application().configuration()
+				.getInt("log.actions");	
+		if (logAction == 1) {
+			UtilitiesDelegate.getInstance().logActivity(user, payload.toString(), context.request().path());
+		}
+		
 		UserBean u = PlayDozerMapper.getInstance().map(user, UserBean.class);
 		u.setSessionKey(signed + "-" + encoded);
 		return Controller.ok(toJson(u));
@@ -206,7 +215,6 @@ public class PlayAuthenticateLocal extends PlayAuthenticate {
 				if (isLinked && !isLoggedIn) {
 					// 1. -> Login
 					loginUser = newUser;
-
 				} else if (isLinked && isLoggedIn) {
 					// 2. -> Merge
 

@@ -127,11 +127,13 @@ public class LifeStory extends Model {
 		lifestory.save();
 
 		// 3. things to save after creating the life story
+		// 3.1. Participation list
 		List<Participation> participants = lifestory.getParticipationList();
 		for (Participation participation : participants) {
 			Participation.create(participation);
 		}
 
+		// 3.2. MementoList
 		List<Memento> mementoList = lifestory.getMementoList();
 		for (Memento memento : mementoList) {
 			Memento.create(memento);
