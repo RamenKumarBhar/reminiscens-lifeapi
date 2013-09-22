@@ -160,7 +160,7 @@ GET     /city/:name                     controllers.Utilities.getCitiesByName(na
 # POST /log/DETAILVIEW/context/11/memento/99
 # POST /log/OPEN/user/99 (if sessionKey is already in LocalStorage)
 # POST /log/CLOSE/user/99 (when app is closed)
-POST    /log/:action/:uri               controllers.Utilities.logActivity(action: String, uri: String )
+POST    /log/:action/*uri               controllers.Utilities.logActivity(action: String, uri: String )
 
 #TODOLIST OF UTILITIES
 #GET    /location                       controllers.Utilities.getDistinctLocations() 

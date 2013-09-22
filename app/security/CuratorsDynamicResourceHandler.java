@@ -95,6 +95,7 @@ public class CuratorsDynamicResourceHandler extends
 	 * @param participants
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private Boolean checkRelationship(Long user,
 			List<Participation> participants) {
 		Boolean allowed = false;

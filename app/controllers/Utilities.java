@@ -7,7 +7,6 @@ import java.util.List;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 
-import models.Log;
 import models.User;
 import play.Logger;
 import play.Play;
@@ -16,12 +15,10 @@ import play.mvc.Controller;
 import play.mvc.Security;
 import play.mvc.Result;
 import pojos.CityBean;
-import pojos.ContextPublicMementoBean;
 import pojos.FileBean;
 import pojos.ResponseStatusBean;
 import security.MyDynamicResourceHandler;
 import security.SecurityModelConstants;
-
 import delegates.ContextDelegate;
 import delegates.UtilitiesDelegate;
 import enums.LogActions;

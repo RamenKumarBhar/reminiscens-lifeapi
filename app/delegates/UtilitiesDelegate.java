@@ -17,7 +17,6 @@ import org.joda.time.DateTime;
 import akka.event.slf4j.Logger;
 
 import play.Play;
-import play.mvc.Http.Context;
 import play.mvc.Http.MultipartFormData.FilePart;
 import pojos.CityBean;
 import pojos.FileBean;

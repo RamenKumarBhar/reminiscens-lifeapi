@@ -5,7 +5,6 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import play.mvc.*;
 import providers.MyLoginUsernamePasswordAuthUser;
-import providers.MyUsernamePasswordAuthProvider;
 
 
 import static play.test.Helpers.*;
