@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="log")
+@Table(name="Log")
 public class Log extends Model{
     
     /**
