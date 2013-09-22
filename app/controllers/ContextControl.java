@@ -7,10 +7,13 @@ import be.objectify.deadbolt.java.actions.Dynamic;
 import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import delegates.ContextDelegate;
+import delegates.UtilitiesDelegate;
+import enums.LogActions;
 import enums.MyRoles;
 import enums.ResponseStatus;
 import exceptions.EntityDoesNotExist;
 import exceptions.NotEnoughInformation;
+import play.Play;
 import play.data.Form;
 import play.mvc.*;
 import pojos.ContextBean;
@@ -29,6 +32,7 @@ public class ContextControl extends Controller {
 			.form(PublicMementoBean.class);
 	static Form<LocationMinimalBean> locationForm = Form
 			.form(LocationMinimalBean.class);
+
 	/**
 	 * Serves the context for the logged user (if exist) or initialize one if it
 	 * does not exist
@@ -45,6 +49,13 @@ public class ContextControl extends Controller {
 				id);
 
 		if (result != null) {
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_READ.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -67,6 +78,13 @@ public class ContextControl extends Controller {
 		try {
 			ContextBean result = ContextDelegate.getInstance()
 					.initContextForPerson(id);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_INIT.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} catch (EntityDoesNotExist e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -86,6 +104,15 @@ public class ContextControl extends Controller {
 				id);
 
 		if (result != null) {
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_READ.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -100,6 +127,15 @@ public class ContextControl extends Controller {
 		try {
 			ContextBean result = ContextDelegate.getInstance()
 					.initContextForPerson(id);
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_INIT.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} catch (EntityDoesNotExist e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -117,6 +153,15 @@ public class ContextControl extends Controller {
 		ContextBean result = ContextDelegate.getInstance()
 				.getContextForPersonAndDecade(id, decade);
 		if (result != null) {
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_READ.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -132,6 +177,15 @@ public class ContextControl extends Controller {
 		ContextBean result = ContextDelegate.getInstance()
 				.getContextForPersonAndDecadeAndCategory(id, decade, category);
 		if (result != null) {
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_READ.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -146,6 +200,15 @@ public class ContextControl extends Controller {
 		try {
 			ContextBean result = ContextDelegate.getInstance()
 					.initContextForPersonAndDecade(id, decade);
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_INIT.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} catch (EntityDoesNotExist e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -175,6 +238,16 @@ public class ContextControl extends Controller {
 				ContextBean result = ContextDelegate.getInstance()
 						.initContextForPersonAndDecadeAndLocation(id, decade,
 								location);
+				String userEmail = session().get("pa.u.id");
+				User user = User.getByEmail(userEmail);
+				// Log Action
+				int logAction = Play.application().configuration()
+						.getInt("log.actions");
+				if (logAction == 1) {
+					UtilitiesDelegate.getInstance().logActivity(user,
+							LogActions.CONTEXT_INIT.toString(),
+							request().path());
+				}
 				return ok(toJson(result));
 			} catch (EntityDoesNotExist e) {
 				ResponseStatusBean res = new ResponseStatusBean(
@@ -194,6 +267,15 @@ public class ContextControl extends Controller {
 		try {
 			ContextBean result = ContextDelegate.getInstance()
 					.initContextForPersonAndDecadeAndCity(id, decade, cityId);
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_INIT.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} catch (EntityDoesNotExist e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -210,6 +292,15 @@ public class ContextControl extends Controller {
 	public static Result getContextById(Long cid) {
 		ContextBean result = ContextDelegate.getInstance().getContext(cid);
 		if (result != null) {
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_READ.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -225,6 +316,15 @@ public class ContextControl extends Controller {
 				.getContextByIdAndDecade(cid, decade);
 
 		if (result != null) {
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_READ.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -240,6 +340,15 @@ public class ContextControl extends Controller {
 		ContextBean result = ContextDelegate.getInstance()
 				.getContextByIdAndDecadeAndCategory(cid, decade, cat);
 		if (result != null) {
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_READ.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -262,6 +371,15 @@ public class ContextControl extends Controller {
 			try {
 				ContextBean result = ContextDelegate.getInstance()
 						.refreshContextDecadeAndLocation(id, decade, location);
+				String userEmail = session().get("pa.u.id");
+				User user = User.getByEmail(userEmail);
+				// Log Action
+				int logAction = Play.application().configuration()
+						.getInt("log.actions");
+				if (logAction == 1) {
+					UtilitiesDelegate.getInstance().logActivity(user,
+							LogActions.CONTEXT_REFRESH.toString(), request().path());
+				}
 				return ok(toJson(result));
 			} catch (EntityDoesNotExist e) {
 				ResponseStatusBean res = new ResponseStatusBean(
@@ -281,6 +399,15 @@ public class ContextControl extends Controller {
 		try {
 			ContextBean result = ContextDelegate.getInstance()
 					.refreshContextForDecadeAndCity(cid, decade, cityId);
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_REFRESH.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} catch (EntityDoesNotExist e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -300,6 +427,15 @@ public class ContextControl extends Controller {
 			ContextDelegate.getInstance().deleteContext(cid);
 			ResponseStatusBean res = new ResponseStatusBean(ResponseStatus.OK,
 					"Entity deleted with success");
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.CONTEXT_DELETE.toString(), request().path());
+			}
 			return ok(toJson(res));
 		} catch (Exception e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -334,6 +470,14 @@ public class ContextControl extends Controller {
 					ContextPublicMementoBean result = ContextDelegate
 							.getInstance()
 							.addMementoToContext(cid, contributed);
+					
+					// Log Action
+					int logAction = Play.application().configuration()
+							.getInt("log.actions");
+					if (logAction == 1) {
+						UtilitiesDelegate.getInstance().logActivity(user,
+								LogActions.PUBLIC_MEMENTO_NEW.toString(), request().path());
+					}
 					return ok(toJson(result));
 				} else {
 					ResponseStatusBean res = new ResponseStatusBean(
@@ -373,6 +517,15 @@ public class ContextControl extends Controller {
 					ContextPublicMementoBean result = ContextDelegate
 							.getInstance().updateContextMemento(cid, mid,
 									contributed);
+					String userEmail = session().get("pa.u.id");
+					User user = User.getByEmail(userEmail);
+					// Log Action
+					int logAction = Play.application().configuration()
+							.getInt("log.actions");
+					if (logAction == 1) {
+						UtilitiesDelegate.getInstance().logActivity(user,
+								LogActions.PUBLIC_MEMENTO_MODIFY.toString(), request().path());
+					}
 					return ok(toJson(result));
 				} else {
 					ResponseStatusBean res = new ResponseStatusBean(
@@ -408,6 +561,15 @@ public class ContextControl extends Controller {
 				contributed.setPublicMementoId(mid);
 				PublicMementoBean result = ContextDelegate.getInstance()
 						.updatePublicMemento(mid, contributed);
+				String userEmail = session().get("pa.u.id");
+				User user = User.getByEmail(userEmail);
+				// Log Action
+				int logAction = Play.application().configuration()
+						.getInt("log.actions");
+				if (logAction == 1) {
+					UtilitiesDelegate.getInstance().logActivity(user,
+							LogActions.PUBLIC_MEMENTO_MODIFY.toString(), request().path());
+				}
 				return ok(toJson(result));
 			} catch (EntityDoesNotExist e) {
 				ResponseStatusBean res = new ResponseStatusBean(
@@ -426,6 +588,15 @@ public class ContextControl extends Controller {
 		try {
 			PublicMementoBean result = ContextDelegate.getInstance()
 					.getPublicMemento(mid);
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.PUBLIC_MEMENTO_READ.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} catch (Exception e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -439,6 +610,15 @@ public class ContextControl extends Controller {
 		try {
 			ContextPublicMementoBean result = ContextDelegate.getInstance()
 					.getContextMemento(cid, mid);
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.PUBLIC_MEMENTO_READ.toString(), request().path());
+			}
 			return ok(toJson(result));
 		} catch (Exception e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -453,6 +633,15 @@ public class ContextControl extends Controller {
 			ContextDelegate.getInstance().deleteContextMemento(cid, mid);
 			ResponseStatusBean res = new ResponseStatusBean(ResponseStatus.OK,
 					"Entity deleted with success");
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.PUBLIC_MEMENTO_DELETE.toString(), request().path());
+			}
 			return ok(toJson(res));
 		} catch (Exception e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -485,6 +674,13 @@ public class ContextControl extends Controller {
 				ResponseStatusBean res = new ResponseStatusBean(
 						ResponseStatus.OK, "Entity created with success");
 				res.setNewResourceId(result.getPublicMementoId());
+				// Log Action
+				int logAction = Play.application().configuration()
+						.getInt("log.actions");
+				if (logAction == 1) {
+					UtilitiesDelegate.getInstance().logActivity(user,
+							LogActions.PUBLIC_MEMENTO_NEW.toString(), request().path());
+				}
 				return ok(toJson(result));
 			} catch (Exception e) {
 				ResponseStatusBean res = new ResponseStatusBean(
@@ -512,6 +708,13 @@ public class ContextControl extends Controller {
 				ResponseStatusBean res = new ResponseStatusBean(
 						ResponseStatus.OK, "Entity created with success");
 				res.setNewResourceId(result.getPublicMementoId());
+				// Log Action
+				int logAction = Play.application().configuration()
+						.getInt("log.actions");
+				if (logAction == 1) {
+					UtilitiesDelegate.getInstance().logActivity(null,
+							LogActions.PUBLIC_MEMENTO_NEW.toString(), request().path());
+				}
 				return ok(toJson(result));
 			} catch (Exception e) {
 				ResponseStatusBean res = new ResponseStatusBean(
@@ -527,6 +730,15 @@ public class ContextControl extends Controller {
 			ContextDelegate.getInstance().deleteContributedMemento(mid);
 			ResponseStatusBean res = new ResponseStatusBean(ResponseStatus.OK,
 					"Entity deleted with success");
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.PUBLIC_MEMENTO_DELETE.toString(), request().path());
+			}
 			return ok(toJson(res));
 		} catch (Exception e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -551,7 +763,7 @@ public class ContextControl extends Controller {
 		/** @TODO */
 		return TODO;
 	}
-	
+
 	// TODO
 	public static Result getContextCurators(Long cid) {
 		/** @TODO */

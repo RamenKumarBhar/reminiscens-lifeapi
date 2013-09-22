@@ -16,8 +16,11 @@ GET     /assets/*file                           controllers.Assets.at(path="/pub
 
 #####################################################################################
 # Very basic User and Authentication Management based on play-authenticate
+# Logged
 POST    /user/login                                  controllers.UserControl.doLogin()
+# Logged
 POST    /user/signup                                 controllers.UserControl.doSignup()
+# Logged
 GET     /user/logout                                 controllers.UserControl.doLogout()
 GET     /user/profile                                controllers.UserControl.profile()
 PUT     /user/:uid                                   controllers.UserControl.updateUser(uid: Long) 
@@ -34,9 +37,13 @@ GET     /person/:id                             controllers.PersonControl.getPer
 POST    /person                                 controllers.PersonControl.createPerson() 
 PUT     /person/:id                             controllers.PersonControl.updatePerson(id: Long) 
 DELETE  /person/:id                             controllers.PersonControl.deletePerson(id: Long) 
+# Logged
 GET     /person/:id/timeline                    controllers.TimelineControl.getPersonTimeline(id: Long) 
+# Logged
 GET     /person/:id/timeline/:from/:to          controllers.TimelineControl.getPersonTimelineWithLimits(id: Long, from: Long, to: Long) 
+# Logged
 POST    /person/:id/timeline                    controllers.TimelineControl.synchronizePersonTimeline(id: Long) 
+# Logged
 GET     /person/:id/timeline/:decade            controllers.TimelineControl.getPersonTimelineByDecade(id: Long, decade: Long) 
 GET     /person/:id/relationships               controllers.RelationshipControl.getPersonRelationships(id: Long) 
 GET     /person/:id/relationships/:network      controllers.RelationshipControl.getPersonRelationshipsByNetwork(id: Long, network: String) 
@@ -46,52 +53,91 @@ GET     /person/:id/relationship/:rid           controllers.RelationshipControl.
 DELETE  /person/:id/relationship/:rid           controllers.RelationshipControl.deleteRelationship(id: Long, rid: Long) 
 GET     /person/:id/memento                     controllers.MementoControl.getAllPersonMemento(id: Long) 
 GET     /person/:id/memento/:type               controllers.MementoControl.getPersonMementoByParticipationType(id: Long, type: String)
+#Logged
 GET     /lifestory/:lsid                        controllers.LifeStoryControl.getLifeStory(lsid: Long) 
+#Logged
 POST    /lifestory                              controllers.LifeStoryControl.createLifeStory() 
+#Logged
 PUT     /lifestory/:lsid                        controllers.LifeStoryControl.updateLifeStory(lsid: Long) 
+#Logged
 DELETE  /lifestory/:lsid                        controllers.LifeStoryControl.deleteLifeStory(lsid: Long) 
 POST    /lifestory/:lsid/person/:id/:type       controllers.LifeStoryControl.addParticipant(lsid: Long, id: Long, type: String) 
 DELETE  /lifestory/:lsid/person/:id             controllers.LifeStoryControl.deletePersonFromLifeStory(lsid: Long, id: Long) 
 DELETE  /lifestory/:lsid/person/:id/protagonist controllers.LifeStoryControl.deleteProtagonistFromLifeStory(lsid: Long, id: Long) 
+
+#Logged
 POST    /lifestory/:lsid/memento                controllers.MementoControl.addNewMementoToLifeStory(lsid: Long) 
+#Logged
 GET     /lifestory/:lsid/memento/:id            controllers.MementoControl.getMemento(lsid: Long, id: Long)
+#Logged
 PUT     /lifestory/:lsid/memento/:id            controllers.MementoControl.updateMemento(lsid: Long, id: Long)
+#Logged
 DELETE  /lifestory/:lsid/memento/:id            controllers.MementoControl.deleteMemento(lsid: Long, id: Long)
 POST    /lifestory/:lsid/memento/:id/mention     controllers.MementoControl.addMementoParticipant(lsid: Long, id: Long)
 POST    /lifestory/:lsid/memento/:id/mention/:pid controllers.MementoControl.addMementoParticipantByPersonId(lsid: Long, id: Long, pid: Long)
 DELETE  /lifestory/:lsid/memento/:id/mention/:pid controllers.MementoControl.deleteMementoParticipantByPersonId(lsid: Long, id: Long, pid: Long)
 
+# POST /lifestory/:lsid/share/:email
+# POST /lifestory/:lsid/:token
+# POST /lifestory/:lsid/:token/comment
+# POST /lifestory/:lsid/comment
+
 #####################################################################################
 # Contextual Reminiscence
+# Logged
 GET     /context                                controllers.ContextControl.getContext()
+#Logged
 POST    /context                                controllers.ContextControl.initContext()
+#Logged
 GET     /context/person/:id                     controllers.ContextControl.getContextForPerson(id: Long)
+#Logged
 POST    /context/person/:id                     controllers.ContextControl.initContextForPerson(id: Long)
+#Logged
 GET     /context/person/:id/:decade             controllers.ContextControl.getContextForPersonAndDecade(id: Long, decade: Long)
+#Logged
 GET     /context/person/:id/:decade/:category   controllers.ContextControl.getContextForPersonAndDecadeAndCategory(id: Long, decade: Long, category: String)
+#Logged
 POST    /context/person/:id/:decade             controllers.ContextControl.initContextForPersonAndDecade(id: Long, decade: Long)
+#Logged
 POST    /context/person/:id/:decade/location    controllers.ContextControl.initContextForPersonAndDecadeAndLocation(id: Long, decade: Long)
+#Logged
 POST    /context/person/:id/:decade/:cityId     controllers.ContextControl.initContextForPersonAndDecadeAndCity(id: Long, decade: Long, cityId: Long)
+#Logged
 GET     /context/:cid                           controllers.ContextControl.getContextById(cid: Long)
-
+#Logged
 POST    /context/memento/anonymous              controllers.ContextControl.createAnonymousContributedMemento()
+#Logged
 POST    /context/memento                        controllers.ContextControl.createContributedMemento()
+#Logged
 GET     /context/memento/:mid                   controllers.ContextControl.getPublicMemento(mid: Long)
+#Logged
 PUT     /context/memento/:mid                   controllers.ContextControl.updatePublicMemento(mid: Long)
+#Logged
 DELETE  /context/memento/:mid                   controllers.ContextControl.deleteContributedMemento(mid: Long)
+#Logged
 POST    /context/:cid/memento                   controllers.ContextControl.createContextMemento(cid: Long)
+#Logged
 GET     /context/:cid/memento/:mid              controllers.ContextControl.getContextMemento(cid: Long, mid: Long)
+#Logged
 PUT     /context/:cid/memento/:mid              controllers.ContextControl.updateContextMemento(cid: Long, mid: Long)
+#Logged
 DELETE  /context/:cid/memento/:mid              controllers.ContextControl.deleteContextMemento(cid: Long, mid: Long)
+#Logged
 PUT     /context/:cid/:decade/location          controllers.ContextControl.refreshContextForDecadeAndLocation(cid: Long, decade: Long)
+#Logged
 PUT     /context/:cid/:decade/:cityId           controllers.ContextControl.refreshContextForDecadeAndCity(cid: Long, decade: Long, cityId: Long)
+#Logged
 DELETE  /context/:cid                           controllers.ContextControl.deleteContext(cid: java.lang.Long)
+#Logged
 GET     /context/:cid/:decade                   controllers.ContextControl.getContextByIdAndDecade(cid: Long, decade: Long)
+#Logged
 GET     /context/:cid/:decade/:category         controllers.ContextControl.getContextByIdAndDecadeAndCategory(cid: Long, decade: Long, category: String)
 
 
 # General Questions
+#Logged
 GET     /question/:byear/:fyear/        controllers.QuestionsControl.getGeneralQuestionsForYear(byear: Integer, fyear: Integer) 
+#Logged
 GET     /question/:chapter              controllers.QuestionsControl.getGeneralQuestionsForLifeChapter(chapter: String) 
 
 # General Public Mementos API (lifecontext proxy)
@@ -110,6 +156,11 @@ GET     /country/:country/:region/city  controllers.Utilities.getCitiesByCountry
 GET     /city/id/:cityId                controllers.Utilities.getCityById(cityId: Long) 
 GET     /city/sync/:lastCityId          controllers.Utilities.getNewCities(lastCityId: Long) 
 GET     /city/:name                     controllers.Utilities.getCitiesByName(name: String) 
+# POST /log/VIEW/context/11/memento/99
+# POST /log/DETAILVIEW/context/11/memento/99
+# POST /log/OPEN/user/99 (if sessionKey is already in LocalStorage)
+# POST /log/CLOSE/user/99 (when app is closed)
+POST    /log/:action/:uri               controllers.Utilities.logActivity(action: String, uri: String )
 
 #TODOLIST OF UTILITIES
 #GET    /location                       controllers.Utilities.getDistinctLocations() 

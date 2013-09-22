@@ -7,22 +7,29 @@ import java.util.List;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 
+import models.Log;
 import models.User;
 import play.Logger;
+import play.Play;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Security;
 import play.mvc.Result;
 import pojos.CityBean;
+import pojos.ContextPublicMementoBean;
 import pojos.FileBean;
 import pojos.ResponseStatusBean;
+import security.MyDynamicResourceHandler;
+import security.SecurityModelConstants;
 
+import delegates.ContextDelegate;
 import delegates.UtilitiesDelegate;
+import enums.LogActions;
 import enums.ResponseStatus;
 
 public class Utilities extends Controller {
 
-	public static Form<FileBean> fileForm = Form.form(FileBean.class);;
+	public static Form<FileBean> fileForm = Form.form(FileBean.class);
 
 	public static Result getCities() {
 		List<CityBean> bean = UtilitiesDelegate.getInstance().getCities();
@@ -110,6 +117,15 @@ public class Utilities extends Controller {
 					response.setStatusMessage(e.getMessage());
 					return internalServerError(toJson(response));
 				}
+				
+				// Log Action
+				int logAction = Play.application().configuration()
+						.getInt("log.actions");
+				if (logAction == 1) {
+					UtilitiesDelegate.getInstance().logActivity(user,
+							LogActions.FILE_NEW.toString(), request().path());
+				}
+				
 				return ok(toJson(fileBean));
 			} else {
 				flash("error", "Missing file");
@@ -232,6 +248,52 @@ public class Utilities extends Controller {
 			response.setResponseStatus(ResponseStatus.NOTAVAILABLE);
 			response.setStatusMessage("Missing file");
 			return notFound(toJson(response));
+		}
+	}
+
+	@SubjectPresent
+	public static Result logActivity(String action, String uri) {
+		String userEmail = session().get("pa.u.id");
+		User user = User.getByEmail(userEmail);
+
+		if (user != null) {
+			UtilitiesDelegate.getInstance().logActivity(user, action, uri);
+
+			// if the call to the logger is to register that a memento has been
+			// seen within the contexts, register this as a stat
+			if (action.equals(LogActions.DETAILVIEWS.toString())
+					|| action.equals(LogActions.VIEWS.toString())
+					|| action.equals(LogActions.STORY_NEW.toString())) {
+				Long contextId = MyDynamicResourceHandler.getIdFromPath(uri,
+						SecurityModelConstants.ID_FROM_CONTEXT);
+				Long publicMementoId = MyDynamicResourceHandler.getIdFromPath(
+						uri, SecurityModelConstants.ID_FROM_MEMENTO);
+				
+				try {
+					ContextDelegate.getInstance()
+							.increaseStatsOnContextMemento(contextId,
+									publicMementoId, action);
+				} catch (Exception e) {
+					ResponseStatusBean response = new ResponseStatusBean();
+					response.setResponseStatus(ResponseStatus.SERVERERROR);
+					response.setStatusMessage("Log was saved, but views on "
+						+ uri + "was not computed due to an error: "+e.getLocalizedMessage());
+					return internalServerError(toJson(response));
+				}
+			}
+
+			ResponseStatusBean response = new ResponseStatusBean();
+			response.setResponseStatus(ResponseStatus.OK);
+			response.setStatusMessage("Log was stored");
+			return ok(toJson(response));
+		} else {
+			// TODO remove once authentication is fully tested, @security
+			// should be enough
+			flash("error", "Missing file");
+			ResponseStatusBean response = new ResponseStatusBean();
+			response.setResponseStatus(ResponseStatus.UNAUTHORIZED);
+			response.setStatusMessage("User is information is null");
+			return unauthorized(toJson(response));
 		}
 	}
 

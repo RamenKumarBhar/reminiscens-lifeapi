@@ -34,6 +34,8 @@ public class ContextPublicMemento extends Model {
 	@Column(name="detail_views")
 	private Long detailViews;
 	@Column
+	private Long stories;
+	@Column
 	private Long ranking;
 	
 	@JsonIgnore
@@ -206,6 +208,14 @@ public class ContextPublicMemento extends Model {
 
 	public void setRanking(Long ranking) {
 		this.ranking = ranking;
+	}
+
+	public Long getStories() {
+		return stories;
+	}
+
+	public void setStories(Long stories) {
+		this.stories = stories;
 	}
 
 }

@@ -1,5 +1,6 @@
 package controllers;
 
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -13,6 +14,7 @@ public class Application extends Controller {
 	}
 
 	public static Result checkPreFlight(String path) {
+		Logger.debug("--> Preflight REQUEST");
 		response().setHeader("Access-Control-Allow-Origin", "*");
 		response().setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS");
 		response()

@@ -20,11 +20,13 @@ import play.mvc.Action;
 import play.mvc.Call;
 import play.mvc.Http.Context;
 import play.mvc.Http.Request;
+import play.mvc.Http.Session;
 import play.mvc.Result;
 import play.mvc.Results;
 import pojos.CityBean;
 import pojos.PersonBean;
 import providers.MyUsernamePasswordAuthUser;
+import utils.PlayDozerMapper;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.PlayAuthenticate.Resolver;
@@ -32,6 +34,7 @@ import com.feth.play.module.pa.exceptions.AccessDeniedException;
 import com.feth.play.module.pa.exceptions.AuthException;
 
 import controllers.routes;
+import delegates.UtilitiesDelegate;
 
 public class Global extends GlobalSettings {
 	/**
@@ -59,7 +62,6 @@ public class Global extends GlobalSettings {
 				// ctx.response().discardCookie("PLAY_SESSION");
 				// ctx.response().discardCookie("PLAY_SESSION", context);
 				Logger.debug("--> Request Headers: ");
-				
 				String contentType = "Content-Type";
 				String origin = "Origin";
 				String host = "Host";
@@ -98,7 +100,6 @@ public class Global extends GlobalSettings {
 				ctx.response()
 						.setHeader("Access-Control-Allow-Headers",
 								"accept, origin, Content-type, x-json, x-prototype-version, x-requested-with, PLAY_SESSION");
-				
 				return r;
 			}
 		};

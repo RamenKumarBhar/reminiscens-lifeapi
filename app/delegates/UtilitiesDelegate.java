@@ -9,11 +9,15 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
+import models.Log;
+import models.User;
+
 import org.joda.time.DateTime;
 
 import akka.event.slf4j.Logger;
 
 import play.Play;
+import play.mvc.Http.Context;
 import play.mvc.Http.MultipartFormData.FilePart;
 import pojos.CityBean;
 import pojos.FileBean;
@@ -296,4 +300,12 @@ public class UtilitiesDelegate {
 		return getFileNoLogin(hashcode, "");
 	}
 
+	public void logActivity(User u, String a, String r) {
+		Log l = new Log();
+		l.setUser(u);
+		l.setAction(a);
+		l.setResourceURI(r);
+		l.setTime(DateTime.now());
+		l.save();
+	}
 }

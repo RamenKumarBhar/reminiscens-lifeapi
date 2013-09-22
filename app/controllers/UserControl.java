@@ -14,8 +14,11 @@ import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 
 import delegates.UserDelegate;
+import delegates.UtilitiesDelegate;
+import enums.LogActions;
 import enums.MyRoles;
 import enums.ResponseStatus;
+import play.Play;
 import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.*;
@@ -69,7 +72,19 @@ public class UserControl extends Controller {
 	}
 
 	// TODO implement our own logout
+	@SubjectPresent
 	public static Result doLogout() {
+
+		String userEmail = session().get("pa.u.id");
+		User user = User.getByEmail(userEmail);
+		
+		// Log Action
+		int logAction = Play.application().configuration()
+				.getInt("log.actions");	
+		if (logAction == 1) {
+			UtilitiesDelegate.getInstance().logActivity(user, LogActions.LOGOUT.toString(), request().path());
+		}
+		
 		return com.feth.play.module.pa.controllers.Authenticate.logout();
 	}
 

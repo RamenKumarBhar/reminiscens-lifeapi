@@ -4,13 +4,18 @@ import static play.libs.Json.toJson;
 
 import java.util.List;
 
+import models.User;
+
 import annotations.CustomRestrict;
 import be.objectify.deadbolt.java.actions.Dynamic;
 import be.objectify.deadbolt.java.actions.Restrict;
 
 import delegates.MementoDelegate;
+import delegates.UtilitiesDelegate;
+import enums.LogActions;
 import enums.MyRoles;
 import enums.ResponseStatus;
+import play.Play;
 import play.data.Form;
 import play.mvc.*;
 import pojos.MementoBean;
@@ -21,14 +26,15 @@ import security.SecurityModelConstants;
 
 public class MementoControl extends Controller {
 	static Form<MementoBean> mementoForm = Form.form(MementoBean.class);
-	static Form<MentionPersonBean> mentionPersonForm = Form.form(MentionPersonBean.class);
-	
-	@CustomRestrict(value = {MyRoles.ADMIN}, config = @Restrict({}))
+	static Form<MentionPersonBean> mentionPersonForm = Form
+			.form(MentionPersonBean.class);
+
+	@CustomRestrict(value = { MyRoles.ADMIN }, config = @Restrict({}))
 	public static Result getAllMemento() {
 		List<MementoBean> lp = MementoDelegate.getInstance().getAll();
 		return lp != null ? ok(toJson(lp)) : notFound();
 	}
-	
+
 	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_PERSON)
 	public static Result getAllPersonMemento(Long personId) {
 		List<MementoBean> lp = MementoDelegate.getInstance()
@@ -37,7 +43,8 @@ public class MementoControl extends Controller {
 	}
 
 	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_PERSON)
-	public static Result getPersonMementoByParticipationType(Long personId, String type) {
+	public static Result getPersonMementoByParticipationType(Long personId,
+			String type) {
 		if (type.equals("protagonist")) {
 			return getPersonProtagonistMemento(personId);
 		} else if (type.equals("mention")) {
@@ -45,7 +52,8 @@ public class MementoControl extends Controller {
 		} else {
 			ResponseStatusBean res = new ResponseStatusBean(
 					ResponseStatus.NODATA,
-					"Mementos with that type of participation ("+type+") does not exist");
+					"Mementos with that type of participation (" + type
+							+ ") does not exist");
 			return notFound(toJson(res));
 		}
 	}
@@ -62,16 +70,39 @@ public class MementoControl extends Controller {
 			MementoBean mementoBean = filledForm.get();
 			mementoBean.setLifeStoryId(lsid);
 			MementoDelegate.getInstance().create(mementoBean);
+
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.MEMENTO_NEW.toString(), request().path());
+			}
+
 			return ok(toJson(mementoBean));
 		}
 	}
-	
+
 	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_STORY)
 	public static Result getMemento(Long lsid, Long id) {
 		MementoBean bean = MementoDelegate.getInstance().getMemento(id);
+		if (bean!=null) {
+
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.MEMENTO_READ.toString(), request().path());
+			}
+		}
 		return bean != null ? ok(toJson(bean)) : notFound();
 	}
-	
+
 	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_STORY)
 	public static Result updateMemento(Long lsid, Long id) {
 		Form<MementoBean> filledForm = mementoForm.bindFromRequest();
@@ -86,6 +117,16 @@ public class MementoControl extends Controller {
 				mementoBean.setLifeStoryId(lsid);
 				mementoBean.setMementoId(id);
 				MementoDelegate.getInstance().update(mementoBean);
+
+				String userEmail = session().get("pa.u.id");
+				User user = User.getByEmail(userEmail);
+				// Log Action
+				int logAction = Play.application().configuration()
+						.getInt("log.actions");
+				if (logAction == 1) {
+					UtilitiesDelegate.getInstance().logActivity(user,
+							LogActions.MEMENTO_MODIFY.toString(), request().path());
+				}
 				return ok(toJson(mementoBean));
 			} catch (Exception e) {
 				ResponseStatusBean res = new ResponseStatusBean(
@@ -95,13 +136,23 @@ public class MementoControl extends Controller {
 			}
 		}
 	}
-	
+
 	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_STORY)
 	public static Result deleteMemento(Long lsid, Long id) {
 		try {
 			MementoDelegate.getInstance().deleteMemento(id);
 			ResponseStatusBean res = new ResponseStatusBean(ResponseStatus.OK,
 					"Entity deleted with success");
+
+			String userEmail = session().get("pa.u.id");
+			User user = User.getByEmail(userEmail);
+			// Log Action
+			int logAction = Play.application().configuration()
+					.getInt("log.actions");
+			if (logAction == 1) {
+				UtilitiesDelegate.getInstance().logActivity(user,
+						LogActions.MEMENTO_DELETE.toString(), request().path());
+			}
 			return ok(toJson(res));
 		} catch (Exception e) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -110,10 +161,11 @@ public class MementoControl extends Controller {
 			return badRequest(toJson(res));
 		}
 	}
-	
+
 	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_STORY)
 	public static Result addMementoParticipant(Long lsid, Long id) {
-		Form<MentionPersonBean> filledForm = mentionPersonForm.bindFromRequest();
+		Form<MentionPersonBean> filledForm = mentionPersonForm
+				.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			ResponseStatusBean res = new ResponseStatusBean(
 					ResponseStatus.BADREQUEST,
@@ -122,7 +174,8 @@ public class MementoControl extends Controller {
 		} else {
 			MentionPersonBean mentionPerson = filledForm.get();
 			try {
-				MementoDelegate.getInstance().addMementoMentionParticipant(id,mentionPerson);
+				MementoDelegate.getInstance().addMementoMentionParticipant(id,
+						mentionPerson);
 				return ok(toJson(mentionPerson));
 			} catch (Exception e) {
 				ResponseStatusBean res = new ResponseStatusBean(
@@ -132,9 +185,10 @@ public class MementoControl extends Controller {
 			}
 		}
 	}
-	
+
 	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_STORY)
-	public static Result addMementoParticipantByPersonId(Long lsid, Long id, Long pid) {
+	public static Result addMementoParticipantByPersonId(Long lsid, Long id,
+			Long pid) {
 		MementoParticipationBean response;
 		try {
 			response = MementoDelegate.getInstance()
@@ -151,12 +205,12 @@ public class MementoControl extends Controller {
 	}
 
 	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_STORY)
-	public static Result deleteMementoParticipantByPersonId(Long lsid, Long id, Long pid) {
+	public static Result deleteMementoParticipantByPersonId(Long lsid, Long id,
+			Long pid) {
 		try {
-			MementoDelegate.getInstance()
-					.deleteMementoParticipantByPersonId(id, pid);
-			ResponseStatusBean res = new ResponseStatusBean(
-					ResponseStatus.OK,
+			MementoDelegate.getInstance().deleteMementoParticipantByPersonId(
+					id, pid);
+			ResponseStatusBean res = new ResponseStatusBean(ResponseStatus.OK,
 					"Participant in Memento was deleted with success");
 			return ok(toJson(res));
 		} catch (NullPointerException e) {
@@ -168,9 +222,7 @@ public class MementoControl extends Controller {
 		}
 	}
 
-	
-	
-	// DEPRECATED 
+	// DEPRECATED
 	@Dynamic(value = "FriendOf", meta = SecurityModelConstants.ID_FROM_PERSON)
 	public static Result getPersonProtagonistMemento(Long personId) {
 		List<MementoBean> lp = MementoDelegate.getInstance()
@@ -187,29 +239,28 @@ public class MementoControl extends Controller {
 
 	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_STORY)
 	public static Result addMementoToLifeStory(Long lsid, Long mid) {
-		MementoBean mementoBean = MementoDelegate.getInstance().addMementoToLifeStory(lsid, mid);
-		
+		MementoBean mementoBean = MementoDelegate.getInstance()
+				.addMementoToLifeStory(lsid, mid);
+
 		if (mementoBean == null) {
 			ResponseStatusBean res = new ResponseStatusBean(
 					ResponseStatus.NODATA, "Entity does not exist");
 			return badRequest(toJson(res));
 		} else {
-		return ok(toJson(mementoBean));
+			return ok(toJson(mementoBean));
 		}
 	}
-	
+
 	public static Result uploadMemento(Long id, Long mid) {
 		/** @TODO */
 		return TODO;
 	}
 
 	/*
-	 * TODO
-	 * 1. Delete participants from mementos
-	 * 2. Fix update of memento that is not mapped to the MentionPerson table
-	 * 3. Get rid of MementoParticipation classes
-	 * 4. Improve adding PersonMention and mapping directly to a real person 
-	 * 5. Find a way to avoid duplicates in Memento mentioned people
-	 * 6. Fix Problem of MentionPerson not having an @Id
+	 * TODO 1. Delete participants from mementos 2. Fix update of memento that
+	 * is not mapped to the MentionPerson table 3. Get rid of
+	 * MementoParticipation classes 4. Improve adding PersonMention and mapping
+	 * directly to a real person 5. Find a way to avoid duplicates in Memento
+	 * mentioned people 6. Fix Problem of MentionPerson not having an @Id
 	 */
 }
