@@ -1,5 +1,9 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import models.Context;
 import models.PublicMemento;
 import models.User;
 import annotations.CustomRestrict;
@@ -32,6 +36,35 @@ public class ContextControl extends Controller {
 			.form(PublicMementoBean.class);
 	static Form<LocationMinimalBean> locationForm = Form
 			.form(LocationMinimalBean.class);
+
+	public static List<String> categoryOptions() {
+		List<String> tmp = new ArrayList<String>();
+
+		tmp.add("SONG");
+		tmp.add("PEOPLE");
+		tmp.add("STORY");
+		tmp.add("TV");
+		tmp.add("FILM");
+		tmp.add("PICTURE");
+		// tmp.add("ARTWORK");
+		// tmp.add("BOOK");
+		// tmp.add("OBJEC");
+		return tmp;
+	}
+	
+	public static List<String> resourceTypeOptions(){
+        List<String> tmp = new ArrayList<String>();
+
+        tmp.add("IMAGE");
+        tmp.add("VIDEO");
+        tmp.add("AUDIO");
+        tmp.add("TEXT");
+        tmp.add("HTML");
+        //tmp.add("ARTWORK");
+        //tmp.add("BOOK");
+        //tmp.add("OBJEC");
+        return tmp;
+    }
 
 	/**
 	 * Serves the context for the logged user (if exist) or initialize one if it
@@ -378,7 +411,8 @@ public class ContextControl extends Controller {
 						.getInt("log.actions");
 				if (logAction == 1) {
 					UtilitiesDelegate.getInstance().logActivity(user,
-							LogActions.CONTEXT_REFRESH.toString(), request().path());
+							LogActions.CONTEXT_REFRESH.toString(),
+							request().path());
 				}
 				return ok(toJson(result));
 			} catch (EntityDoesNotExist e) {
@@ -405,8 +439,10 @@ public class ContextControl extends Controller {
 			int logAction = Play.application().configuration()
 					.getInt("log.actions");
 			if (logAction == 1) {
-				UtilitiesDelegate.getInstance().logActivity(user,
-						LogActions.CONTEXT_REFRESH.toString(), request().path());
+				UtilitiesDelegate.getInstance()
+						.logActivity(user,
+								LogActions.CONTEXT_REFRESH.toString(),
+								request().path());
 			}
 			return ok(toJson(result));
 		} catch (EntityDoesNotExist e) {
@@ -470,13 +506,14 @@ public class ContextControl extends Controller {
 					ContextPublicMementoBean result = ContextDelegate
 							.getInstance()
 							.addMementoToContext(cid, contributed);
-					
+
 					// Log Action
 					int logAction = Play.application().configuration()
 							.getInt("log.actions");
 					if (logAction == 1) {
 						UtilitiesDelegate.getInstance().logActivity(user,
-								LogActions.PUBLIC_MEMENTO_NEW.toString(), request().path());
+								LogActions.PUBLIC_MEMENTO_NEW.toString(),
+								request().path());
 					}
 					return ok(toJson(result));
 				} else {
@@ -524,7 +561,8 @@ public class ContextControl extends Controller {
 							.getInt("log.actions");
 					if (logAction == 1) {
 						UtilitiesDelegate.getInstance().logActivity(user,
-								LogActions.PUBLIC_MEMENTO_MODIFY.toString(), request().path());
+								LogActions.PUBLIC_MEMENTO_MODIFY.toString(),
+								request().path());
 					}
 					return ok(toJson(result));
 				} else {
@@ -568,7 +606,8 @@ public class ContextControl extends Controller {
 						.getInt("log.actions");
 				if (logAction == 1) {
 					UtilitiesDelegate.getInstance().logActivity(user,
-							LogActions.PUBLIC_MEMENTO_MODIFY.toString(), request().path());
+							LogActions.PUBLIC_MEMENTO_MODIFY.toString(),
+							request().path());
 				}
 				return ok(toJson(result));
 			} catch (EntityDoesNotExist e) {
@@ -595,7 +634,8 @@ public class ContextControl extends Controller {
 					.getInt("log.actions");
 			if (logAction == 1) {
 				UtilitiesDelegate.getInstance().logActivity(user,
-						LogActions.PUBLIC_MEMENTO_READ.toString(), request().path());
+						LogActions.PUBLIC_MEMENTO_READ.toString(),
+						request().path());
 			}
 			return ok(toJson(result));
 		} catch (Exception e) {
@@ -617,7 +657,8 @@ public class ContextControl extends Controller {
 					.getInt("log.actions");
 			if (logAction == 1) {
 				UtilitiesDelegate.getInstance().logActivity(user,
-						LogActions.PUBLIC_MEMENTO_READ.toString(), request().path());
+						LogActions.PUBLIC_MEMENTO_READ.toString(),
+						request().path());
 			}
 			return ok(toJson(result));
 		} catch (Exception e) {
@@ -640,7 +681,8 @@ public class ContextControl extends Controller {
 					.getInt("log.actions");
 			if (logAction == 1) {
 				UtilitiesDelegate.getInstance().logActivity(user,
-						LogActions.PUBLIC_MEMENTO_DELETE.toString(), request().path());
+						LogActions.PUBLIC_MEMENTO_DELETE.toString(),
+						request().path());
 			}
 			return ok(toJson(res));
 		} catch (Exception e) {
@@ -651,12 +693,19 @@ public class ContextControl extends Controller {
 		}
 	}
 
-	@SubjectPresent
 	public static Result createContributedMemento() {
 		Form<PublicMementoBean> filledForm = contributedForm.bindFromRequest();
+		Long id = new Long(1);	
+		User user = null;
+		String contributorType = "ANONYMOUS";
 		String userEmail = session().get("pa.u.id");
-		User user = User.getByEmail(userEmail);
-		Long id = user.getUserId();
+		if (userEmail != null && !userEmail.equals("")) {
+			user = User.getByEmail(userEmail);
+			id = user.getUserId();	
+			contributorType = "MEMBER";
+		} else {
+			user = User.read(id);
+		}
 
 		if (filledForm.hasErrors()) {
 			ResponseStatusBean res = new ResponseStatusBean(
@@ -668,7 +717,7 @@ public class ContextControl extends Controller {
 			try {
 				PublicMementoBean contributed = filledForm.get();
 				contributed.setContributor(id);
-				contributed.setContributorType("MEMBER");
+				contributed.setContributorType(contributorType);
 				PublicMemento result = ContextDelegate.getInstance()
 						.createContributedMemento(contributed);
 				ResponseStatusBean res = new ResponseStatusBean(
@@ -679,7 +728,8 @@ public class ContextControl extends Controller {
 						.getInt("log.actions");
 				if (logAction == 1) {
 					UtilitiesDelegate.getInstance().logActivity(user,
-							LogActions.PUBLIC_MEMENTO_NEW.toString(), request().path());
+							LogActions.PUBLIC_MEMENTO_NEW.toString(),
+							request().path());
 				}
 				return ok(toJson(result));
 			} catch (Exception e) {
@@ -713,7 +763,8 @@ public class ContextControl extends Controller {
 						.getInt("log.actions");
 				if (logAction == 1) {
 					UtilitiesDelegate.getInstance().logActivity(null,
-							LogActions.PUBLIC_MEMENTO_NEW.toString(), request().path());
+							LogActions.PUBLIC_MEMENTO_NEW.toString(),
+							request().path());
 				}
 				return ok(toJson(result));
 			} catch (Exception e) {
@@ -737,7 +788,8 @@ public class ContextControl extends Controller {
 					.getInt("log.actions");
 			if (logAction == 1) {
 				UtilitiesDelegate.getInstance().logActivity(user,
-						LogActions.PUBLIC_MEMENTO_DELETE.toString(), request().path());
+						LogActions.PUBLIC_MEMENTO_DELETE.toString(),
+						request().path());
 			}
 			return ok(toJson(res));
 		} catch (Exception e) {
@@ -747,6 +799,19 @@ public class ContextControl extends Controller {
 					e.getMessage());
 			return badRequest(toJson(res));
 		}
+	}
+	
+	public static Result contribute() {
+		return ok(views.html.uploadpublicmemento.render(null));
+	}
+
+	public static Result contributeToContext(String code) {
+		Long contextId = ContextDelegate.getInstance().getContextIdByHashCode(code);
+		return ok(views.html.uploadpublicmemento.render(contextId));
+	}
+
+	public static Result contributeMain() {
+		return ok(views.html.main.render("","",views.html.uploadpublicmemento.render(null)));
 	}
 
 	public static Result addContextMementoView(Long cid) {

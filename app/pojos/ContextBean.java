@@ -25,6 +25,7 @@ public class ContextBean  implements Serializable {
 	private DateTime date;
 	private Long dateRatio;
 	private List<ContextPublicMementoBean> publicMementoList;
+	private String hashcode;
 //	private List<ContextContentBean> publicContextContent;
 //	private List<ContextContributedBean> contributedMementoList;
 //	private List<ContextMediaBean> mediaList;
@@ -121,5 +122,11 @@ public class ContextBean  implements Serializable {
 	}
 	public void setPublicMementoList(List<ContextPublicMementoBean> publicMementoList) {
 		this.publicMementoList = publicMementoList;
+	}
+	public String getHashcode() {
+		return hashcode;
+	}
+	public void setHashcode(String hashcode) {
+		this.hashcode = hashcode;
 	}	
 }

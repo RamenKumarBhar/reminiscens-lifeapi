@@ -617,4 +617,13 @@ public class ContextDelegate {
 		
 		return ContextPublicMemento.update(pm);
 	}
+
+	public Long getContextIdByHashCode(String code) {
+		models.Context context = models.Context.findByHashCode(code);
+		if (context != null) {
+			return context.getContextId();
+		} else {
+			return null;
+		}
+	}
 }
