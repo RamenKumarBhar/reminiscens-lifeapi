@@ -157,6 +157,8 @@ public class PublicMemento extends Model {
 		if (endPlace != null)
 			publicMemento.setEndLocation(Location.createOrUpdateIfNotExist(endPlace));
 		
+		publicMemento.setCreationDate(DateTime.now());
+		publicMemento.setLastUpdate(DateTime.now());
 		publicMemento.save();
 		publicMemento.refresh();
 	}

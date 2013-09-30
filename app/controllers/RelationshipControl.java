@@ -30,6 +30,8 @@ public class RelationshipControl extends Controller {
 	public static Result getPersonRelationshipsByNetwork(Long id, String network) {
 		if (network.equals("curators")) {
 			return RelationshipControl.getPersonCurators(id);
+		} else if (network.equals("curated")) { 
+			return RelationshipControl.getPersonCurated(id);
 		} else {		
 			List<RelationshipBean> relationships = RelationshipDelegate
 				.getInstance().getPersonRelationshipsByType(id, network);
@@ -41,6 +43,13 @@ public class RelationshipControl extends Controller {
 	public static Result getPersonCurators(Long id) {
 		List<RelationshipBean> relationships = RelationshipDelegate
 				.getInstance().getPersonCurators(id);
+		return relationships != null ? ok(toJson(relationships)) : notFound();
+	}
+	
+	@Dynamic(value = "OnlyMe", meta = SecurityModelConstants.ID_FROM_PERSON)
+	public static Result getPersonCurated(Long id) {
+		List<RelationshipBean> relationships = RelationshipDelegate
+				.getInstance().getPersonCurated(id);
 		return relationships != null ? ok(toJson(relationships)) : notFound();
 	}
 

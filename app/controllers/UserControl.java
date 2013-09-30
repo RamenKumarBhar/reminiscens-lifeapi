@@ -30,6 +30,7 @@ import providers.MyUsernamePasswordAuthProvider.MyLogin;
 import providers.MyUsernamePasswordAuthProvider.MySignup;
 import security.SecurityModelConstants;
 import utils.PlayDozerMapper;
+import play.mvc.Controller;
 
 public class UserControl extends Controller {
 
@@ -215,5 +216,9 @@ public class UserControl extends Controller {
 		final User localUser = getLocalUser(session());
 		UserBean bean = PlayDozerMapper.getInstance().map(localUser, UserBean.class);
 		return ok(toJson(bean));
+	}
+
+	public static Result getLoginForm() {
+		return ok(views.html.login.render());
 	}
 }
