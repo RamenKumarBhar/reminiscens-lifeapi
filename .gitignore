@@ -40,3 +40,9 @@ start.sh
 lifeapi.log
 project/target/streams/$global/update/$global/out
 conf/application.conf
+platforms/.metadata/
+platforms/android/.metadata/
+platforms/android/.settings/
+platforms/android/project.properties
+.svn/
+android/ReminiscensApp/assets/www/js/flash/ru/.svn/

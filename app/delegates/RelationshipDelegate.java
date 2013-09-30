@@ -96,4 +96,18 @@ public class RelationshipDelegate {
 		return pojosPersonRels;
 	}
 
+	public List<RelationshipBean> getPersonCurated(Long id) {
+		List<models.Relationship> modelPersonRels = models.Relationship.findRelationshipsByPerson(id);
+		List<RelationshipBean> pojosPersonRels = new ArrayList<RelationshipBean>();
+		for (models.Relationship rel : modelPersonRels) {
+			
+			if(rel.getFromIsCurator()) {
+				RelationshipBean relBean = PlayDozerMapper.getInstance().map(rel,
+					RelationshipBean.class);
+				pojosPersonRels.add(relBean);
+			}
+		}
+		return pojosPersonRels;
+	}
+
 }
