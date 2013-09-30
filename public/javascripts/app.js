@@ -59,13 +59,22 @@ function Logout() {
 			.html("<ul class='nav navbar-nav'></ul>"
 			  +"<form class='navbar-form navbar-right'>"
               +"  <div class='form-group'>"
-              +"    <input name='email' type='text' placeholder='Email' class='form-control'>"
+              +"    <input id='email' name='email' type='text' placeholder='Email' class='form-control'>"
               +"  </div>"
               +"  <div class='form-group'>"
-              +"    <input name='password' type='password' placeholder='Password' class='form-control'>"
+              +"    <input id='password' name='password' type='password' placeholder='Password' class='form-control'>"
               +"  </div>"
-              +"  <button class='btn btn-success'>Entra</button>"
+              +"  <button id='loginButton' type='submit' class='btn btn-success'>Entra</button>"
               +"</form>");
+	
+	$( "#loginButton" ).click(function( event ) {
+		  event.preventDefault();
+		  Login();
+	});
+	$( "#loginButton" ).submit(function( event ) {
+		  event.preventDefault();
+		  Login();
+	});
 	return false;
 }
 
