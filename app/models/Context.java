@@ -51,6 +51,9 @@ public class Context extends Model {
 	@Column
 	private Boolean enabled;
 	
+	@Column 
+	private String hashcode;
+	
 //
 //    @ManyToMany
 //    @JoinTable(name="Context_Content",
@@ -354,5 +357,22 @@ public class Context extends Model {
 
 	public void setPublicMementoList(List<ContextPublicMemento> publicMementoList) {
 		this.publicMementoList = publicMementoList;
+	}
+
+	public String getHashcode() {
+		return hashcode;
+	}
+
+	public void setHashcode(String hashcode) {
+		this.hashcode = hashcode;
+	}
+
+	public static Context findByHashCode(String code) {
+		Context contextOfPerson = find.where()
+				.eq("hashcode", code)
+				.eq("enabled",true)
+				.orderBy("publicMementoList.ranking desc")
+				.findUnique();
+		return contextOfPerson;
 	}
 }

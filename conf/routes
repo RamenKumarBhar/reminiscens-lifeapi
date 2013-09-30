@@ -18,6 +18,7 @@ GET     /assets/*file                           controllers.Assets.at(path="/pub
 # Very basic User and Authentication Management based on play-authenticate
 # Logged
 POST    /user/login                                  controllers.UserControl.doLogin()
+GET     /user/login                                  controllers.UserControl.getLoginForm()
 # Logged
 POST    /user/signup                                 controllers.UserControl.doSignup()
 # Logged
@@ -102,6 +103,8 @@ POST    /context/person/:id/:decade             controllers.ContextControl.initC
 POST    /context/person/:id/:decade/location    controllers.ContextControl.initContextForPersonAndDecadeAndLocation(id: Long, decade: Long)
 #Logged
 POST    /context/person/:id/:decade/:cityId     controllers.ContextControl.initContextForPersonAndDecadeAndCity(id: Long, decade: Long, cityId: Long)
+GET     /context/contribute                     controllers.ContextControl.contribute()
+GET     /context/contribute/:hashcode           controllers.ContextControl.contributeToContext(hashcode: String)
 #Logged
 GET     /context/:cid                           controllers.ContextControl.getContextById(cid: Long)
 #Logged
@@ -132,6 +135,7 @@ DELETE  /context/:cid                           controllers.ContextControl.delet
 GET     /context/:cid/:decade                   controllers.ContextControl.getContextByIdAndDecade(cid: Long, decade: Long)
 #Logged
 GET     /context/:cid/:decade/:category         controllers.ContextControl.getContextByIdAndDecadeAndCategory(cid: Long, decade: Long, category: String)
+
 
 
 # General Questions

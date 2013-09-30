@@ -5,85 +5,89 @@
 
 <!DOCTYPE html>
 <html lang="@lang().code()">
-  <head>
+ <head>
     <title>@title</title>
    
     <!-- Le meta -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Reminiscens is tablet application to stimulate good old positive memories with context">
+    <meta name="description" content="Reminiscens is a tablet application to stimulate good old positive memories with context">
     <meta name="author" content="Reminiscens Team">
-    
-    <!-- Le scripts -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="@routes.Assets.at("js/bootstrap.min.js")"></script>
 
     <!-- Le styles -->
-    <link href="@routes.Assets.at("stylesheets/main.min.css")" rel="stylesheet">
-    <link href="@routes.Assets.at("css/bootstrap.min.css")" rel="stylesheet">
+    <link href="/lifeapi/assets/stylesheets/main.min.css" rel="stylesheet">
+    <link href="/lifeapi/assets/stylesheets/bootstrap.css" rel="stylesheet">
 
+    <style> 
+    font-face {
+        font-family: 'Glyphicons Halflings';
+        src: url('/lifeapi/assets/fonts/glyphicons-halflings-regular.eot');
+        src: url('/lifeapi/assets/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/lifeapi/assets/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/lifeapi/assets/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/lifeapi/assets/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+    }
+    </style>
+    
+  <!-- Le scripts -->
+  <script src="/lifeapi/assets/javascripts/jquery.js"></script>
+  <script src="/lifeapi/assets/javascripts/jquery.storageapi.min.js"></script>
+  <script src="/lifeapi/assets/javascripts/bootstrap.min.js"></script>
+  <script src="/lifeapi/assets/javascripts/localvariables.js"></script> 
+  <script src="/lifeapi/assets/javascripts/app.js"></script> 
+    
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
  </head>
-
+ 
  <body>       
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="@routes.Application.index()">Play! Authenticate</a>
-          
-          <div class="btn-group pull-right">
-          @subjectPresentOr() {
-            @defining(UserControl.getLocalUser(session())) { user =>
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-              <i class="icon-user"></i> @user.getPerson().getFirstname(), @user.getPerson().getLastname()
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="@routes.UserControl.profile()">@Messages("playauthenticate.navigation.profile")</a></li>
-              <li class="divider"></li>
-              <li><a href="@routes.UserControl.doLogout()"><i class="icon-off"></i> @Messages("playauthenticate.navigation.logout")</a></li>
-            </ul>
-            }
-          }{
-            <a href="@routes.UserControl.doLogin()" class="btn btn-primary btn-mini @("disabled".when(nav == "login"))">@Messages("playauthenticate.navigation.login")</a>
-          }
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/lifeapi@routes.Application.index()">Reminiscens</a>
+      </div>         
+      <div id="loginForm" class="navbar-collapse collapse">  
+        <ul class="nav navbar-nav"></ul>
+        <form class="navbar-form navbar-right">
+          <div class="form-group">
+            <input name="email" id="email" type="text" placeholder="Email" class="form-control">
           </div>
-
-          
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li class="@("active".when(nav == ""))"><a href="@routes.Application.index()">@Messages("playauthenticate.navigation.home")</a></li>
-                @subjectNotPresent() {
-                    <li class="@("active".when(nav == "signup"))"><a href="@routes.UserControl.doSignup()">@Messages("playauthenticate.navigation.signup")</a></li>
-                }
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
+          <div class="form-group">
+            <input name="password" id="password" type="password" placeholder="Password" class="form-control">
+          </div>
+          <button class="btn btn-success" type="submit" id="loginButton">Entra</button>
+        </form>
       </div>
-    </div>
+    </div>        
+  </div>
     
-    <div class="container">        
-        @if(flash.contains(Application.FLASH_ERROR_KEY)) {
-          <div class="alert alert-error">
-            @flash().get(Application.FLASH_ERROR_KEY)
-          </div>
-        }
-        
-        @if(flash.contains(Application.FLASH_MESSAGE_KEY)) {
-          <div class="alert alert-info">
-            @flash().get(Application.FLASH_MESSAGE_KEY)
-          </div>
-        }
-            @content
-    </div>
-    <hr>
-  </body>
+  <div class="container"> @content </div>
+  <hr>
+    
+  <script>
+  
+	$(document).ready(
+			function() {
+				if (window.location.hostname == "http://base.reminiscens.me") {
+					console.log("Setting API url to BASE");
+					SetBaseUrl("http://base.reminiscens.me");
+				} else if (window.location.hostname == "localhost"){
+		            localBaseUrl = "http://localhost";
+		            SetBaseUrl("http://localhost");
+		        } else {
+					console.log("Setting API url to TEST");
+					SetBaseUrl("http://test.reminiscens.me");
+				}
+				if (GetSessionKey() != "" && GetSessionKey() != null) {
+					var username = GetPersonName();
+					$("#loginForm").html("<ul class='nav navbar-nav'><li class='active'><a href='#'>Benvenuto "
+								+ username
+								+ "!</a></li></ul>"
+							    + "<form class='navbar-form navbar-right'><button id='logoutButton1' class='btn btn-danger'>Logout</button></form>");
+					   }							
+				});
+
+
+    initialize();
+    </script>
+</body>
 </html>
