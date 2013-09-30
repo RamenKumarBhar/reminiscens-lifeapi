@@ -170,6 +170,8 @@ function PostContextMemento(publicMemento,contextId){
         	type: "POST",			
 			beforeSend: function (request)
             {
+				$("#postMementoResult").html("");
+    			$("#postMementoResult").html("<div class='alert alert-warning'>Salvando...</div>");
                 request.setRequestHeader("PLAY_SESSION", sessionKey);
             },
 			url:GetBaseUrl() + "/lifeapi/context/"+contextId+"/memento",
@@ -210,6 +212,7 @@ function SaveStoryWithConnection(publicMemento)
         	type: "POST",			
 			beforeSend: function (request)
             {
+				$("#postMementoResult").html("<div class='alert alert-warning'>Salvando...</div>");
                 request.setRequestHeader("PLAY_SESSION", sessionKey);
             },
 			url:GetBaseUrl() + "/lifeapi/context/memento",
@@ -271,7 +274,19 @@ function Login() {
 					"<ul class='nav navbar-nav'><li class='active'><a href='#'>Benvenuto "
 							+ username
 							+ "!</a></li></ul>"
-							+ "<form class='navbar-form navbar-right'><button id='logoutButton2' class='btn btn-danger'>Logout</button></form>");
+							+ "<form class='navbar-form navbar-right'><button id='logoutButton2' type='submit' class='btn btn-danger'>Logout</button></form>");
+				
+				
+				 $( "#logoutButton2" ).click(function( event ) {
+			          event.preventDefault();
+			          Logout();
+			    });
+
+			    $( "#logoutButton2" ).submit(function( event ) {
+			          event.preventDefault();
+			          Logout();
+			    });
+				
 				return false;
 			},
 			error : function(data) {
