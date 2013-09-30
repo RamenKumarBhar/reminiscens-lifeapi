@@ -1,4 +1,4 @@
-@(contextId: Long)
+@(contextId: Long, personForName: String)
 
 @main("Multimedia per stimolare i Ricordi","login") {
  
@@ -6,7 +6,13 @@
 <div class="container">
     <form role="role" id="formMemento">
         <!-- Form Name -->
-        <legend>Aggiungi una risorsa che fa riferimento al passato e che sia disponibile online</legend>
+        
+        @if(contextId!=null) {
+            <legend>Aggiungi una risorsa che fa riferimento al passato e che sia disponibile online, per farlo vedere a @personForName</legend>
+        } else {
+            <legend>Aggiungi una risorsa che fa riferimento al passato e che sia disponibile online</legend>
+        }
+        
             <div class="row">
                 <div class="col-md-6">
                 <!-- Text input-->
@@ -153,7 +159,7 @@
 			    <div id="postMementoResult"></div>
 			</div>
 		</div>
-		<input type="hidden" id="contextId">@contextId</input>
+		<input type="hidden" id="contextId" value="@contextId"></input>
     </form> 
 </div>
 }

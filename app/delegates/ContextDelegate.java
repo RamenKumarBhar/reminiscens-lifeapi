@@ -618,10 +618,10 @@ public class ContextDelegate {
 		return ContextPublicMemento.update(pm);
 	}
 
-	public Long getContextIdByHashCode(String code) {
+	public Context getContextIdByHashCode(String code) {
 		models.Context context = models.Context.findByHashCode(code);
 		if (context != null) {
-			return context.getContextId();
+			return context;
 		} else {
 			return null;
 		}

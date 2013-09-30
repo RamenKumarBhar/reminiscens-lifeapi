@@ -82,8 +82,18 @@
 					$("#loginForm").html("<ul class='nav navbar-nav'><li class='active'><a href='#'>Benvenuto "
 								+ username
 								+ "!</a></li></ul>"
-							    + "<form class='navbar-form navbar-right'><button id='logoutButton1' class='btn btn-danger'>Logout</button></form>");
-					   }							
+							    + "<form class='navbar-form navbar-right'><button id='logoutButton1' type='submit' class='btn btn-danger'>Logout</button></form>");
+					   }
+				 $( "#logoutButton1" ).click(function( event ) {
+			          event.preventDefault();
+			          Logout();
+			    });
+
+			    $( "#logoutButton1" ).submit(function( event ) {
+			          event.preventDefault();
+			          Logout();
+			    });
+				 							
 				});
 
 

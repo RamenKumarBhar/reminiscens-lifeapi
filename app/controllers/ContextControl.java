@@ -802,16 +802,25 @@ public class ContextControl extends Controller {
 	}
 	
 	public static Result contribute() {
-		return ok(views.html.uploadpublicmemento.render(null));
+		return ok(views.html.uploadpublicmemento.render(null,""));
 	}
 
 	public static Result contributeToContext(String code) {
-		Long contextId = ContextDelegate.getInstance().getContextIdByHashCode(code);
-		return ok(views.html.uploadpublicmemento.render(contextId));
+		Context context = ContextDelegate.getInstance().getContextIdByHashCode(code);
+		Long contextId = null;
+		String personForName = "";
+		
+		if (context!=null) {
+			contextId = context.getContextId();
+			Long personForId = context.getPersonForId();
+			models.Person p = models.Person.read(personForId);
+			personForName = p.getFirstname()+" "+p.getLastname();
+		}
+		return ok(views.html.uploadpublicmemento.render(contextId,personForName));
 	}
 
 	public static Result contributeMain() {
-		return ok(views.html.main.render("","",views.html.uploadpublicmemento.render(null)));
+		return ok(views.html.main.render("","",views.html.uploadpublicmemento.render(null,"")));
 	}
 
 	public static Result addContextMementoView(Long cid) {
