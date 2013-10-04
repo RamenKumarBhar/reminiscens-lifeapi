@@ -28,6 +28,8 @@ public class UserBean implements Serializable {
     private DateTime creationDate;    
     private String sessionKey;
 
+	private String fullname;
+
 //	@Required 
 //	@NotNull
 //	public Long personId;
@@ -132,6 +134,14 @@ public class UserBean implements Serializable {
 
 	public DateTime getCreationDate() {
 		return creationDate;
+	}
+
+	public String getFullname() {
+		return fullname;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 
 	    

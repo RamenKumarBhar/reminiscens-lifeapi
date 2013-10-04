@@ -78,7 +78,7 @@
 					SetBaseUrl("http://test.reminiscens.me");
 				}
 				if (GetSessionKey() != "" && GetSessionKey() != null) {
-					var username = GetPersonName();
+					var username = GetUserFullname();
 					$("#loginForm").html("<ul class='nav navbar-nav'><li class='active'><a href='#'>Benvenuto "
 								+ username
 								+ "!</a></li></ul>"

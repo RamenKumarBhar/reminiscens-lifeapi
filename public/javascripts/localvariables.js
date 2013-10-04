@@ -29,6 +29,16 @@ function GetPersonId()
 	return storage.get('personId');
 }
 
+function SetUserFullname(Id)
+{
+	storage.set('userFullname',Id);
+}
+
+function GetUserFullname()
+{
+	return storage.get('userFullname');
+}
+
 function SetUserList(userList)
 {
 	storage.set('userList',userList);
