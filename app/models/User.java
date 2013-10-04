@@ -47,6 +47,9 @@ public class User extends Model implements Subject {
 	@MapsId
 	@JoinColumn(name = "person_id", updatable=true, insertable=true )
 	private Person person;
+	
+	@Column
+	private String fullname;
 
 	@Column(length = 60, name = "nickname")
 	private String username;
@@ -593,6 +596,14 @@ public class User extends Model implements Subject {
 
 	public void setRoles(List<SecurityRole> singletonList) {
 		this.roles = singletonList;
+	}
+
+	public String getFullname() {
+		return fullname;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 	
 }

@@ -65,28 +65,6 @@
                 </div>
 	       </div>
         </div>
-		<div class="row">		
-            <div class="col-md-3">
-                <div class="form-group">
-                      <label id="sourceLabel" for="source">Fonte</label>
-                      <input id="source" name="source" type="text" placeholder="Da dove hai presso l'URL (e.g. Wikipedia, Youtube)" class="form-control">
-                </div>
-            </div>
-		    <div class="col-md-5">
-				<!-- Text input-->
-				<div class="form-group">
-				  <label id="resourceUrlLabel" for="resourceUrl">URL della risorsa</label>
-				  <input id="resourceUrl" name="resourceUrl" type="text" placeholder="URL della risorsa (e.g. http://www.youtube.com/watch?v=CqqSklcgThA)" class="form-control">
-				  <p class="help-block">Coppia qui, l'URL del video youtube o immagine che vuoi aggiungere</p>
-				</div>
-			</div>  
-            <div class="col-md-4">
-                <div class="form-group">
-                      <label id="sourceUrlLable" for="sourceUrl">Fonte Home</label>
-                      <input id="sourceUrl" name="source" type="text" placeholder="Home della risorsa (e.g. www.youtube.com/channel/abc)" class="form-control">
-                </div>
-            </div>
-		</div>
 		<div class="row">
 			<div class="col-md-4">
 				<!-- Text input-->
@@ -154,17 +132,44 @@
 				</div>
 			</div>
 		</div>
+		
+        <div class="row">       
+            <div class="col-md-3">
+                <div class="form-group">
+                      <label id="sourceLabel" for="source">Fonte</label>
+                      <input id="source" name="source" type="text" placeholder="Da dove hai presso l'URL (e.g. Wikipedia, Youtube)" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                      <label id="sourceUrlLable" for="sourceUrl">Pagina web della fonte</label>
+                      <input id="sourceUrl" name="source" type="text" placeholder="Pagina web de la fonte della risorsa (e.g. www.youtube.com/channel/abc)" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-5">
+                <!-- Text input-->
+                <div class="form-group">
+                  <label id="resourceUrlLabel" for="resourceUrl">URL della risorsa</label>
+                  <input id="resourceUrl" name="resourceUrl" type="text" placeholder="URL della risorsa (e.g. http://www.youtube.com/watch?v=CqqSklcgThA)" class="form-control">
+                  <p class="help-block">Coppia qui, l'URL del video youtube o immagine che vuoi aggiungere</p>
+                </div>
+            </div>  
+        </div>
+		
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-3">
 				<!-- Button -->
 					<div class="form-group">
 					  <label id="submitLabel" for="submit">Salva il nuovo memento</label>
 					  <button id="postMemento" name="postMemento" class="btn btn-success">Salva!</button>
 					</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-4">
 			    <div id="postMementoResult"></div>
 			</div>
+            <div class="col-md-4">
+                <div id="previewRisorsa"></div>
+            </div>
 		</div>
 		<input type="hidden" id="contextId" value="@contextId"></input>
     </form> 

@@ -54,6 +54,7 @@ function Logout() {
 	SetPersonId("");
 	SetPersonName("");
 	SetUserId("");
+	SetUserFullname("");
 	
 	$("#loginForm")
 			.html("<ul class='nav navbar-nav'></ul>"
@@ -278,7 +279,8 @@ function Login() {
 				SetPersonId(data.person.personId);
 				SetPersonName(data.person.firstname+" "+data.person.lastname);
 				SetUserId(data.userId);
-				var username = GetPersonName();
+				SetUserFullname(data.fullname)
+				var username = GetUserFullname();
 				$("#loginForm").html(
 					"<ul class='nav navbar-nav'><li class='active'><a href='#'>Benvenuto "
 							+ username
@@ -349,4 +351,3 @@ function updateDaySelect() {
         $('#day').fadeIn('slow');
     }
 }
-
