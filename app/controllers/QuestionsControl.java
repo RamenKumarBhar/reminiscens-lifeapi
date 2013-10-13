@@ -48,4 +48,8 @@ public class QuestionsControl extends Controller {
 		}
 		return lp != null ? ok(toJson(lp)) : notFound();
 	}
+	
+	public static Result addQuestionToContext(Long contextId) {
+		return TODO;
+	}
 }
