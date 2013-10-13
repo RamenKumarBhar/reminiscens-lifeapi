@@ -116,9 +116,11 @@ public class UtilitiesDelegate {
 		 * 1. Prepare file metadata before saving the file in the final
 		 * destination
 		 */
+		
+		String nameOnClient = file.getFilename().replace("'", "");
 
 		String fileName = "U_" + fileBean.getOwner().toString() + "_" + "D"
-				+ DateTime.now() + "_" + file.getFilename();
+				+ DateTime.now() + "_" + nameOnClient;
 		// TODO check how to make uploadDir also cross-platform
 		String fullPath = uploadDir + FileUtilities.slash + fileName;
 		String contentType = file.getContentType();
