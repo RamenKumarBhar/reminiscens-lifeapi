@@ -99,8 +99,13 @@ public class QuestionDelegate {
 
 	public static List<QuestionBean> getQuestionsForLifeDecade(Integer birthYear, Integer focusYear) {
 		Integer focusDecade = ((focusYear - birthYear) % 100)/10;
-		String chapter = questionChapterDecades.get(focusDecade);
-		return getQuestionsForLifeChapter(chapter);
+		
+		if (focusDecade >= 0) {
+			String chapter = questionChapterDecades.get(focusDecade);
+			return getQuestionsForLifeChapter(chapter);
+		} else {
+			// questions to send if the focus decade is set to before the birth of the person
+			return getQuestionsForLifeChapter("ALLTIMES");
+		}
 	}
-
 }
