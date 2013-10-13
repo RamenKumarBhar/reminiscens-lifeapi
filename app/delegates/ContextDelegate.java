@@ -618,6 +618,30 @@ public class ContextDelegate {
 		return ContextPublicMemento.update(pm);
 	}
 
+	
+	public ContextPublicMemento increaseStatsOnContextMemento(Long contextId,
+			Long publicMementoId, String stat, Long statsIncrement) {
+
+		ContextPublicMemento pm = ContextPublicMemento.read(contextId, publicMementoId);
+		Long views = pm.getViews();
+		Long detailViews = pm.getDetailViews();
+		Long stories = pm.getStories();
+		
+		if (stat.equals(LogActions.VIEWS.toString())) {
+			views = views == null ? statsIncrement : views+statsIncrement; 
+			pm.setViews(views);
+		} else if (stat.equals(LogActions.DETAILVIEWS.toString())) {
+			detailViews = detailViews == null ? statsIncrement : detailViews+statsIncrement; 
+			pm.setDetailViews(detailViews);
+		} else if  (stat.equals(LogActions.STORY_NEW.toString())) {
+			stories = stories == null ? statsIncrement : stories+statsIncrement; 
+			pm.setStories(stories);
+		} 
+		
+		return ContextPublicMemento.update(pm);
+	}
+
+	
 	public Context getContextIdByHashCode(String code) {
 		models.Context context = models.Context.findByHashCode(code);
 		if (context != null) {
