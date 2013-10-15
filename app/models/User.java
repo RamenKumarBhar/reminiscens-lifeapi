@@ -139,9 +139,10 @@ public class User extends Model implements Subject {
 	}
 
 	public static String readLocaleByPersonId(Long personId) {
-		User p = find.where().eq("person.personId", personId).findUnique();
-		if (p!=null) {
-			return p.getLocale();
+		List<User> p = find.where().eq("person.personId", personId).findList();
+		if (p!=null && !p.isEmpty()) {
+			User u = p.get(0);
+			return u.getLocale();
 		} else {
 			return null;
 		}
