@@ -433,6 +433,8 @@ public class LifeStory extends Model {
 		FuzzyDate fuzzyBirth = new FuzzyDate();
 		try {
 			fuzzyBirth.setExactDate(birthdate);
+			fuzzyBirth.setYear(new Long(birthdate.getYear()));
+			fuzzyBirth.setDay(""+birthdate.getDayOfMonth());
 		} catch (ParseException e) {
 			// TODO change to stop user from being created if no birthdate is
 			// provided
@@ -441,10 +443,17 @@ public class LifeStory extends Model {
 		FuzzyDate.createOrUpdateIfNotExist(fuzzyBirth);
 		fuzzyBirth.refresh();
 		birth.setStartDate(fuzzyBirth);
-
 		City birthPlace = user.getPerson().getBirthplace();
 		Location loc = new Location();
 		loc.setCityBean(birthPlace);
+		loc.setCity(birthPlace.getName());
+		loc.setRegion(birthPlace.getRegion());
+		Country birthCountry = birthPlace.getCountry();
+		String locale = birth.getLocale(); 
+		if (birthCountry != null) {
+			String country = birthCountry.getNameByLocale(locale);
+			loc.setCountry(country);
+		}		
 		Location.createOrUpdateIfNotExist(loc);
 		loc.refresh();
 		birth.setLocation(loc);
