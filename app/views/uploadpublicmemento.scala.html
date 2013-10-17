@@ -150,7 +150,7 @@
                 <!-- Text input-->
                 <div class="form-group">
                   <label id="resourceUrlLabel" for="resourceUrl">URL della risorsa</label>
-                  <input id="resourceUrl" name="resourceUrl" type="text" placeholder="URL della risorsa (e.g. http://www.youtube.com/watch?v=CqqSklcgThA)" class="form-control">
+                  <input id="resourceUrl" name="resourceUrl" type="text" placeholder="URL della risorsa (e.g. http://www.youtube.com/watch?v=CqqSklcgThA)" onchange="updateContentIframe();" class="form-control">
                   <p class="help-block">Coppia qui, l'URL del video youtube o immagine che vuoi aggiungere</p>
                 </div>
             </div>  
@@ -168,7 +168,9 @@
 			    <div id="postMementoResult"></div>
 			</div>
             <div class="col-md-4">
-                <div id="previewRisorsa"></div>
+                <div style="float: left; margin-right: 8px;">
+                    <iframe width="650" id="iframeAnteprima" src=""></iframe>
+                </div>
             </div>
 		</div>
 		<input type="hidden" id="contextId" value="@contextId"></input>

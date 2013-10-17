@@ -351,3 +351,8 @@ function updateDaySelect() {
         $('#day').fadeIn('slow');
     }
 }
+
+function updateContentIframe()
+{
+    document.getElementById("iframeAnteprima").src = document.getElementById("resourceUrl").value;
+}
