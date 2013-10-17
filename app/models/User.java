@@ -233,7 +233,7 @@ public class User extends Model implements Subject {
 				models.Person p = PlayDozerMapper.getInstance().map(
 						identity.getPerson(), Person.class);
 				user.setPerson(p);
-
+				user.setFullname(p.getFirstname()+" "+p.getLastname());
 				City c = p.getBirthplace();
 
 				if (c != null) {
