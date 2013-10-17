@@ -67,16 +67,22 @@
   
 	$(document).ready(
 			function() {
-				if (window.location.hostname == "http://base.reminiscens.me") {
-					console.log("Setting API url to BASE");
-					SetBaseUrl("http://base.reminiscens.me");
-				} else if (window.location.hostname == "localhost"){
-		            localBaseUrl = "http://localhost";
-		            SetBaseUrl("http://localhost");
-		        } else {
-					console.log("Setting API url to TEST");
-					SetBaseUrl("http://test.reminiscens.me");
-				}
+				
+				//SetSessionKey("");        
+	            var location = window.location.hostname;    
+	            if (location.indexOf("base.reminiscens.me") != -1) {
+	                // we are on production server
+	                console.log("Setting API url to BASE");
+	                SetBaseUrl("http://base.reminiscens.me");
+	            } else if (location.indexOf("test.reminiscens.me") != -1)  {
+	                console.log("Setting API url to TEST");
+	                SetBaseUrl("http://test.reminiscens.me");
+	            } else {
+	                // we are on production server
+	                console.log("Setting API url to BASE");
+	                SetBaseUrl("http://base.reminiscens.me");
+	            }
+
 				if (GetSessionKey() != "" && GetSessionKey() != null) {
 					var username = GetUserFullname();
 					$("#loginForm").html("<ul class='nav navbar-nav'><li class='active'><a href='#'>Benvenuto "
