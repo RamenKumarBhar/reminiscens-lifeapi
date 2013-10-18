@@ -182,12 +182,12 @@ public class Location extends Model {
 			if (city != null && !city.isEmpty()) {
 				if (cityBean==null) {
 					City c = City.getCityByName(city);
-					location.setCityBean(c);
 					
-					if (locale!=null && !locale.isEmpty()){
-						if (c.getCountry()!=null) {	
-							location.setCountry(c.getCountry().getNameByLocale(locale));
-						} 
+					if (locale!=null && !locale.isEmpty() && c!=null){
+					    location.setCityBean(c);
+					    if (c.getCountry()!=null) {	
+						location.setCountry(c.getCountry().getNameByLocale(locale));
+					    } 
 					} else {
 						location.setCountry(c.getCountry().getShort_name());
 					}
