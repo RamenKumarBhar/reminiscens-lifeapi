@@ -182,22 +182,25 @@ public class Location extends Model {
 			if (city != null && !city.isEmpty()) {
 				if (cityBean==null) {
 					City c = City.getCityByName(city);
-					
+				
+				    if (c!=null) {	
+					location.setCityBean(c);
+					location.setRegion(c.getRegion());
+
 					if (locale!=null && !locale.isEmpty() && c!=null){
-					    location.setCityBean(c);
 					    if (c.getCountry()!=null) {	
 						location.setCountry(c.getCountry().getNameByLocale(locale));
 					    } 
 					} else {
-						location.setCountry(c.getCountry().getShort_name());
+					    location.setCountry(c.getCountry().getShort_name());
 					}
-					location.setRegion(c.getRegion());
 					if (lat == null && lon == null) {
-						location.setLat(location.getCityBean().getLat());
-						location.setLon(location.getCityBean().getLon());
-						location.setCoordinates_trust(new Integer(0));
-						acc = new Long(11);
+					    location.setLat(location.getCityBean().getLat());
+					    location.setLon(location.getCityBean().getLon());
+					    location.setCoordinates_trust(new Integer(0));
+					    acc = new Long(11);
 					}
+				    }
 				}
 			}
 			
