@@ -376,4 +376,35 @@ public class Context extends Model {
 				.findUnique();
 		return contextOfPerson;
 	}
+	
+	public static Long getMaxRanking(Long contextId) {
+		List<ContextPublicMemento> mList = find.ref(contextId).getPublicMementoList();
+		Long maxRanking = new Long(0);
+		if (mList != null) {
+			ContextPublicMemento topMemento = mList.get(0);
+			if (topMemento != null) {
+				maxRanking = topMemento.getRanking();
+				if (maxRanking==null) {
+					maxRanking = new Long(0);
+				}
+			}
+		}		
+		return maxRanking;
+	}
+	
+
+	public Long readMaxRanking() {
+		List<ContextPublicMemento> mList = this.getPublicMementoList();
+		Long maxRanking = new Long(0);
+		if (mList != null) {
+			ContextPublicMemento topMemento = mList.get(0);
+			if (topMemento != null) {
+				maxRanking = topMemento.getRanking();
+				if (maxRanking==null) {
+					maxRanking = new Long(0);
+				}
+			}
+		}		
+		return maxRanking;
+	}
 }
