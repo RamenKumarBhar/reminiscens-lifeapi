@@ -69,6 +69,7 @@ public class Context extends Model {
 //	private List<ContextContent> publicContextContent;
 	@JsonIgnore
 	@OneToMany(mappedBy = "context", cascade = CascadeType.ALL)
+	@OrderBy("ranking desc")  
 	private List<ContextPublicMemento> publicMementoList;
 	
 	@JsonIgnore

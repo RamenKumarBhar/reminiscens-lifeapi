@@ -139,10 +139,12 @@ GET     /context/:cid/:decade/:category         controllers.ContextControl.getCo
 
 
 # General Questions
+GET     /question/:id                           controllers.QuestionsControl.getQuestionById(id: Long)
 #Logged
-GET     /question/:byear/:fyear/        controllers.QuestionsControl.getGeneralQuestionsForYear(byear: Integer, fyear: Integer) 
+GET     /question/list/chapter/:chapter      controllers.QuestionsControl.getGeneralQuestionsForLifeChapter(chapter: String) 
 #Logged
-GET     /question/:chapter              controllers.QuestionsControl.getGeneralQuestionsForLifeChapter(chapter: String) 
+GET     /question/:byear/:fyear                 controllers.QuestionsControl.getGeneralQuestionsForYear(byear: Integer, fyear: Integer) 
+GET     /question/:byear/:fyear/                controllers.QuestionsControl.getGeneralQuestionsForYear(byear: Integer, fyear: Integer) 
 
 # General Public Mementos API (lifecontext proxy)
 #GET     /memento/random/:lang           controllers.PublicMementoControl.getRandomMemento(lang: String)
