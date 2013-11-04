@@ -235,6 +235,7 @@ public class ContextDelegate {
 				contributed, models.ContextPublicMemento.class);
 		models.Context c = models.Context.read(cid);
 		cc.setContext(c);
+		cc.setRanking(c.readMaxRanking()+1);
 		models.ContextPublicMemento.create(cc);
 		return PlayDozerMapper.getInstance().map(cc, pojos.ContextPublicMementoBean.class);
 	}
