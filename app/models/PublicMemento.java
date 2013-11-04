@@ -233,25 +233,25 @@ public class PublicMemento extends Model {
 			// content from any part of the world excluding those in the location list
 			for (LocationMinimalBean loc : locations) {
 				String country = loc.getCountry();
-				el.ne("startLocation.country", country);
+				el.ne("lower(startLocation.country)", country.toLowerCase());
 			}
 		} else if (level.equals("COUNTRY")) {
 			// content related to the countries in the location list
 			List<String> countries = new ArrayList<String>();
 			for (LocationMinimalBean loc : locations) {
 				String country = loc.getCountry();
-				countries.add(country);
+				countries.add(country.toLowerCase());
 			}
-			el.in("startLocation.country", countries);
+			el.in("lower(startLocation.country)", countries);
 		} else if (level.equals("REGION")) {
 			// content related to the regions in the location list
 			for (LocationMinimalBean loc : locations) {				
 				String country = loc.getCountry();
 				if (country != null && !country.isEmpty()) {
-					el.eq("startLocation.country", country);
+					el.eq("lower(startLocation.country)", country.toLowerCase());
 					String region = loc.getRegion();
 					if (region != null && !region.isEmpty()) {
-						el.eq("startLocation.region", region);
+						el.eq("lower(startLocation.region)", region.toLowerCase());
 					}
 				}
 			}
@@ -311,12 +311,12 @@ public class PublicMemento extends Model {
 			List<String> countries = new ArrayList<String>();
 			for (LocationMinimalBean loc : locations) {
 				String country = loc.getCountry();
-				countries.add(country);
+				countries.add(country.toLowerCase());
 			}
 			el.eq("locale", locale)
 			.eq("category", category.toString())
 			.eq("startDate.decade",decade)
-			.in("startLocation.country", countries)
+			.in("lower(startLocation.country)", countries)
 			.orderBy("rand()")
 			.setMaxRows(itemsPerLevel);	
 			result.addAll(el.findList());
@@ -328,7 +328,7 @@ public class PublicMemento extends Model {
 				
 				String country = loc.getCountry();
 				if (country != null && !country.isEmpty()) {
-					el.eq("startLocation.country", country);
+					el.eq("lower(startLocation.country)", country.toLowerCase());
 					String region = loc.getRegion();
 					if (region != null && !region.isEmpty()) {
 						el.eq("startLocation.region", region);

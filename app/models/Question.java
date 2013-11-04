@@ -231,7 +231,7 @@ public class Question extends Model {
 
 	public static List<Question> readByChapter(String chap) {
 		List<Question> questionList = find.where()
-				.eq("chapter", chap)
+				.eq("lower(chapter)", chap.toLowerCase())
 				.orderBy("rand()")
 				.setMaxRows(3)
 				.findList();
