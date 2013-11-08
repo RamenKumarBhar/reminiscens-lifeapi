@@ -2,7 +2,7 @@ package security;
 
 import models.LifeStory;
 import models.Participation;
-
+import models.Person;
 import play.Logger;
 import play.mvc.Http;
 import be.objectify.deadbolt.core.DeadboltAnalyzer;
@@ -42,7 +42,7 @@ public class OnlyMeDynamicResourceHandler extends
 				allowed = userPersonId == requestedResourceId;	
 			} else if (SecurityModelConstants.ID_FROM_STORY.equals(meta)) {
 				LifeStory story = models.LifeStory.read(requestedResourceId);
-				allowed = story != null && story.getContributorId() == userId && checkThatStoryIsMine(userPersonId,story);
+				allowed = story != null && checkThatStoryIsMine(userPersonId,story);
 			} else if (SecurityModelConstants.ID_FROM_MEMENTO.equals(meta)) {
 				LifeStory story = getMementoStory(requestedResourceId);
 				allowed = story!=null && story.getContributorId() == userId && checkThatStoryIsMine(userPersonId, story);
@@ -68,7 +68,8 @@ public class OnlyMeDynamicResourceHandler extends
 	private Boolean checkThatStoryIsMine(Long person, LifeStory story) {
 		Boolean allowed = false;
 		for (Participation participant : story.getParticipationList()) {
-			allowed = participant.getPerson().getPersonId() == person;
+			Person part = participant.getPerson();
+			allowed = part != null && part.getPersonId() == person;
 			if (allowed) {
 				break;
 			}
