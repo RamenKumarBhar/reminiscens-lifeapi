@@ -30,6 +30,7 @@ local.properties
 .project
 .settings/
 project/target/*
+project/target/scala-2.9.2/sbt-0.12/classes/ApplicationBuild$.class
 
 
 PID
