@@ -49,3 +49,6 @@ platforms/android/project.properties
 .svn/
 android/ReminiscensApp/assets/www/js/flash/ru/.svn/
 comparison
+visualization
+data-collection
+ui
